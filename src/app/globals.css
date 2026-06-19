@@ -1610,13 +1610,18 @@ body.sig-off #board .board { display: none; }
 /* ============================================================
    SOCIAL — "COSA FACCIAMO" phone mockup + tab nav
    ============================================================ */
-.soc-cosa-vh {
-  min-height: 100svh; padding-block: 0 !important;
-  background: var(--paper); display: flex; align-items: stretch;
+.soc-cosa-scroll {
+  background: var(--paper);
+  position: relative;
+}
+.soc-cosa-sticky {
+  position: sticky; top: 0;
+  height: 100svh; overflow: hidden;
+  display: flex; align-items: stretch;
 }
 .soc-cosa-inner {
   display: grid; grid-template-columns: 1.15fr 0.85fr;
-  width: 100%; min-height: 100svh; align-items: stretch;
+  width: 100%; align-items: stretch;
 }
 .soc-cosa-left {
   display: flex; flex-direction: column; justify-content: center;
@@ -1750,8 +1755,9 @@ body.sig-off #board .board { display: none; }
 }
 .soc-rbot-on { color: rgba(255,255,255,.95); }
 @media (max-width: 880px) {
+  .soc-cosa-scroll { height: auto !important; }
+  .soc-cosa-sticky { position: static; height: auto; overflow: visible; }
   .soc-cosa-inner { grid-template-columns: 1fr; }
-  .soc-cosa-vh { min-height: auto; }
   .soc-cosa-left { border-right: none; border-bottom: 1px solid var(--line); justify-content: flex-start; padding-top: clamp(52px,8vh,80px); }
   .soc-cosa-right { padding-block: 40px; }
   .soc-reel-phone { width: min(240px,55vw); }

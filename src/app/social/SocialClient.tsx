@@ -145,10 +145,39 @@ const PUNTI = [
 
 function SocCosaSection() {
   const [active, setActive] = useState(1)
+  const sectionRef = useRef<HTMLElement>(null)
+  const N = PUNTI.length
   const p = PUNTI[active - 1]
 
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    // Scroll-driven only on desktop; mobile stays click-based
+    if (!window.matchMedia('(min-width: 860px)').matches) return
+
+    function update() {
+      const rect = section!.getBoundingClientRect()
+      const total = section!.offsetHeight - window.innerHeight
+      if (total <= 0) return
+      const scrolled = Math.max(0, Math.min(total, -rect.top))
+      const idx = Math.min(N - 1, Math.floor((scrolled / total) * N))
+      setActive(idx + 1)
+    }
+
+    window.addEventListener('scroll', update, { passive: true })
+    update()
+    return () => window.removeEventListener('scroll', update)
+  }, [N])
+
   return (
-    <section className="soc-cosa-vh" id="cosa" data-bg="paper">
+    <section
+      ref={sectionRef}
+      className="soc-cosa-scroll"
+      id="cosa"
+      data-bg="paper"
+      style={{ height: `calc(${N} * 100svh)` }}
+    >
+      <div className="soc-cosa-sticky">
       <div className="soc-cosa-inner">
         <div className="soc-cosa-left">
           <div className="soc-cosa-head">
@@ -166,7 +195,6 @@ function SocCosaSection() {
                 role="tab"
                 aria-selected={active === pt.n}
                 onClick={() => setActive(pt.n)}
-                onMouseEnter={() => setActive(pt.n)}
               >
                 <span className="soc-punto-idx">0{pt.n}</span>
                 <div className="soc-punto-body">
@@ -227,6 +255,7 @@ function SocCosaSection() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   )
