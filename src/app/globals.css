@@ -133,7 +133,7 @@ body.has-cursor [data-magnetic] { cursor: none; }
 /* ============ layout ============ */
 .wrap       { width: 100%; max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
 .wrap-wide  { max-width: 1560px; }
-.section    { padding-block: clamp(64px, 9vw, 150px); position: relative; overflow-x: clip; }
+.section    { padding-block: clamp(64px, 9vw, 150px); position: relative; }
 .section-tight { padding-block: clamp(40px, 5vw, 80px); }
 .divider    { height: 1px; background: var(--line); border: 0; margin: 0; }
 
