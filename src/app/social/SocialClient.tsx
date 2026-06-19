@@ -1,136 +1,101 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay } from 'swiper/modules'
+import type { Swiper as SwiperType } from 'swiper'
+import 'swiper/css'
+
+type Card = { meta: string; like: string; video: boolean }
+
+const ROWS: Card[][] = [
+  [
+    { meta: 'reel · ricetta',       like: '♥ 12,4k', video: true },
+    { meta: 'carosello · menù',     like: '↗ 2,1k',  video: false },
+    { meta: 'behind · cucina',      like: '♥ 8,9k',  video: true },
+    { meta: 'UGC · cliente',        like: '♥ 5,5k',  video: false },
+    { meta: 'reel · trend',         like: '▶ 5,0M',  video: true },
+    { meta: 'copertina · piatto',   like: '♥ 7,2k',  video: false },
+    { meta: 'story · poll',         like: '↗ 4,3k',  video: false },
+    { meta: 'reel · backstage',     like: '♥ 9,1k',  video: true },
+    { meta: 'carosello · tips',     like: '↗ 3,8k',  video: false },
+    { meta: 'reel · collab',        like: '▶ 2,2M',  video: true },
+    { meta: 'food photo · menu',    like: '♥ 3,1k',  video: false },
+    { meta: 'reel · apertura',      like: '♥ 22k',   video: true },
+  ],
+  [
+    { meta: 'reel · lancio',        like: '♥ 21k',   video: true },
+    { meta: 'quote · recensione',   like: '↗ 980',   video: false },
+    { meta: 'tutorial · 3 step',    like: '▶ 1,3M',  video: true },
+    { meta: 'poster · apertura',    like: '♥ 4,1k',  video: false },
+    { meta: 'reel · chef',          like: '▶ 880k',  video: true },
+    { meta: 'carosello · offerta',  like: '↗ 3,4k',  video: false },
+    { meta: 'reel · prodotto',      like: '♥ 6,6k',  video: true },
+    { meta: 'story · swipe',        like: '↗ 1,1k',  video: false },
+    { meta: 'reel · evento',        like: '♥ 14k',   video: true },
+    { meta: 'grafica · quote',      like: '↗ 2,7k',  video: false },
+    { meta: 'reel · degustazione',  like: '▶ 1,1M',  video: true },
+    { meta: 'carosello · pack',     like: '↗ 2,0k',  video: false },
+  ],
+  [
+    { meta: 'food photo · still',       like: '♥ 6,7k',  video: false },
+    { meta: 'reel · stagione',          like: '♥ 15k',   video: true },
+    { meta: 'carosello · how-to',       like: '↗ 1,7k',  video: false },
+    { meta: 'reel · trend',             like: '♥ 11k',   video: true },
+    { meta: 'UGC · cliente',            like: '♥ 5,5k',  video: false },
+    { meta: 'reel · ricetta',           like: '♥ 12,4k', video: true },
+    { meta: 'copertina · new',          like: '↗ 3,2k',  video: false },
+    { meta: 'reel · dietro le quinte',  like: '▶ 1,8M',  video: true },
+    { meta: 'carosello · menù',         like: '↗ 2,9k',  video: false },
+    { meta: 'reel · chef ospite',       like: '♥ 18k',   video: true },
+    { meta: 'behind · mise en place',   like: '♥ 7,3k',  video: false },
+    { meta: 'reel · risposta',          like: '▶ 990k',  video: true },
+  ],
+]
+
+// ms per slide: higher = slower. Matches original px/frame speeds (×6000 ref)
+const ROW_SPEEDS = [6000, 9000, 7500]
+const ROW_REVERSE = [false, true, false]
+const ROW_CLASSES = ['', 'feed-row-2', 'feed-row-3']
 
 function FeedMarquee() {
-  const feedRef = useRef<HTMLDivElement>(null)
+  const swipers = useRef<SwiperType[]>([])
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const feed = feedRef.current
-    if (!feed) return
-
-    const PER_SET = 12
-    const configs = [
-      { nth: 0, speed: 0.55, dir: -1 },
-      { nth: 1, speed: 0.38, dir:  1 },
-      { nth: 2, speed: 0.46, dir: -1 },
-    ]
-
-    const rows = configs.map(c => {
-      const row = feed.querySelectorAll<HTMLElement>('.mq-row')[c.nth]
-      if (!row) return null
-      const track = row.querySelector<HTMLElement>('.mq-track')
-      if (!track) return null
-      return { track, speed: c.speed, dir: c.dir, x: 0, half: 0 }
-    }).filter(Boolean) as { track: HTMLElement; speed: number; dir: number; x: number; half: number }[]
-
-    function measure() {
-      rows.forEach(r => {
-        // Distance from first item of set1 to first item of set2 = exact seamless wrap distance
-        const c0 = r.track.children[0] as HTMLElement | null
-        const c1 = r.track.children[PER_SET] as HTMLElement | null
-        r.half = c0 && c1 ? c1.offsetLeft - c0.offsetLeft : r.track.scrollWidth / 2
-      })
-    }
-
-    let paused = false
-    feed.addEventListener('mouseenter', () => { paused = true })
-    feed.addEventListener('mouseleave', () => { paused = false })
-
-    let rafId: number
-    function tick() {
-      rows.forEach(r => {
-        if (!paused) {
-          r.x += r.dir * r.speed
-          if (r.dir === -1 && r.x <= -r.half) r.x += r.half
-          if (r.dir ===  1 && r.x >= 0)       r.x -= r.half
-        }
-        r.track.style.transform = `translate3d(${r.x}px,0,0)`
-      })
-      rafId = requestAnimationFrame(tick)
-    }
-
-    // Double rAF ensures layout is complete before measuring and starting
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        measure()
-        const vw = feed.offsetWidth
-        rows.forEach(r => {
-          // For left-moving rows start at 0; for right-moving, anchor the
-          // track's right edge to the container right so there's never a blank gap.
-          r.x = r.dir === 1 ? Math.max(-r.half, vw - 2 * r.half) : 0
-        })
-        rafId = requestAnimationFrame(tick)
-      })
-    })
-
-    return () => cancelAnimationFrame(rafId)
-  }, [])
-
-  const row1 = [
-    { meta: 'reel · ricetta', like: '♥ 12,4k', video: true },
-    { meta: 'carosello · menù', like: '↗ 2,1k', video: false },
-    { meta: 'behind · cucina', like: '♥ 8,9k', video: true },
-    { meta: 'UGC · cliente', like: '♥ 5,5k', video: false },
-    { meta: 'reel · trend', like: '▶ 5,0M', video: true },
-    { meta: 'copertina · piatto', like: '♥ 7,2k', video: false },
-    { meta: 'story · poll', like: '↗ 4,3k', video: false },
-    { meta: 'reel · backstage', like: '♥ 9,1k', video: true },
-    { meta: 'carosello · tips', like: '↗ 3,8k', video: false },
-    { meta: 'reel · collab', like: '▶ 2,2M', video: true },
-    { meta: 'food photo · menu', like: '♥ 3,1k', video: false },
-    { meta: 'reel · apertura', like: '♥ 22k', video: true },
-  ]
-  const row2 = [
-    { meta: 'reel · lancio', like: '♥ 21k', video: true },
-    { meta: 'quote · recensione', like: '↗ 980', video: false },
-    { meta: 'tutorial · 3 step', like: '▶ 1,3M', video: true },
-    { meta: 'poster · apertura', like: '♥ 4,1k', video: false },
-    { meta: 'reel · chef', like: '▶ 880k', video: true },
-    { meta: 'carosello · offerta', like: '↗ 3,4k', video: false },
-    { meta: 'reel · prodotto', like: '♥ 6,6k', video: true },
-    { meta: 'story · swipe', like: '↗ 1,1k', video: false },
-    { meta: 'reel · evento', like: '♥ 14k', video: true },
-    { meta: 'grafica · quote', like: '↗ 2,7k', video: false },
-    { meta: 'reel · degustazione', like: '▶ 1,1M', video: true },
-    { meta: 'carosello · pack', like: '↗ 2,0k', video: false },
-  ]
-  const row3 = [
-    { meta: 'food photo · still', like: '♥ 6,7k', video: false },
-    { meta: 'reel · stagione', like: '♥ 15k', video: true },
-    { meta: 'carosello · how-to', like: '↗ 1,7k', video: false },
-    { meta: 'reel · trend', like: '♥ 11k', video: true },
-    { meta: 'UGC · cliente', like: '♥ 5,5k', video: false },
-    { meta: 'reel · ricetta', like: '♥ 12,4k', video: true },
-    { meta: 'copertina · new', like: '↗ 3,2k', video: false },
-    { meta: 'reel · dietro le quinte', like: '▶ 1,8M', video: true },
-    { meta: 'carosello · menù', like: '↗ 2,9k', video: false },
-    { meta: 'reel · chef ospite', like: '♥ 18k', video: true },
-    { meta: 'behind · mise en place', like: '♥ 7,3k', video: false },
-    { meta: 'reel · risposta', like: '▶ 990k', video: true },
-  ]
-
-  function renderCards(cards: typeof row1) {
-    return [...cards, ...cards].map((c, i) => (
-      <div key={i} className={`reel-card ph on-ink${c.video ? ' video' : ''}`}>
-        <span className="reel-meta">{c.meta}</span>
-        <span className="reel-like">{c.like}</span>
-      </div>
-    ))
-  }
+  const pause  = () => swipers.current.forEach(s => s?.autoplay?.stop())
+  const resume = () => swipers.current.forEach(s => s?.autoplay?.start())
 
   return (
-    <div className="feed-marquee" ref={feedRef} aria-label="Anteprima feed Fooody">
-      <div className="mq-row mq-left">
-        <div className="mq-track">{renderCards(row1)}</div>
-      </div>
-      <div className="mq-row mq-right feed-row-2">
-        <div className="mq-track">{renderCards(row2)}</div>
-      </div>
-      <div className="mq-row mq-left feed-row-3">
-        <div className="mq-track">{renderCards(row3)}</div>
-      </div>
+    <div
+      className="feed-marquee"
+      onMouseEnter={pause}
+      onMouseLeave={resume}
+      aria-label="Anteprima feed Fooody"
+    >
+      {ROWS.map((cards, rowIdx) => (
+        <div key={rowIdx} className={`mq-row ${ROW_CLASSES[rowIdx]}`}>
+          <Swiper
+            modules={[Autoplay]}
+            slidesPerView="auto"
+            spaceBetween={14}
+            loop={true}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+              reverseDirection: ROW_REVERSE[rowIdx],
+            }}
+            speed={ROW_SPEEDS[rowIdx]}
+            allowTouchMove={false}
+            onSwiper={(s) => { swipers.current[rowIdx] = s }}
+            className="mq-swiper"
+          >
+            {cards.map((c, i) => (
+              <SwiperSlide key={i} className={`reel-card ph on-ink${c.video ? ' video' : ''}`}>
+                <span className="reel-meta">{c.meta}</span>
+                <span className="reel-like">{c.like}</span>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      ))}
     </div>
   )
 }

@@ -1066,6 +1066,10 @@ body.sig-off #panoramica .pillars-map { display: none; }
 }
 .mq-row { overflow: visible; }
 .mq-track { display: flex; gap: clamp(10px,1.4vw,16px); width: max-content; will-change: transform; }
+/* Swiper marquee overrides */
+.mq-swiper { overflow: visible; width: 100%; }
+.mq-swiper .swiper-wrapper { will-change: transform; transition-timing-function: linear !important; }
+.mq-swiper .swiper-slide { width: auto; flex-shrink: 0; }
 .reel-card {
   aspect-ratio: 9/16; border-radius: 14px; position: relative; flex: 0 0 auto;
   width: clamp(130px,14vw,200px); display: flex; align-items: flex-end;
