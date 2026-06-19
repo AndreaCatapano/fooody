@@ -10,7 +10,7 @@ function FeedMarquee() {
     const feed = feedRef.current
     if (!feed) return
 
-    const PER_SET = 6 // cards per set (each row duplicates 6 cards)
+    const PER_SET = 10 // cards per set — must exceed viewport/card_width to avoid blank edge on right-moving row
     const configs = [
       { nth: 0, speed: 0.55, dir: -1 },
       { nth: 1, speed: 0.38, dir:  1 },
@@ -70,6 +70,10 @@ function FeedMarquee() {
     { meta: 'UGC · cliente', like: '♥ 5,5k', video: false },
     { meta: 'reel · trend', like: '▶ 5,0M', video: true },
     { meta: 'copertina · piatto', like: '♥ 7,2k', video: false },
+    { meta: 'story · poll', like: '↗ 4,3k', video: false },
+    { meta: 'reel · backstage', like: '♥ 9,1k', video: true },
+    { meta: 'carosello · tips', like: '↗ 3,8k', video: false },
+    { meta: 'reel · collab', like: '▶ 2,2M', video: true },
   ]
   const row2 = [
     { meta: 'reel · lancio', like: '♥ 21k', video: true },
@@ -78,14 +82,22 @@ function FeedMarquee() {
     { meta: 'poster · apertura', like: '♥ 4,1k', video: false },
     { meta: 'reel · chef', like: '▶ 880k', video: true },
     { meta: 'carosello · offerta', like: '↗ 3,4k', video: false },
+    { meta: 'reel · prodotto', like: '♥ 6,6k', video: true },
+    { meta: 'story · swipe', like: '↗ 1,1k', video: false },
+    { meta: 'reel · evento', like: '♥ 14k', video: true },
+    { meta: 'grafica · quote', like: '↗ 2,7k', video: false },
   ]
   const row3 = [
     { meta: 'food photo · still', like: '♥ 6,7k', video: false },
-    { meta: 'reel · evento', like: '♥ 9,8k', video: true },
-    { meta: 'carosello · how-to', like: '↗ 1,7k', video: false },
     { meta: 'reel · stagione', like: '♥ 15k', video: true },
+    { meta: 'carosello · how-to', like: '↗ 1,7k', video: false },
+    { meta: 'reel · trend', like: '♥ 11k', video: true },
     { meta: 'UGC · cliente', like: '♥ 5,5k', video: false },
     { meta: 'reel · ricetta', like: '♥ 12,4k', video: true },
+    { meta: 'copertina · new', like: '↗ 3,2k', video: false },
+    { meta: 'reel · dietro le quinte', like: '▶ 1,8M', video: true },
+    { meta: 'carosello · menù', like: '↗ 2,9k', video: false },
+    { meta: 'reel · chef ospite', like: '♥ 18k', video: true },
   ]
 
   function renderCards(cards: typeof row1) {

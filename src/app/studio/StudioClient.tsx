@@ -26,8 +26,8 @@ export default function StudioClient() {
                 <a className="btn stu-btn lg" href="/contatti" data-transition="" data-transition-word="Parliamo." data-magnetic="0.3">
                   <span className="btn-label">Lavoriamo insieme <span className="arrow">↗</span></span>
                 </a>
-                <a className="btn on-ink ghost lg" href="#team">
-                  <span className="btn-label">Il team <span className="arrow">↓</span></span>
+                <a className="btn on-ink ghost lg" href="#numeri">
+                  <span className="btn-label">Chi siamo <span className="arrow">↓</span></span>
                 </a>
               </div>
             </div>
@@ -338,18 +338,22 @@ export default function StudioClient() {
         <div className="wrap">
           <div className="stu-lavora">
             <div>
-              <div className="eyebrow stu-eyebrow">e tu?</div>
+              <div className="eyebrow stu-eyebrow">entra nel team</div>
               <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-                Hai un progetto<br />in testa?
+                Cerchi un posto<br />dove contare?
               </h2>
               <p className="lead text-pretty" data-reveal="" style={{ marginTop: 20, maxWidth: '44ch' }}>
-                Raccontaci dove sei e dove vuoi arrivare. Prima call gratuita — nessun obbligo,
-                solo una conversazione onesta.
+                Non assumiamo ruoli, assumiamo persone. Mandaci portfolio, profilo LinkedIn o due
+                righe su cosa sai fare — anche se non c&apos;è una posizione aperta in questo momento.
               </p>
+              <ul className="stu-job-hints" data-reveal="" data-reveal-d="1">
+                <li>Designer · Strategist · Videomaker · Copywriter</li>
+                <li>Risposta garantita entro 5 giorni lavorativi</li>
+              </ul>
             </div>
             <div data-reveal="" data-reveal-d="2" style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
-              <a className="btn stu-btn lg" href="/contatti" data-transition="" data-transition-word="Parliamo." data-magnetic="0.3">
-                <span className="btn-label">Prenota una call <span className="arrow">↗</span></span>
+              <a className="btn stu-btn lg" href="mailto:lavora@fooody.it" data-magnetic="0.3">
+                <span className="btn-label">Manda la candidatura <span className="arrow">↗</span></span>
               </a>
               <a className="btn ghost lg" href="mailto:ciao@fooody.it">
                 <span className="btn-label">ciao@fooody.it</span>
@@ -365,17 +369,23 @@ export default function StudioClient() {
       <section className="section ink-region" data-bg="ink" id="contatti">
         <div className="wrap" style={{ textAlign: 'center' }}>
           <div className="eyebrow no-slash stu-accent-fg" style={{ justifyContent: 'center' }}>
-            — a tavola
+            — prima call
           </div>
           <h2 className="mega" data-kinetic="lines" style={{ margin: '22px auto 0', maxWidth: '15ch' }}>
-            Lavoriamo<br />insieme.
+            30 minuti.<br />Gratis.
           </h2>
-          <p className="lead text-pretty" data-reveal="" style={{ margin: '26px auto 0', maxWidth: '42ch' }}>
-            Raccontaci il tuo progetto. Prima call gratuita — caffè offerto dalla casa, conto mai.
+          <p className="lead text-pretty" data-reveal="" style={{ margin: '26px auto 0', maxWidth: '44ch' }}>
+            Ti ascoltiamo, analizziamo la situazione attuale e ti diciamo se — e come — possiamo
+            aiutarti. Nessun obbligo, nessuna vendita: solo una valutazione onesta.
           </p>
+          <div className="stu-call-punti" data-reveal="" data-reveal-d="1">
+            <span>✓ Audit gratuito del tuo canale</span>
+            <span>✓ Stima budget e tempi</span>
+            <span>✓ Piano d&apos;azione su misura</span>
+          </div>
           <div data-reveal="" data-reveal-d="2" style={{ marginTop: 36, display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
             <a className="btn stu-btn lg" href="/contatti" data-transition="" data-transition-word="Parliamo." data-magnetic="0.3">
-              <span className="btn-label">Prenota una call <span className="arrow">↗</span></span>
+              <span className="btn-label">Prenota la call <span className="arrow">↗</span></span>
             </a>
             <a className="btn on-ink ghost lg" href="mailto:ciao@fooody.it">
               <span className="btn-label">ciao@fooody.it</span>
