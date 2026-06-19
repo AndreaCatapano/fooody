@@ -7,6 +7,7 @@ import Nav from '@/components/layout/Nav'
 import Footer from '@/components/layout/Footer'
 import TweaksPanel from '@/components/TweaksPanel'
 import { MaskWord } from '@/components/MaskWord'
+import SmoothScroll from '@/components/SmoothScroll'
 
 const mont = localFont({
   src: [
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Script src="/motion.js" strategy="afterInteractive" />
         <Script src="/hero-effects.js" strategy="afterInteractive" />
+        <SmoothScroll />
       </body>
     </html>
   )
