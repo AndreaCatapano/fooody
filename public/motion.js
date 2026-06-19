@@ -140,8 +140,7 @@
   /* ---------------------------------------------------------
      VIEWPORT ENGINE — rAF + scroll driven (IO-free, robust)
   --------------------------------------------------------- */
-  const _revealers = [];   // {el, off}
-  const _counters = [];    // {el, done}
+  const _revealers = [];   // {el, off} — kept for failsafe only; GSAP ScrollTrigger is primary
   let _bgSections = [];
   let _navEl = null;
   const _bgMap = {
@@ -153,8 +152,8 @@
   const _scrollies = []; // {root, steps, medias, chapterEls, progressEl, current}
 
   function initReveal() {
-    document.querySelectorAll('[data-reveal], .kinetic').forEach(el =>
-      _revealers.push({ el, off: 0.9 }));
+    // GSAP ScrollTrigger handles reveals (see SmoothScroll.tsx).
+    // _revealers stays empty — tickViewport loop is a no-op for reveals.
   }
   function initReactiveBg() {
     _bgSections = [...document.querySelectorAll('[data-bg]')];
@@ -169,14 +168,6 @@
       if (r.top < vh * _revealers[i].off && r.bottom > 0) {
         _revealers[i].el.classList.add('is-in');
         _revealers.splice(i, 1);
-      }
-    }
-    // counters
-    for (let i = _counters.length - 1; i >= 0; i--) {
-      const r = _counters[i].el.getBoundingClientRect();
-      if (r.top < vh * 0.88 && r.bottom > 0) {
-        runCounter(_counters[i].el);
-        _counters.splice(i, 1);
       }
     }
     // reactive bg — section whose band crosses viewport middle
@@ -268,27 +259,6 @@
     document.querySelectorAll('.marquee-track').forEach(track => {
       track.innerHTML += track.innerHTML;
     });
-  }
-
-  /* ---------------------------------------------------------
-     9. COUNTERS — count up on enter ([data-count])
-  --------------------------------------------------------- */
-  function initCounters() {
-    document.querySelectorAll('[data-count]').forEach(n => _counters.push({ el: n }));
-  }
-  function runCounter(node) {
-    const to = parseFloat(node.getAttribute('data-count'));
-    const dec = (node.getAttribute('data-count') + '').includes('.') ? 1 : 0;
-    const pre = node.getAttribute('data-pre') || '';
-    const suf = node.getAttribute('data-suf') || '';
-    if (reduce) { node.textContent = pre + to.toFixed(dec) + suf; return; }
-    const dur = 1400, start = performance.now();
-    (function tick(now) {
-      const p = clamp((now - start) / dur, 0, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      node.textContent = pre + (to * e).toFixed(dec) + suf;
-      if (p < 1) requestAnimationFrame(tick);
-    })(start);
   }
 
   /* ---------------------------------------------------------
@@ -412,7 +382,6 @@
     initNav();
     initProgress();
     initMarquee();
-    initCounters();
     initScrolly();
     initMagnetic();
     initTilt();
@@ -427,6 +396,9 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
+    // signal GSAP ScrollTrigger that splitKinetic() has run
+    window.dispatchEvent(new Event('fooody:ready'));
+
     // safety raf for first ~2s (covers mask retract + late layout/fonts)
     let t0 = performance.now();
     (function settle(now) {
