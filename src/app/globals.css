@@ -76,7 +76,7 @@
 
 /* ============ reset ============ */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
 body {
   margin: 0;
   background: var(--bg);
@@ -133,7 +133,7 @@ body.has-cursor [data-magnetic] { cursor: none; }
 /* ============ layout ============ */
 .wrap       { width: 100%; max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
 .wrap-wide  { max-width: 1560px; }
-.section    { padding-block: clamp(64px, 9vw, 150px); position: relative; }
+.section    { padding-block: clamp(64px, 9vw, 150px); position: relative; overflow-x: clip; }
 .section-tight { padding-block: clamp(40px, 5vw, 80px); }
 .divider    { height: 1px; background: var(--line); border: 0; margin: 0; }
 
@@ -501,7 +501,7 @@ body.has-cursor [data-magnetic] { cursor: none; }
   border-top: 1px solid var(--line-ink);
   color: rgba(247,244,238,0.55);
 }
-@media (max-width: 760px) {
+@media (max-width: 860px) {
   .footer .foot-grid { grid-template-columns: 1fr; gap: var(--s6); }
 }
 
@@ -951,7 +951,7 @@ body.wh-tilt .work { transform-style: preserve-3d; }
   margin-top: clamp(28px, 4vw, 48px);
 }
 .case-cover { aspect-ratio: 4/5; }
-.case-kpis  { display: flex; gap: clamp(20px, 4vw, 48px); margin-top: 30px; }
+.case-kpis  { display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 48px); margin-top: 30px; }
 .case-kpi   { display: flex; flex-direction: column; gap: 4px; }
 .case-kpi .numeral { font-size: clamp(1.6rem, 3vw, 2.4rem); color: var(--tomato-deep); }
 
@@ -1486,7 +1486,7 @@ body.sig-off #board .board { display: none; }
 .stu-quote-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px;
   margin-top: clamp(28px,4vw,44px); padding-top: 24px; border-top: 1px solid var(--line); flex-wrap: wrap; }
 .stu-quote-meta { display: flex; flex-direction: column; gap: 4px; }
-.stu-quote-kpis { display: flex; gap: clamp(20px,3vw,48px); }
+.stu-quote-kpis { display: flex; flex-wrap: wrap; gap: clamp(20px,3vw,48px); }
 .stu-quote-kpi { display: flex; flex-direction: column; gap: 4px; }
 
 .stu-lavora { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: clamp(32px,5vw,80px); align-items: center; }

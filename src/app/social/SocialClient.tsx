@@ -175,7 +175,7 @@ function SocCosaSection() {
       className="soc-cosa-scroll"
       id="cosa"
       data-bg="paper"
-      style={{ height: `calc(${N} * 100svh)` }}
+      style={{ height: `calc(${N} * 58svh)` }}
     >
       <div className="soc-cosa-sticky">
       <div className="soc-cosa-inner">
