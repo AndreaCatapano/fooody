@@ -10,7 +10,7 @@ function FeedMarquee() {
     const feed = feedRef.current
     if (!feed) return
 
-    const PER_SET = 10 // cards per set — must exceed viewport/card_width to avoid blank edge on right-moving row
+    const PER_SET = 12
     const configs = [
       { nth: 0, speed: 0.55, dir: -1 },
       { nth: 1, speed: 0.38, dir:  1 },
@@ -55,7 +55,12 @@ function FeedMarquee() {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         measure()
-        rows.forEach(r => { r.x = r.dir === 1 ? -r.half : 0 })
+        const vw = feed.offsetWidth
+        rows.forEach(r => {
+          // For left-moving rows start at 0; for right-moving, anchor the
+          // track's right edge to the container right so there's never a blank gap.
+          r.x = r.dir === 1 ? Math.max(-r.half, vw - 2 * r.half) : 0
+        })
         rafId = requestAnimationFrame(tick)
       })
     })
@@ -74,6 +79,8 @@ function FeedMarquee() {
     { meta: 'reel · backstage', like: '♥ 9,1k', video: true },
     { meta: 'carosello · tips', like: '↗ 3,8k', video: false },
     { meta: 'reel · collab', like: '▶ 2,2M', video: true },
+    { meta: 'food photo · menu', like: '♥ 3,1k', video: false },
+    { meta: 'reel · apertura', like: '♥ 22k', video: true },
   ]
   const row2 = [
     { meta: 'reel · lancio', like: '♥ 21k', video: true },
@@ -86,6 +93,8 @@ function FeedMarquee() {
     { meta: 'story · swipe', like: '↗ 1,1k', video: false },
     { meta: 'reel · evento', like: '♥ 14k', video: true },
     { meta: 'grafica · quote', like: '↗ 2,7k', video: false },
+    { meta: 'reel · degustazione', like: '▶ 1,1M', video: true },
+    { meta: 'carosello · pack', like: '↗ 2,0k', video: false },
   ]
   const row3 = [
     { meta: 'food photo · still', like: '♥ 6,7k', video: false },
@@ -98,6 +107,8 @@ function FeedMarquee() {
     { meta: 'reel · dietro le quinte', like: '▶ 1,8M', video: true },
     { meta: 'carosello · menù', like: '↗ 2,9k', video: false },
     { meta: 'reel · chef ospite', like: '♥ 18k', video: true },
+    { meta: 'behind · mise en place', like: '♥ 7,3k', video: false },
+    { meta: 'reel · risposta', like: '▶ 990k', video: true },
   ]
 
   function renderCards(cards: typeof row1) {
