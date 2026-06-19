@@ -749,7 +749,7 @@ body.has-cursor [data-magnetic] { cursor: none; }
   height: 100vh; height: 100svh;
   min-height: 600px;
 }
-.hero100.mode-particelle { height: 240vh; }
+.hero100.mode-particelle { height: 100vh; height: 100svh; }
 .hero-stage {
   position: sticky; top: 0;
   height: 100vh; height: 100svh;
