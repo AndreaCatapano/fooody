@@ -300,6 +300,14 @@
     const introOn = () => (window.FOOODY_TWEAKS || {}).intro !== false;
     if (!introOn()) { mask.style.display = 'none'; return; }
 
+    // Derive theme slug from a pathname (empty slug = home)
+    function getTheme(href) {
+      return (href || window.location.pathname).replace(/^\//, '').split('/')[0] || 'home';
+    }
+
+    // Set mask colour for the current page before entrance animation
+    mask.dataset.theme = getTheme(window.location.pathname);
+
     const sp = mask.querySelector('.mask-word span');
 
     // Entrance — panels retract from top, word disappears with panel 3
@@ -327,6 +335,9 @@
       const href = a.getAttribute('href');
       if (!href || href.startsWith('#') || a.target === '_blank') return;
       e.preventDefault();
+
+      // Set destination page colour before panels animate in
+      mask.dataset.theme = getTheme(href);
 
       const wt = a.getAttribute('data-transition-word');
       if (sp && wt) sp.textContent = wt;

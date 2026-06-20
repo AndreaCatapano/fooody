@@ -117,21 +117,24 @@ function SocCosaSection() {
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
-    // Scroll-driven only on desktop; mobile stays click-based
     if (!window.matchMedia('(min-width: 860px)').matches) return
+
+    let rafId: number
+    let last = -1
 
     function update() {
       const rect = section!.getBoundingClientRect()
       const total = section!.offsetHeight - window.innerHeight
-      if (total <= 0) return
-      const scrolled = Math.max(0, Math.min(total, -rect.top))
-      const idx = Math.min(N - 1, Math.floor((scrolled / total) * N))
-      setActive(idx + 1)
+      if (total > 0) {
+        const scrolled = Math.max(0, Math.min(total, -rect.top))
+        const next = Math.min(N, Math.floor((scrolled / total) * N) + 1)
+        if (next !== last) { last = next; setActive(next) }
+      }
+      rafId = requestAnimationFrame(update)
     }
 
-    window.addEventListener('scroll', update, { passive: true })
-    update()
-    return () => window.removeEventListener('scroll', update)
+    rafId = requestAnimationFrame(update)
+    return () => cancelAnimationFrame(rafId)
   }, [N])
 
   return (

@@ -611,6 +611,25 @@ body.has-cursor [data-magnetic] { cursor: none; }
   white-space: nowrap;
 }
 
+/* ---- page mask: per-page colour themes ---- */
+/* Social → tomato */
+.page-mask[data-theme="social"] .panel { background: var(--tomato); }
+/* Metodo → gold (light bg — use dark word) */
+.page-mask[data-theme="metodo"] .panel { background: var(--gold); }
+.page-mask[data-theme="metodo"] .mask-word span { color: var(--ink); }
+/* Web → violet */
+.page-mask[data-theme="web"] .panel { background: var(--violet); }
+/* Branding → gradient across the 5 columns (panels transparent) */
+.page-mask[data-theme="branding"] {
+  background: linear-gradient(90deg, var(--tomato) 0%, var(--gold) 50%, var(--violet) 100%);
+}
+.page-mask[data-theme="branding"] .panel { background: transparent; }
+/* Studio / Contatti → neutral paper (dark word for legibility) */
+.page-mask[data-theme="studio"] .panel,
+.page-mask[data-theme="contatti"] .panel { background: var(--paper); }
+.page-mask[data-theme="studio"] .mask-word span,
+.page-mask[data-theme="contatti"] .mask-word span { color: var(--ink); }
+
 /* scroll progress bar */
 .scroll-progress {
   position: fixed; top: 0; left: 0; height: 2px; width: 0%;
@@ -749,7 +768,10 @@ body.has-cursor [data-magnetic] { cursor: none; }
   height: 100vh; height: 100svh;
   min-height: 600px;
 }
-.hero100.mode-particelle { height: 100vh; height: 100svh; }
+.hero100.mode-particelle {
+  height: 240vh;
+  background: var(--ink); /* post-sticky area blends into the ink manifesto section */
+}
 .hero-stage {
   position: sticky; top: 0;
   height: 100vh; height: 100svh;
@@ -1315,8 +1337,11 @@ body.sig-off #anteprima .preview-wrap { display: none; }
 /* ============================================================
    BRANDING — page-specific
    ============================================================ */
-.brand-accent-fg { color: var(--violet) !important; }
-.brand-eyebrow::before { color: var(--violet); }
+.brand-accent-fg {
+  background: var(--spectrum); -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.brand-eyebrow::before { color: var(--tomato); }
 .btn.brand-btn { --bbg: var(--violet); --bfg: #fff; --bbd: var(--violet); }
 .btn.brand-btn::after { background: var(--ink); }
 .btn.brand-btn:hover { border-color: var(--ink); color: #fff; }

@@ -157,7 +157,7 @@ export default function MetodoPage() {
         >
           <div className="sec-head" style={{ marginBottom: 0 }}>
             <div>
-              <div className="eyebrow no-slash" style={{ color: 'var(--tomato)' }}>
+              <div className="eyebrow no-slash met-accent-fg">
                 — il sistema
               </div>
               <h2 className="h2" style={{ marginTop: 14, color: 'var(--paper)' }}>
