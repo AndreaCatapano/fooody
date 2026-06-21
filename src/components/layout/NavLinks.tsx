@@ -15,7 +15,7 @@ export function NavLinks() {
   return (
     <div className="nav-links">
       {NAV_ITEMS.map((item) => (
-        /* Plain <a> ensures full-page reload so motion.js page-mask animation works correctly */
+        /* data-transition is intercepted by PageTransition → router.push (client-side nav) */
         <a
           key={item.href}
           className={`nav-link${pathname === item.href ? ' active' : ''}`}

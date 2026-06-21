@@ -6,7 +6,7 @@ import './globals.css'
 import Nav from '@/components/layout/Nav'
 import Footer from '@/components/layout/Footer'
 import TweaksPanel from '@/components/TweaksPanel'
-import { MaskWord } from '@/components/MaskWord'
+import { PageTransition } from '@/components/PageTransition'
 import SmoothScroll from '@/components/SmoothScroll'
 
 const mont = localFont({
@@ -72,15 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Vai al contenuto principale
         </a>
 
-        <div className="page-mask" aria-hidden="true">
-          <div className="panel" />
-          <div className="panel" />
-          <div className="panel">
-            <MaskWord />
-          </div>
-          <div className="panel" />
-          <div className="panel" />
-        </div>
+        <PageTransition />
         <div className="scroll-progress" />
 
         <Nav />
@@ -96,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</Script>
 
         <Script id="tweaks-init" strategy="beforeInteractive">{`
-          var _def = { intro:true, workHover:'tilt', particleCount:80, particleDir:'sparpaglia', particleSize:100, assemblySpeed:'normale', scrollSensitivity:'normale', particleColor:'ink', glow:false, exitMode:'radiale', exitCurve:'lineare', exitFade:'normale' };
+          var _def = { particleCount:80, particleDir:'sparpaglia' };
           try {
             var s = localStorage.getItem('fooody_tweaks');
             window.FOOODY_TWEAKS = s ? Object.assign({}, _def, JSON.parse(s)) : _def;

@@ -237,51 +237,6 @@
   }
 
   /* ============================================================
-     PAGE MASK (transitions)
-  ============================================================ */
-  function initPageMask() {
-    const mask = $('.page-mask');
-    if (!mask) return;
-    const introOn = () => (window.FOOODY_TWEAKS || {}).intro !== false;
-    if (!introOn()) { mask.style.display = 'none'; return; }
-
-    /* entrance — panels retract upward */
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      mask.querySelectorAll('.panel').forEach((p, i) => {
-        p.style.transition = 'transform .7s cubic-bezier(0.22,1,0.36,1)';
-        p.style.transitionDelay = (i * 0.05) + 's';
-        p.style.transformOrigin = 'top';
-        p.style.transform = 'scaleY(0)';
-      });
-      setTimeout(() => { mask.style.display = 'none'; }, 950);
-    }));
-    setTimeout(() => { mask.style.display = 'none'; }, 1800);
-
-    if (REDUCE) return;
-
-    /* exit — panels cover, then navigate */
-    document.addEventListener('click', e => {
-      const a = e.target.closest('a[data-transition]');
-      if (!a || !introOn()) return;
-      const href = a.getAttribute('href');
-      if (!href || href.startsWith('#') || a.target === '_blank') return;
-      e.preventDefault();
-      document.documentElement.dataset.page = (href || '').replace(/^\//, '').split('/')[0] || 'home';
-      const sp = $('.mask-word span', mask);
-      const wt = a.getAttribute('data-transition-word');
-      if (sp && wt) sp.textContent = wt;
-      mask.style.display = '';
-      mask.querySelectorAll('.panel').forEach((p, i) => {
-        p.style.transition = 'transform .6s cubic-bezier(0.65,0,0.35,1)';
-        p.style.transitionDelay = (i * 0.05) + 's';
-        p.style.transformOrigin = 'bottom';
-        p.style.transform = 'scaleY(1)';
-      });
-      setTimeout(() => { window.location.href = href; }, 720);
-    });
-  }
-
-  /* ============================================================
      MAGNETIC CURSOR
   ============================================================ */
   function initCursor() {
@@ -425,8 +380,6 @@
     initMagnetic();
     initTilt();
     initWork();
-    initPageMask();
-
     /* single viewport rAF loop */
     (function loop() { tick(); requestAnimationFrame(loop); })();
     window.addEventListener('resize', tick, { passive: true });

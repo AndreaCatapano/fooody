@@ -594,42 +594,6 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   body.has-cursor, body.has-cursor * { cursor: auto; }
 }
 
-/* ============ page transition mask ============ */
-.page-mask {
-  position: fixed; inset: 0; z-index: 9000; pointer-events: none;
-  display: grid; grid-template-columns: repeat(5, 1fr);
-}
-.page-mask .panel { transform: scaleY(1); transform-origin: top; background: var(--ink); }
-.page-mask .panel:nth-child(3) { position: relative; z-index: 1; overflow: visible; }
-.page-mask .mask-word {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  pointer-events: none; opacity: 1;
-}
-.page-mask .mask-word span {
-  font-family: var(--exp);
-  font-weight: 700;
-  color: var(--paper);
-  font-size: clamp(2.5rem, 9vw, 7rem);
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
-
-/* ---- page mask: per-page colour themes ----
-   Set via html[data-page] by a beforeInteractive script → no first-paint flash.
-   Exit transitions update html.dataset.page before panels animate in. ---- */
-html[data-page="social"]   .page-mask .panel { background: var(--tomato); }
-html[data-page="metodo"]   .page-mask .panel { background: var(--gold); }
-html[data-page="metodo"]   .page-mask .mask-word span { color: var(--ink); }
-html[data-page="web"]      .page-mask .panel { background: var(--violet); }
-html[data-page="branding"] .page-mask {
-  background: linear-gradient(90deg, var(--tomato) 0%, var(--gold) 50%, var(--violet) 100%);
-}
-html[data-page="branding"] .page-mask .panel { background: transparent; }
-html[data-page="studio"]   .page-mask .panel,
-html[data-page="contatti"] .page-mask .panel { background: var(--paper); }
-html[data-page="studio"]   .page-mask .mask-word span,
-html[data-page="contatti"] .page-mask .mask-word span { color: var(--ink); }
-
 /* scroll progress bar */
 .scroll-progress {
   position: fixed; top: 0; left: 0; height: 2px; width: 0%;

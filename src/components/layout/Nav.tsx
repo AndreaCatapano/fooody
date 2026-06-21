@@ -11,7 +11,7 @@ export default function Nav() {
       {/* NavLinks is 'use client' for usePathname() active state */}
       <NavLinks />
 
-      {/* Plain <a> so motion.js page-mask fires on click */}
+      {/* data-transition triggers PageTransition overlay */}
       <a
         className="btn nav-cta"
         href="/contatti"
