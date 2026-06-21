@@ -1,449 +1,442 @@
 /* ============================================================
-   FOODY — Motion & Interaction engine
-   cursor magnetico · bg reattivo · type cinetico ·
-   maschera transizioni · scroll-telling · reveal
+   FOOODY — Motion engine v2
+   BCR-only (Lenis-safe) · single rAF loop · reduced-motion aware
    ============================================================ */
 (function () {
   'use strict';
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const lerp = (a, b, n) => a + (b - a) * n;
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
-  /* ---------------------------------------------------------
-     1. CUSTOM MAGNETIC CURSOR
-  --------------------------------------------------------- */
-  function initCursor() {
-    if (!canHover) return;
-    document.body.classList.add('has-cursor');
-    const dot = el('div', 'cursor-dot');
-    const ring = el('div', 'cursor-ring');
-    const label = el('div', 'cursor-label');
-    const preview = el('div', 'cursor-preview');
-    const previewImg = document.createElement('div');
-    previewImg.style.cssText = 'width:100%;height:100%';
-    preview.appendChild(previewImg);
-    document.body.append(dot, ring, label, preview);
+  /* ---- utils ---- */
+  const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CAN_HOVER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const $ = (s, ctx) => (ctx || document).querySelector(s);
+  const $$ = (s, ctx) => [...(ctx || document).querySelectorAll(s)];
+  const mk = (tag, cls) => { const e = document.createElement(tag); if (cls) e.className = cls; return e; };
 
-    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    let rx = mx, ry = my;
-    let down = false;
+  /* ---- bg tone map ---- */
+  const BG = {
+    paper:     { bg: '#f7f4ee', fg: '#17130f', ink: false },
+    'paper-2': { bg: '#efeae1', fg: '#17130f', ink: false },
+    ink:       { bg: '#17130f', fg: '#f7f4ee', ink: true  },
+    tomato:    { bg: '#e8442a', fg: '#ffffff', ink: true  },
+  };
+  const SCENE_BG = { ink: '#17130f', paper: '#f7f4ee', 'paper-2': '#efeae1', tomato: '#e8442a', deep: '#0f0c0a' };
 
-    window.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-      label.style.left = mx + 'px'; label.style.top = (my + 46) + 'px';
-      preview.style.left = mx + 'px'; preview.style.top = my + 'px';
-    });
-    window.addEventListener('mousedown', () => { down = true; });
-    window.addEventListener('mouseup', () => { down = false; });
+  /* ---- state ---- */
+  let reveals   = [];  // { el, threshold }
+  let counters  = [];  // { el }
+  let bgSects   = [];
+  let scrollies = [];  // { root, steps, medias, dots, bar, current }
+  let progressBar = null;
+  let navEl = null;
+  let lastBgKey = null;
 
-    (function raf() {
-      rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
-      ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%) scale(${down ? 0.8 : 1})`;
-      requestAnimationFrame(raf);
-    })();
-
-    // interactive targets
-    const hoverSel = 'a, button, [data-magnetic], .chip, input, textarea, [data-cursor]';
-    document.addEventListener('mouseover', e => {
-      const t = e.target.closest(hoverSel);
-      if (!t) return;
-      ring.classList.add('is-hover');
-      const lbl = t.getAttribute('data-cursor');
-      if (lbl) { label.textContent = lbl; label.classList.add('show'); ring.classList.add('is-label'); }
-      const prev = t.getAttribute('data-preview');
-      if (prev) {
-        previewImg.style.cssText = `width:100%;height:100%;background:${prev};` +
-          `background-size:cover;background-position:center;` +
-          `background-image:repeating-linear-gradient(135deg,rgba(247,244,238,.10) 0 1px,transparent 1px 9px);` +
-          `background-color:#211c17`;
-        const cap = t.getAttribute('data-preview-label');
-        if (cap) {
-          previewImg.style.display = 'grid';
-          previewImg.style.placeItems = 'center';
-          previewImg.innerHTML = `<span style="font-family:var(--mono);font-size:.62rem;` +
-            `text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);` +
-            `background:#17130f;padding:5px 9px;border-radius:999px">${cap}</span>`;
-        }
-        preview.classList.add('show');
-      }
-    });
-    document.addEventListener('mouseout', e => {
-      const t = e.target.closest(hoverSel);
-      if (!t) return;
-      ring.classList.remove('is-hover', 'is-label');
-      label.classList.remove('show');
-      preview.classList.remove('show');
-    });
-  }
-
-  /* ---------------------------------------------------------
-     2. MAGNETIC ELEMENTS
-  --------------------------------------------------------- */
-  function initMagnetic() {
-    if (!canHover || reduce) return;
-    document.querySelectorAll('[data-magnetic]').forEach(elm => {
-      const strength = parseFloat(elm.getAttribute('data-magnetic')) || 0.3;
-      const inner = elm.querySelector('[data-magnetic-inner]') || elm;
-      elm.addEventListener('mousemove', e => {
-        const r = elm.getBoundingClientRect();
-        const x = (e.clientX - r.left - r.width / 2) * strength;
-        const y = (e.clientY - r.top - r.height / 2) * strength;
-        elm.style.transform = `translate(${x}px,${y}px)`;
-        inner.style.transform = `translate(${x * 0.4}px,${y * 0.4}px)`;
-      });
-      elm.addEventListener('mouseleave', () => {
-        elm.style.transform = '';
-        inner.style.transform = '';
-        elm.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
-        inner.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
-        setTimeout(() => { elm.style.transition = ''; inner.style.transition = ''; }, 600);
-      });
-    });
-  }
-
-  /* ---------------------------------------------------------
-     3. KINETIC TYPE — split lines / words
-  --------------------------------------------------------- */
-  function splitKinetic() {
-    // line-based: data-kinetic, children are explicit .kline or we wrap text
-    document.querySelectorAll('[data-kinetic="lines"]').forEach(node => {
-      const lines = node.innerHTML.split(/<br[^>]*>/i);
-      node.innerHTML = '';
-      node.classList.add('kinetic');
-      lines.forEach(html => {
-        const line = el('span', 'kline');
-        const inner = el('span', 'kline-inner');
+  /* ============================================================
+     KINETIC TYPE — split at boot
+  ============================================================ */
+  function initKinetic() {
+    $$('[data-kinetic="lines"]').forEach(el => {
+      const frags = el.innerHTML.split(/<br\s*\/?>/i);
+      el.innerHTML = '';
+      el.classList.add('kinetic');
+      frags.forEach(html => {
+        const line = mk('span', 'kline');
+        const inner = mk('span', 'kline-inner');
         inner.innerHTML = html.trim();
         line.appendChild(inner);
-        node.appendChild(line);
+        el.appendChild(line);
       });
     });
-    // word-based
-    document.querySelectorAll('[data-kinetic="words"]').forEach(node => {
-      const words = node.textContent.trim().split(/\s+/);
-      node.innerHTML = '';
-      node.classList.add('kinetic');
+    $$('[data-kinetic="words"]').forEach(el => {
+      const words = el.textContent.trim().split(/\s+/);
+      el.innerHTML = '';
+      el.classList.add('kinetic');
       words.forEach((w, i) => {
-        const wrap = el('span', 'kw');
-        const inner = el('span', 'kw-inner');
+        const wrap = mk('span', 'kw');
+        const inner = mk('span', 'kw-inner');
         inner.textContent = w;
         inner.style.transitionDelay = (i * 0.04) + 's';
         wrap.appendChild(inner);
-        node.appendChild(wrap);
-        node.appendChild(document.createTextNode(' '));
+        el.appendChild(wrap);
+        el.appendChild(document.createTextNode(' '));
       });
     });
   }
 
-  /* ---------------------------------------------------------
-     VIEWPORT ENGINE — rAF only (IO-free, Lenis-safe)
-     BCR is always accurate regardless of Lenis scroll mode
-     (native or virtual/transform). scrollY is derived from
-     the html element's BCR top so it also works in both modes.
-  --------------------------------------------------------- */
-  const _revealers = [];   // {el, off}
-  const _counters  = [];   // {el}
-  let _bgSections = [];
-  let _navEl = null;
-  let _progressBar = null;
-  const _bgMap = {
-    paper:     { bg: '#f7f4ee', fg: '#17130f', ink: false },
-    'paper-2': { bg: '#efeae1', fg: '#17130f', ink: false },
-    ink:       { bg: '#17130f', fg: '#f7f4ee', ink: true },
-    tomato:    { bg: '#e8442a', fg: '#fff', ink: true },
-  };
-  const _scrollies = []; // {root, steps, medias, chapterEls, progressEl, current}
-
-  function initReveal() {
-    document.querySelectorAll('[data-reveal], .kinetic').forEach(el =>
-      _revealers.push({ el, off: 0.9 }));
-  }
-  function initReactiveBg() {
-    _bgSections = [...document.querySelectorAll('[data-bg]')];
-    _navEl = document.querySelector('.nav');
+  /* ============================================================
+     COUNTER — count up on enter
+  ============================================================ */
+  function countUp(el) {
+    const to  = parseFloat(el.getAttribute('data-count'));
+    const dec = (el.getAttribute('data-count') || '').includes('.') ? 1 : 0;
+    const pre = el.getAttribute('data-pre') || '';
+    const suf = el.getAttribute('data-suf') || '';
+    if (REDUCE) { el.textContent = pre + to.toFixed(dec) + suf; return; }
+    const dur = 1400, t0 = performance.now();
+    (function frame(now) {
+      const p = clamp((now - t0) / dur, 0, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + (to * e).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(frame);
+    })(t0);
   }
 
-  function tickViewport() {
+  /* ============================================================
+     SCROLL-TELLING
+  ============================================================ */
+  function tickScrolly(sc, vh) {
+    const rootR = sc.root.getBoundingClientRect();
+    // Only process when section overlaps the viewport (+ 100vh buffer)
+    if (rootR.bottom < -vh || rootR.top > vh * 2) return;
+
+    let idx = 0;
+    for (let i = 0; i < sc.steps.length; i++) {
+      if (sc.steps[i].getBoundingClientRect().top < vh * 0.55) idx = i;
+    }
+
+    if (idx === sc.current) return;
+    sc.current = idx;
+
+    const key   = sc.steps[idx].getAttribute('data-scene');
+    const bgKey = sc.steps[idx].getAttribute('data-scene-bg');
+
+    sc.medias.forEach(m => m.classList.toggle('active', m.getAttribute('data-scene') === key));
+    sc.dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    if (sc.bar) sc.bar.style.transform = `scaleX(${(idx + 1) / sc.steps.length})`;
+    if (bgKey && SCENE_BG[bgKey]) sc.root.style.setProperty('--scene-bg', SCENE_BG[bgKey]);
+  }
+
+  /* ============================================================
+     MAIN VIEWPORT TICK — runs every rAF frame
+  ============================================================ */
+  function tick() {
     const vh = window.innerHeight;
-    // BCR-derived scroll position — works with Lenis native and virtual scroll modes
     const scrollY = -document.documentElement.getBoundingClientRect().top;
-    // reveals
-    for (let i = _revealers.length - 1; i >= 0; i--) {
-      const r = _revealers[i].el.getBoundingClientRect();
-      if (r.top < vh * _revealers[i].off && r.bottom > 0) {
-        _revealers[i].el.classList.add('is-in');
-        _revealers.splice(i, 1);
+
+    /* progress bar */
+    if (progressBar) {
+      const max = document.documentElement.scrollHeight - vh;
+      progressBar.style.width = (max > 0 ? clamp(scrollY / max, 0, 1) * 100 : 0) + '%';
+    }
+
+    /* nav scrolled class */
+    if (navEl) navEl.classList.toggle('scrolled', scrollY > 24);
+
+    /* reveals — fired once then removed */
+    for (let i = reveals.length - 1; i >= 0; i--) {
+      const r = reveals[i].el.getBoundingClientRect();
+      if (r.top < vh * reveals[i].threshold && r.bottom > 0) {
+        reveals[i].el.classList.add('is-in');
+        reveals.splice(i, 1);
       }
     }
-    // counters
-    for (let i = _counters.length - 1; i >= 0; i--) {
-      const r = _counters[i].el.getBoundingClientRect();
+
+    /* counters — fired once then removed */
+    for (let i = counters.length - 1; i >= 0; i--) {
+      const r = counters[i].el.getBoundingClientRect();
       if (r.top < vh * 0.88 && r.bottom > 0) {
-        runCounter(_counters[i].el);
-        _counters.splice(i, 1);
+        countUp(counters[i].el);
+        counters.splice(i, 1);
       }
     }
-    // progress bar
-    if (_progressBar) {
-      const h = document.documentElement.scrollHeight - vh;
-      _progressBar.style.width = clamp(scrollY / (h || 1), 0, 1) * 100 + '%';
-    }
-    // nav scrolled state
-    if (_navEl) _navEl.classList.toggle('scrolled', scrollY > 24);
-    // reactive bg — section whose band crosses viewport middle
-    if (_bgSections.length) {
+
+    /* reactive background */
+    if (bgSects.length) {
       let active = null;
-      for (const s of _bgSections) {
+      for (const s of bgSects) {
         const r = s.getBoundingClientRect();
-        if (r.top <= vh * 0.5 && r.bottom >= vh * 0.5) { active = s; break; }
+        if (r.top <= vh * 0.5) active = s;
+        else break;
       }
-      if (!active) { // fallback: last section above middle
-        for (const s of _bgSections) {
-          const r = s.getBoundingClientRect();
-          if (r.top <= vh * 0.5) active = s;
-        }
-      }
-      if (active && active.getAttribute('data-bg') !== tickViewport._lastBgKey) {
-        tickViewport._lastBgKey = active.getAttribute('data-bg');
-        const t = _bgMap[active.getAttribute('data-bg')];
-        if (t) {
-          document.body.style.setProperty('--bg', t.bg);
-          document.body.style.setProperty('--fg', t.fg);
-          document.body.classList.toggle('on-ink-mode', t.ink);
-          if (_navEl) _navEl.classList.toggle('on-ink', t.ink);
-        }
-      }
-    }
-    // scrolly
-    for (const sc of _scrollies) updateScrolly(sc, vh);
-  }
-
-  /* ---------------------------------------------------------
-     6. NAV scroll state
-  --------------------------------------------------------- */
-  function initNav() {
-    const nav = document.querySelector('.nav');
-    if (!nav) return;
-    // scrolled state is now driven by tickViewport (rAF) via _navEl
-
-    // mobile toggle
-    const toggle = nav.querySelector('.nav-toggle');
-    const links = nav.querySelector('.nav-links');
-    if (toggle && links) {
-      const label = toggle.querySelector('.nav-toggle-label') || toggle;
-      toggle.addEventListener('click', () => {
-        const open = nav.classList.toggle('menu-open');
-        if (label.textContent !== undefined) label.textContent = open ? 'Chiudi' : 'Menu';
-        // fold the primary CTA into the menu (clone once)
-        if (open && !links.querySelector('.nav-mobile-cta')) {
-          const cta = nav.querySelector('.nav-cta');
-          if (cta) {
-            const c = cta.cloneNode(true);
-            c.classList.add('nav-mobile-cta');
-            c.classList.remove('nav-cta');
-            c.removeAttribute('data-magnetic');
-            links.appendChild(c);
+      if (active) {
+        const key = active.getAttribute('data-bg');
+        if (key !== lastBgKey) {
+          lastBgKey = key;
+          const t = BG[key];
+          if (t) {
+            document.body.style.setProperty('--bg', t.bg);
+            document.body.style.setProperty('--fg', t.fg);
+            document.body.classList.toggle('on-ink-mode', t.ink);
+            if (navEl) navEl.classList.toggle('on-ink', t.ink);
           }
         }
-      });
-      // close menu when a link is tapped
-      links.addEventListener('click', e => {
-        if (e.target.closest('a') && nav.classList.contains('menu-open')) {
-          nav.classList.remove('menu-open');
-          if (label.textContent !== undefined) label.textContent = 'Menu';
-        }
-      });
+      }
     }
+
+    /* scroll-telling */
+    for (const sc of scrollies) tickScrolly(sc, vh);
   }
 
-  /* ---------------------------------------------------------
-     7. SCROLL PROGRESS
-  --------------------------------------------------------- */
-  function initProgress() {
-    _progressBar = document.querySelector('.scroll-progress');
-    // width is driven by tickViewport (rAF) — no scroll event needed
+  /* ============================================================
+     INIT HELPERS
+  ============================================================ */
+  function initReveal() {
+    $$('[data-reveal], .kinetic').forEach(el => reveals.push({ el, threshold: 0.9 }));
   }
 
-  /* ---------------------------------------------------------
-     8. MARQUEE — duplicate track for seamless loop
-  --------------------------------------------------------- */
-  function initMarquee() {
-    document.querySelectorAll('.marquee-track').forEach(track => {
-      track.innerHTML += track.innerHTML;
+  function initCounters() {
+    $$('[data-count]').forEach(el => counters.push({ el }));
+  }
+
+  function initBg() {
+    bgSects = $$('[data-bg]');
+    navEl   = $('.nav');
+    progressBar = $('.scroll-progress');
+  }
+
+  function initScrolly() {
+    $$('[data-scrolly]').forEach(root => {
+      scrollies.push({
+        root,
+        steps:   $$('.scrolly-step', root),
+        medias:  $$('.scene-media', root),
+        dots:    $$('[data-chapter-step]', root),
+        bar:     $('[data-scrolly-progress]', root),
+        current: -1,
+      });
     });
   }
 
-  /* ---------------------------------------------------------
-     9. COUNTERS — count up on enter ([data-count])
-  --------------------------------------------------------- */
-  function initCounters() {
-    document.querySelectorAll('[data-count]').forEach(n => _counters.push({ el: n }));
-  }
-  function runCounter(node) {
-    const to = parseFloat(node.getAttribute('data-count'));
-    const dec = (node.getAttribute('data-count') + '').includes('.') ? 1 : 0;
-    const pre = node.getAttribute('data-pre') || '';
-    const suf = node.getAttribute('data-suf') || '';
-    if (reduce) { node.textContent = pre + to.toFixed(dec) + suf; return; }
-    const dur = 1400, start = performance.now();
-    (function tick(now) {
-      const p = clamp((now - start) / dur, 0, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      node.textContent = pre + (to * e).toFixed(dec) + suf;
-      if (p < 1) requestAnimationFrame(tick);
-    })(start);
+  /* ============================================================
+     NAV mobile toggle
+  ============================================================ */
+  function initNav() {
+    const nav = $('.nav');
+    if (!nav) return;
+    const toggle = $('.nav-toggle', nav);
+    const links  = $('.nav-links', nav);
+    if (!toggle || !links) return;
+    const label = $('.nav-toggle-label', toggle) || toggle;
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('menu-open');
+      label.textContent = open ? 'Chiudi' : 'Menu';
+      if (open && !$('.nav-mobile-cta', links)) {
+        const cta = $('.nav-cta', nav);
+        if (cta) {
+          const c = cta.cloneNode(true);
+          c.classList.replace('nav-cta', 'nav-mobile-cta');
+          c.removeAttribute('data-magnetic');
+          links.appendChild(c);
+        }
+      }
+    });
+    links.addEventListener('click', e => {
+      if (e.target.closest('a') && nav.classList.contains('menu-open')) {
+        nav.classList.remove('menu-open');
+        label.textContent = 'Menu';
+      }
+    });
   }
 
-  /* ---------------------------------------------------------
-     10. PAGE TRANSITION MASK
-  --------------------------------------------------------- */
+  /* ============================================================
+     MARQUEE
+  ============================================================ */
+  function initMarquee() {
+    $$('.marquee-track').forEach(t => { t.innerHTML += t.innerHTML; });
+  }
+
+  /* ============================================================
+     PAGE MASK (transitions)
+  ============================================================ */
   function initPageMask() {
-    const mask = document.querySelector('.page-mask');
+    const mask = $('.page-mask');
     if (!mask) return;
     const introOn = () => (window.FOOODY_TWEAKS || {}).intro !== false;
     if (!introOn()) { mask.style.display = 'none'; return; }
 
-    // Derive page slug from a pathname (empty slug = home)
-    function getPageSlug(href) {
-      return (href || window.location.pathname).replace(/^\//, '').split('/')[0] || 'home';
-    }
-
-    const sp = mask.querySelector('.mask-word span');
-
-    // Entrance — panels retract from top, word disappears with panel 3
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        mask.querySelectorAll('.panel').forEach((p, i) => {
-          p.style.transition = 'transform .7s cubic-bezier(0.22,1,0.36,1)';
-          p.style.transitionDelay = (i * .05) + 's';
-          p.style.transformOrigin = 'top';
-          p.style.transform = 'scaleY(0)';
-        });
-        setTimeout(() => { mask.style.display = 'none'; }, 950);
+    /* entrance — panels retract upward */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      mask.querySelectorAll('.panel').forEach((p, i) => {
+        p.style.transition = 'transform .7s cubic-bezier(0.22,1,0.36,1)';
+        p.style.transitionDelay = (i * 0.05) + 's';
+        p.style.transformOrigin = 'top';
+        p.style.transform = 'scaleY(0)';
       });
-    });
-
-    // Fail-safe: never leave mask covering the page
+      setTimeout(() => { mask.style.display = 'none'; }, 950);
+    }));
     setTimeout(() => { mask.style.display = 'none'; }, 1800);
 
-    if (reduce) return;
+    if (REDUCE) return;
 
-    // Exit — panels cover from bottom, word updates to destination, then navigate
+    /* exit — panels cover, then navigate */
     document.addEventListener('click', e => {
       const a = e.target.closest('a[data-transition]');
       if (!a || !introOn()) return;
       const href = a.getAttribute('href');
       if (!href || href.startsWith('#') || a.target === '_blank') return;
       e.preventDefault();
-
-      // Update html data-page so CSS applies destination colours before panels animate in
-      document.documentElement.dataset.page = getPageSlug(href);
-
+      document.documentElement.dataset.page = (href || '').replace(/^\//, '').split('/')[0] || 'home';
+      const sp = $('.mask-word span', mask);
       const wt = a.getAttribute('data-transition-word');
       if (sp && wt) sp.textContent = wt;
-
       mask.style.display = '';
       mask.querySelectorAll('.panel').forEach((p, i) => {
         p.style.transition = 'transform .6s cubic-bezier(0.65,0,0.35,1)';
-        p.style.transitionDelay = (i * .05) + 's';
+        p.style.transitionDelay = (i * 0.05) + 's';
         p.style.transformOrigin = 'bottom';
         p.style.transform = 'scaleY(1)';
       });
-
       setTimeout(() => { window.location.href = href; }, 720);
     });
   }
 
-  /* ---------------------------------------------------------
-     11. SCROLL-TELLING controller (Metodo) — rAF driven
-  --------------------------------------------------------- */
-  function initScrolly() {
-    document.querySelectorAll('[data-scrolly]').forEach(root => {
-      _scrollies.push({
-        root,
-        steps: [...root.querySelectorAll('.scrolly-step')],
-        medias: [...root.querySelectorAll('.scene-media')],
-        chapterEls: [...root.querySelectorAll('[data-chapter-step]')],
-        progressEl: root.querySelector('[data-scrolly-progress]'),
-        current: -1,
+  /* ============================================================
+     MAGNETIC CURSOR
+  ============================================================ */
+  function initCursor() {
+    if (!CAN_HOVER) return;
+    document.body.classList.add('has-cursor');
+    const dot     = mk('div', 'cursor-dot');
+    const ring    = mk('div', 'cursor-ring');
+    const label   = mk('div', 'cursor-label');
+    const preview = mk('div', 'cursor-preview');
+    const pImg    = mk('div');
+    pImg.style.cssText = 'width:100%;height:100%';
+    preview.appendChild(pImg);
+    document.body.append(dot, ring, label, preview);
+
+    let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, down = false;
+
+    window.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform   = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+      label.style.left      = mx + 'px';
+      label.style.top       = (my + 46) + 'px';
+      preview.style.left    = mx + 'px';
+      preview.style.top     = my + 'px';
+    });
+    window.addEventListener('mousedown', () => { down = true; });
+    window.addEventListener('mouseup',   () => { down = false; });
+
+    (function rafRing() {
+      rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
+      ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%) scale(${down ? 0.8 : 1})`;
+      requestAnimationFrame(rafRing);
+    })();
+
+    const SEL = 'a,button,[data-magnetic],.chip,input,textarea,[data-cursor]';
+    document.addEventListener('mouseover', e => {
+      const t = e.target.closest(SEL);
+      if (!t) return;
+      ring.classList.add('is-hover');
+      const lbl = t.getAttribute('data-cursor');
+      if (lbl) { label.textContent = lbl; label.classList.add('show'); ring.classList.add('is-label'); }
+      const prev = t.getAttribute('data-preview');
+      if (prev) {
+        pImg.style.cssText = `width:100%;height:100%;background:${prev};background-size:cover;background-position:center;background-image:repeating-linear-gradient(135deg,rgba(247,244,238,.10) 0 1px,transparent 1px 9px);background-color:#211c17`;
+        const cap = t.getAttribute('data-preview-label');
+        if (cap) {
+          pImg.style.display = 'grid'; pImg.style.placeItems = 'center';
+          pImg.innerHTML = `<span style="font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-3);background:#17130f;padding:5px 9px;border-radius:999px">${cap}</span>`;
+        }
+        preview.classList.add('show');
+      }
+    });
+    document.addEventListener('mouseout', e => {
+      if (!e.target.closest(SEL)) return;
+      ring.classList.remove('is-hover', 'is-label');
+      label.classList.remove('show');
+      preview.classList.remove('show');
+    });
+  }
+
+  /* ============================================================
+     MAGNETIC ELEMENTS
+  ============================================================ */
+  function initMagnetic() {
+    if (!CAN_HOVER || REDUCE) return;
+    $$('[data-magnetic]').forEach(el => {
+      const str   = parseFloat(el.getAttribute('data-magnetic')) || 0.3;
+      const inner = $('[data-magnetic-inner]', el) || el;
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width  / 2) * str;
+        const y = (e.clientY - r.top  - r.height / 2) * str;
+        el.style.transform    = `translate(${x}px,${y}px)`;
+        inner.style.transform = `translate(${x * 0.4}px,${y * 0.4}px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        const t = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+        el.style.transition = inner.style.transition = t;
+        el.style.transform  = inner.style.transform  = '';
+        setTimeout(() => { el.style.transition = inner.style.transition = ''; }, 600);
       });
     });
   }
-  function updateScrolly(sc, vh) {
-    let idx = -1;
-    for (let i = 0; i < sc.steps.length; i++) {
-      if (sc.steps[i].getBoundingClientRect().top < vh * 0.55) idx = i;
-    }
-    if (idx < 0) idx = 0;
-    if (idx === sc.current) return;
-    sc.current = idx;
-    const step = sc.steps[idx];
-    const key = step.getAttribute('data-scene');
-    const bgkey = step.getAttribute('data-scene-bg');
-    sc.medias.forEach(m => m.classList.toggle('active', m.getAttribute('data-scene') === key));
-    sc.chapterEls.forEach((c, i) => c.classList.toggle('active', i === idx));
-    if (sc.progressEl) sc.progressEl.style.transform = `scaleX(${(idx + 1) / sc.steps.length})`;
-    if (bgkey) {
-      const tones = { ink: '#17130f', paper: '#f7f4ee', 'paper-2': '#efeae1',
-        tomato: '#e8442a', deep: '#0f0c0a' };
-      sc.root.style.setProperty('--scene-bg', tones[bgkey] || bgkey);
-    }
-  }
 
-  /* ---------------------------------------------------------
-     12. TILT on [data-tilt]
-  --------------------------------------------------------- */
+  /* ============================================================
+     TILT cards
+  ============================================================ */
   function initTilt() {
-    if (!canHover || reduce) return;
-    document.querySelectorAll('[data-tilt]').forEach(card => {
+    if (!CAN_HOVER || REDUCE) return;
+    $$('[data-tilt]').forEach(card => {
       const max = parseFloat(card.getAttribute('data-tilt')) || 6;
       card.style.transformStyle = 'preserve-3d';
       card.addEventListener('mousemove', e => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
+        const r  = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width  - 0.5;
+        const py = (e.clientY - r.top)  / r.height - 0.5;
         card.style.transform = `perspective(900px) rotateY(${px * max}deg) rotateX(${-py * max}deg)`;
       });
       card.addEventListener('mouseleave', () => {
         card.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
-        card.style.transform = '';
-        setTimeout(() => card.style.transition = '', 600);
+        card.style.transform  = '';
+        setTimeout(() => { card.style.transition = ''; }, 600);
       });
     });
   }
 
-  /* helpers */
-  function el(tag, cls) { const n = document.createElement(tag); if (cls) n.className = cls; return n; }
+  /* ============================================================
+     WORK hover (home)
+  ============================================================ */
+  function initWork() {
+    const mode = () => (window.FOOODY_TWEAKS || {}).workHover || 'tilt';
+    document.body.classList.add('wh-' + mode());
+    if (!CAN_HOVER || REDUCE) return;
+    $$('.work').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        if (mode() !== 'tilt') return;
+        const r  = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width  - 0.5;
+        const py = (e.clientY - r.top)  / r.height - 0.5;
+        card.style.transform = `perspective(900px) rotateY(${(px * 5).toFixed(2)}deg) rotateX(${(-py * 5).toFixed(2)}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform .6s var(--ease)';
+        card.style.transform  = '';
+        setTimeout(() => { card.style.transition = ''; }, 600);
+      });
+    });
+  }
 
-  /* boot */
+  /* ============================================================
+     BOOT
+  ============================================================ */
   function boot() {
-    splitKinetic();
+    initKinetic();
     initReveal();
-    initReactiveBg();
-    initNav();
-    initProgress();
-    initMarquee();
     initCounters();
+    initBg();
     initScrolly();
+    initNav();
+    initMarquee();
+    initCursor();
     initMagnetic();
     initTilt();
-    initCursor();
+    initWork();
     initPageMask();
-    // viewport engine: continuous rAF — Lenis suppresses native scroll events,
-    // so we run tickViewport every frame using BCR (always correct with Lenis)
-    (function viewportLoop() {
-      tickViewport();
-      requestAnimationFrame(viewportLoop);
-    })();
-    window.addEventListener('resize', tickViewport, { passive: true });
 
-    // absolute fail-safe: never leave content hidden
+    /* single viewport rAF loop */
+    (function loop() { tick(); requestAnimationFrame(loop); })();
+    window.addEventListener('resize', tick, { passive: true });
+
+    /* absolute fallback: never leave content hidden */
     setTimeout(() => {
-      document.querySelectorAll('[data-reveal], .kinetic').forEach(el => el.classList.add('is-in'));
+      $$('[data-reveal], .kinetic').forEach(el => el.classList.add('is-in'));
     }, 3000);
   }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();
