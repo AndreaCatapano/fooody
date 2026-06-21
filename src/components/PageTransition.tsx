@@ -37,25 +37,27 @@ export function PageTransition() {
     el.style.pointerEvents = 'auto'
   }
 
-  /* Fade overlay out smoothly */
-  function hide() {
-    const el = ref.current
-    if (!el) return
-    el.style.transition = 'opacity 0.65s cubic-bezier(0.22,1,0.36,1)'
-    requestAnimationFrame(() => {
-      if (ref.current) ref.current.style.opacity = '0'
-    })
+  /* Fade overlay out: hold briefly, then ease out over 0.85s */
+  function hide(delay = 60) {
     setTimeout(() => {
-      if (ref.current) ref.current.style.pointerEvents = 'none'
-      setWord('')
-    }, 700)
+      const el = ref.current
+      if (!el) return
+      el.style.transition = 'opacity 0.85s cubic-bezier(0.16,1,0.3,1)'
+      requestAnimationFrame(() => {
+        if (ref.current) ref.current.style.opacity = '0'
+      })
+      setTimeout(() => {
+        if (ref.current) ref.current.style.pointerEvents = 'none'
+        setWord('')
+      }, 920)
+    }, delay)
   }
 
-  /* Entry: show current-page colour, then fade out */
+  /* Entry: show current-page colour, then fade out after a beat */
   useEffect(() => {
     const bg = PAGE_COLOR[pageKey(pathname)] ?? '#17130f'
     show(bg)
-    requestAnimationFrame(() => requestAnimationFrame(() => hide()))
+    requestAnimationFrame(() => requestAnimationFrame(() => hide(120)))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -63,11 +65,9 @@ export function PageTransition() {
   useEffect(() => {
     if (!navigating.current) return
     navigating.current = false
-    setTimeout(() => {
-      hide()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ;(window as any).motionReinit?.()
-    }, 100)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(window as any).motionReinit?.()
+    hide(80)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 

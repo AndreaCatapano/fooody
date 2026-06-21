@@ -1,7 +1,7 @@
 /* ============================================================
-   FOOODY — Hero engine · mode-particelle
-   Particelle che compongono FOOODY e si disperdono con lo scroll.
-   Scroll position via BCR (Lenis-safe).
+   FOOODY — Hero engine · particelle
+   Canvas FOOODY text → particelle che si disperdono allo scroll.
+   BCR scroll (Lenis-safe) · per-particle speed variation · lerp smooth.
    ============================================================ */
 (function () {
   'use strict';
@@ -12,9 +12,9 @@
   const lerp  = (a, b, t) => a + (b - a) * t;
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-  /* ---- find elements — graceful, no early exit on missing IDs ---- */
-  const hero      = document.getElementById('hero');
-  if (!hero) return;                          // not on home page, stop here
+  /* ---- elements ---- */
+  const hero = document.getElementById('hero');
+  if (!hero) return;
 
   const stage     = hero.querySelector('.hero-stage');
   const canvas    = hero.querySelector('.hero-particles, #hero-particles');
@@ -24,15 +24,23 @@
   const eyebrow   = hero.querySelector('.hero-eyebrow');
   const cap       = hero.querySelector('.hero-cap');
 
-  if (!stage || !canvas) return;             // can't draw without these two
+  if (!stage || !canvas) return;
 
-  /* ---- config from tweaks (mutable so tweakchange can update) ---- */
-  const tw  = window.FOOODY_TWEAKS || {};
-  let DENSITY = clamp(tw.particleCount || 80, 20, 120);
-  let DIR     = tw.particleDir || 'sparpaglia';
-  let SIZE    = clamp(tw.particleSize || 100, 40, 260);
+  /* ---- color map ---- */
+  const COLOR_HEX = { ink: '#17130f', tomato: '#e8442a', paper: '#f7f4ee', cream: '#d2b48c' };
+  /* ---- sensitivity map (scroll progress multiplier) ---- */
+  const SENS_MAP  = { dolce: 0.6, normale: 1.0, forte: 1.55 };
 
-  /* brief preview burst so direction change is visible without scrolling */
+  /* ---- tweaks state (mutable — updated by tweakchange) ---- */
+  const tw   = window.FOOODY_TWEAKS || {};
+  let DENSITY = clamp(tw.particleCount    || 80,          20,  120);
+  let SIZE    = clamp(tw.particleSize     || 100,         40,  260);
+  let DIR     = tw.particleDir    || 'sparpaglia';
+  let PCOLOR  = COLOR_HEX[tw.particleColor] || '#17130f';
+  let GLOW    = !!tw.glow;
+  let SENS    = tw.scrollSensitivity || 'normale';
+
+  /* ---- preview burst: show scatter direction without scrolling ---- */
   let previewE = 0, previewTimer = null;
 
   /* ---- mouse parallax ---- */
@@ -44,52 +52,43 @@
     }, { passive: true });
   }
 
-  /* ---- BCR-based scroll progress (Lenis-safe) ---- */
+  /* ---- scroll progress (BCR, Lenis-safe) ---- */
   function scrollProg() {
     const range = hero.offsetHeight - innerHeight;
     return clamp(range > 0 ? -hero.getBoundingClientRect().top / range : 0, 0, 1);
   }
+
+  /* ease-in-out quad */
   function ease(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
 
-  /* ---- particle state ---- */
+  /* ---- canvas state ---- */
   let ctx, parts = [], W = 0, H = 0, cx = 0, cy = 0;
   let built = false;
   let pmx = 0, pmy = 0;
+  let eSmooth = 0; /* lerped effective scatter — for silky transitions */
 
-  /* ---- build particles from text bitmap ---- */
+  /* ---- build particles from FOOODY text bitmap ---- */
   function buildParticles() {
     const r = stage.getBoundingClientRect();
     W = Math.round(r.width);
     H = Math.round(r.height);
-
-    if (W === 0 || H === 0) {
-      /* stage not laid out yet — retry next frame */
-      requestAnimationFrame(buildParticles);
-      return;
-    }
+    if (W === 0 || H === 0) { requestAnimationFrame(buildParticles); return; }
 
     canvas.width  = W;
     canvas.height = H;
-    cx = W / 2;
-    cy = H / 2;
+    cx = W / 2; cy = H / 2;
     ctx = canvas.getContext('2d');
 
-    /* offscreen canvas to sample text pixels */
     const off = document.createElement('canvas');
     off.width = W; off.height = H;
     const o = off.getContext('2d');
 
-    /* font: use the actual loaded body font (sans-serif stack).
-       We read the computed font-family from a live element so the
-       Next.js local font variable is resolved to its actual name. */
     const bodyFont = getComputedStyle(document.body).fontFamily
       || '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
     o.fillStyle   = '#000';
     o.textAlign   = 'center';
     o.textBaseline = 'middle';
-
-    /* measure at 100 px then scale to fill ~88 % of width */
     o.font = `700 100px ${bodyFont}`;
     const measured = o.measureText('FOOODY').width || 100;
     const fs = Math.min(100 * (W * 0.88) / measured, H * 0.46);
@@ -98,6 +97,7 @@
 
     const px   = o.getImageData(0, 0, W, H).data;
     const step = clamp(Math.round(14 - (DENSITY / 120) * 10), 3, 14);
+    const sz   = step * 0.55 * (SIZE / 100);
 
     parts = [];
     for (let y = 0; y < H; y += step) {
@@ -107,20 +107,25 @@
           let dx, dy;
           if (DIR === 'su') {
             dx = (x - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
-            dy = -(0.5  + Math.random() * 0.7) * H;
+            dy = -(0.5 + Math.random() * 0.7) * H;
           } else if (DIR === 'giu') {
             dx = (x - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
-            dy =  (0.5  + Math.random() * 0.7) * H;
+            dy =  (0.5 + Math.random() * 0.7) * H;
           } else if (DIR === 'sparpaglia') {
             const d = (0.4 + Math.random()) * W * 0.4;
             dx = Math.cos(ang) * d;
             dy = Math.sin(ang) * d * 0.65;
-          } else {
-            /* esplode: radiale dal centro */
+          } else { /* esplode */
             dx = (x - cx) * 0.85 + Math.cos(ang) * W * 0.12;
             dy = (y - cy) * 0.85 + Math.sin(ang) * H * 0.12;
           }
-          parts.push({ hx: x, hy: y, dx, dy, ph: Math.random() * Math.PI * 2, sz: step * 0.55 * (SIZE / 100) });
+          /* sp: per-particle speed variation → organic stagger */
+          parts.push({
+            hx: x, hy: y, dx, dy,
+            ph: Math.random() * Math.PI * 2,
+            sz,
+            sp: 0.65 + Math.random() * 0.7,
+          });
         }
       }
     }
@@ -131,70 +136,80 @@
   function draw(now) {
     if (!ctx || !built) return;
 
-    const p  = scrollProg();
-    const e  = ease(Math.max(p, previewE));
-    const t  = now * 0.001;
-    const jitter = REDUCE ? 0 : 2.0;
-    const AMT    = 14;                        /* parallax amplitude px */
+    const p      = scrollProg();
+    const sens   = SENS_MAP[SENS] || 1.0;
+    const eBase  = ease(clamp(p * sens, 0, 1));
+    const eDisp  = Math.max(eBase, previewE); /* preview overrides scroll */
+    const t      = now * 0.001;
+    const jitter = REDUCE ? 0 : 2.2;
+    const AMT    = 14;
+
+    /* smooth lerp — particles drift into position rather than snapping */
+    eSmooth = REDUCE ? eDisp : lerp(eSmooth, eDisp, 0.09);
 
     pmx = lerp(pmx, -mx * AMT,        0.08);
     pmy = lerp(pmy, -my * AMT * 0.65, 0.08);
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle  = '#17130f';
+    ctx.fillStyle   = PCOLOR;
     ctx.globalAlpha = clamp(1 - p * 1.5, 0, 1);
 
+    if (GLOW && !REDUCE) {
+      ctx.shadowBlur  = 7 * (SIZE / 100);
+      ctx.shadowColor = PCOLOR;
+    } else {
+      ctx.shadowBlur = 0;
+    }
+
     for (let i = 0; i < parts.length; i++) {
-      const o = parts[i];
-      const x = o.hx + pmx + o.dx * e + (jitter ? Math.sin(t * 1.3 + o.ph) * jitter : 0);
-      const y = o.hy + pmy + o.dy * e + (jitter ? Math.cos(t * 1.1 + o.ph) * jitter : 0);
+      const o  = parts[i];
+      /* each particle uses its own speed to scatter — staggered effect */
+      const pE = ease(clamp(eSmooth * o.sp, 0, 1));
+      const x  = o.hx + pmx + o.dx * pE + (jitter ? Math.sin(t * 1.3 + o.ph) * jitter : 0);
+      const y  = o.hy + pmy + o.dy * pE + (jitter ? Math.cos(t * 1.1 + o.ph) * jitter : 0);
       ctx.fillRect(x, y, o.sz, o.sz);
     }
+
     ctx.globalAlpha = 1;
+    ctx.shadowBlur  = 0;
 
-    /* reveal video as particles scatter */
-    if (paper) paper.style.opacity     = clamp(1 - p * 1.25, 0, 1).toFixed(3);
-    if (vid)   vid.style.transform     = `scale(${(1.06 + e * 0.18).toFixed(3)})`;
+    if (paper) paper.style.opacity = clamp(1 - p * 1.25, 0, 1).toFixed(3);
+    if (vid)   vid.style.transform = `scale(${(1.06 + eSmooth * 0.18).toFixed(3)})`;
 
-    /* fade auxiliary UI elements */
     const uiFade = clamp(1 - p * 2.4, 0, 1).toFixed(3);
     [eyebrow, cap, scrollCue].forEach(el => el && (el.style.opacity = uiFade));
   }
 
   /* ---- rAF loop ---- */
-  function loop(now) {
-    draw(now);
-    requestAnimationFrame(loop);
-  }
+  function loop(now) { draw(now); requestAnimationFrame(loop); }
 
-  /* ---- resize — debounced rebuild ---- */
+  /* ---- resize ---- */
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(buildParticles, 180);
   });
 
-  /* ---- tweakchange: rebuild if particle params change ---- */
+  /* ---- tweakchange ---- */
   window.addEventListener('tweakchange', e => {
     const d = e.detail || {};
-    let rebuild = false;
-    let preview = false;
-    if ('particleCount' in d) { DENSITY = clamp(d.particleCount, 20, 120); rebuild = true; }
-    if ('particleSize'  in d) { SIZE    = clamp(d.particleSize,  40, 260); rebuild = true; }
-    if ('particleDir'   in d) { DIR     = d.particleDir; rebuild = true; preview = true; }
+    let rebuild = false, preview = false;
+    if ('particleCount'     in d) { DENSITY = clamp(d.particleCount, 20, 120);     rebuild = true; }
+    if ('particleSize'      in d) { SIZE    = clamp(d.particleSize,  40, 260);     rebuild = true; }
+    if ('particleColor'     in d) { PCOLOR  = COLOR_HEX[d.particleColor] || PCOLOR; }
+    if ('glow'              in d) { GLOW    = !!d.glow; }
+    if ('scrollSensitivity' in d) { SENS    = d.scrollSensitivity; }
+    if ('particleDir'       in d) { DIR     = d.particleDir; rebuild = true; preview = true; }
     if (rebuild) buildParticles();
     if (preview) {
-      /* animate scatter so direction change is visible at rest */
-      previewE = 0.45;
+      previewE = 0.48;
       clearTimeout(previewTimer);
-      previewTimer = setTimeout(() => { previewE = 0; }, 1400);
+      previewTimer = setTimeout(() => { previewE = 0; }, 1600);
     }
   });
 
-  /* ---- boot: build now, then rebuild after fonts load ---- */
+  /* ---- boot ---- */
   buildParticles();
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(buildParticles);
-  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildParticles);
   requestAnimationFrame(loop);
 })();
