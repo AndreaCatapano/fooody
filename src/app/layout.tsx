@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</Script>
 
         <Script id="tweaks-init" strategy="beforeInteractive">{`
-          var _def = { particleCount:80, particleDir:'sparpaglia' };
+          var _def = { particleCount:80, particleSize:100, particleDir:'sparpaglia' };
           try {
             var s = localStorage.getItem('fooody_tweaks');
             window.FOOODY_TWEAKS = s ? Object.assign({}, _def, JSON.parse(s)) : _def;

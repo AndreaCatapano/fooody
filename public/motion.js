@@ -35,8 +35,8 @@
   /* ============================================================
      KINETIC TYPE — split at boot
   ============================================================ */
-  function initKinetic() {
-    $$('[data-kinetic="lines"]').forEach(el => {
+  function initKinetic(root) {
+    $$('[data-kinetic="lines"]:not(.kinetic)', root).forEach(el => {
       const frags = el.innerHTML.split(/<br\s*\/?>/i);
       el.innerHTML = '';
       el.classList.add('kinetic');
@@ -48,7 +48,7 @@
         el.appendChild(line);
       });
     });
-    $$('[data-kinetic="words"]').forEach(el => {
+    $$('[data-kinetic="words"]:not(.kinetic)', root).forEach(el => {
       const words = el.textContent.trim().split(/\s+/);
       el.innerHTML = '';
       el.classList.add('kinetic');
@@ -169,30 +169,30 @@
   }
 
   /* ============================================================
-     INIT HELPERS
+     INIT HELPERS  (root param lets reinit scope to #main-content)
   ============================================================ */
-  function initReveal() {
-    $$('[data-reveal], .kinetic').forEach(el => reveals.push({ el, threshold: 0.9 }));
+  function initReveal(root) {
+    $$('[data-reveal], .kinetic', root).forEach(el => reveals.push({ el, threshold: 0.9 }));
   }
 
-  function initCounters() {
-    $$('[data-count]').forEach(el => counters.push({ el }));
+  function initCounters(root) {
+    $$('[data-count]', root).forEach(el => counters.push({ el }));
   }
 
   function initBg() {
-    bgSects = $$('[data-bg]');
-    navEl   = $('.nav');
-    progressBar = $('.scroll-progress');
+    bgSects     = $$('[data-bg]');
+    navEl       = navEl       || $('.nav');
+    progressBar = progressBar || $('.scroll-progress');
   }
 
-  function initScrolly() {
-    $$('[data-scrolly]').forEach(root => {
+  function initScrolly(root) {
+    $$('[data-scrolly]', root).forEach(sect => {
       scrollies.push({
-        root,
-        steps:   $$('.scrolly-step', root),
-        medias:  $$('.scene-media', root),
-        dots:    $$('[data-chapter-step]', root),
-        bar:     $('[data-scrolly-progress]', root),
+        root:    sect,
+        steps:   $$('.scrolly-step', sect),
+        medias:  $$('.scene-media',  sect),
+        dots:    $$('[data-chapter-step]', sect),
+        bar:     $('[data-scrolly-progress]', sect),
         current: -1,
       });
     });
@@ -369,11 +369,11 @@
      BOOT
   ============================================================ */
   function boot() {
-    initKinetic();
-    initReveal();
-    initCounters();
+    initKinetic(document);
+    initReveal(document);
+    initCounters(document);
     initBg();
-    initScrolly();
+    initScrolly(document);
     initNav();
     initMarquee();
     initCursor();
@@ -389,6 +389,21 @@
       $$('[data-reveal], .kinetic').forEach(el => el.classList.add('is-in'));
     }, 3000);
   }
+
+  /* re-init after client-side navigation — called by PageTransition */
+  window.motionReinit = function () {
+    const main = document.getElementById('main-content') || document.body;
+    reveals   = [];
+    counters  = [];
+    scrollies = [];
+    lastBgKey = null;
+    bgSects   = $$('[data-bg]');
+    initKinetic(main);
+    initReveal(main);
+    initCounters(main);
+    initScrolly(main);
+    setTimeout(() => $$('[data-reveal], .kinetic', main).forEach(el => el.classList.add('is-in')), 3000);
+  };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();

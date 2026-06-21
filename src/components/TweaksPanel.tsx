@@ -5,11 +5,13 @@ type ParticleDir = 'sparpaglia' | 'su' | 'giu' | 'esplode'
 
 interface Tweaks {
   particleCount: number
+  particleSize:  number
   particleDir:   ParticleDir
 }
 
 const DEFAULTS: Tweaks = {
   particleCount: 80,
+  particleSize:  100,
   particleDir:   'sparpaglia',
 }
 
@@ -66,7 +68,15 @@ export default function TweaksPanel() {
             style={rangeStyle}
           />
 
-          <Label>Entrata</Label>
+          <Label>Grandezza — {tweaks.particleSize}%</Label>
+          <input
+            type="range" min={40} max={260} step={10}
+            value={tweaks.particleSize}
+            onChange={e => update('particleSize', Number(e.target.value))}
+            style={rangeStyle}
+          />
+
+          <Label>Dispersione</Label>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {(['sparpaglia', 'su', 'giu', 'esplode'] as ParticleDir[]).map(v => (
               <RadioBtn key={v} active={tweaks.particleDir === v} onClick={() => update('particleDir', v)}>

@@ -13,7 +13,7 @@ const PAGE_COLOR: Record<string, string> = {
   lavori:   '#17130f',
 }
 
-const LIGHT_BG = new Set(['#c88a1a', '#f7f4ee'])
+const LIGHT_BG = new Set(['#c88a1a'])
 
 function pageKey(path: string) {
   return path.replace(/^\//, '').split('/')[0] || 'home'
@@ -22,22 +22,53 @@ function pageKey(path: string) {
 export function PageTransition() {
   const pathname   = usePathname()
   const router     = useRouter()
-  const [visible,  setVisible] = useState(true)
-  const [color,    setColor]   = useState(() => PAGE_COLOR[pageKey(pathname)] ?? '#17130f')
-  const [word,     setWord]    = useState('')
+  const ref        = useRef<HTMLDivElement>(null)
+  const [word,     setWord]      = useState('')
+  const [wordColor, setWordColor] = useState('#f7f4ee')
   const navigating = useRef(false)
 
-  /* Entry animation: fade out on first paint */
+  /* Snap overlay to full coverage instantly */
+  function show(bg: string) {
+    const el = ref.current
+    if (!el) return
+    el.style.transition    = 'none'
+    el.style.background    = bg
+    el.style.opacity       = '1'
+    el.style.pointerEvents = 'auto'
+  }
+
+  /* Fade overlay out smoothly */
+  function hide() {
+    const el = ref.current
+    if (!el) return
+    el.style.transition = 'opacity 0.65s cubic-bezier(0.22,1,0.36,1)'
+    requestAnimationFrame(() => {
+      if (ref.current) ref.current.style.opacity = '0'
+    })
+    setTimeout(() => {
+      if (ref.current) ref.current.style.pointerEvents = 'none'
+      setWord('')
+    }, 700)
+  }
+
+  /* Entry: show current-page colour, then fade out */
   useEffect(() => {
-    requestAnimationFrame(() => requestAnimationFrame(() => setVisible(false)))
+    const bg = PAGE_COLOR[pageKey(pathname)] ?? '#17130f'
+    show(bg)
+    requestAnimationFrame(() => requestAnimationFrame(() => hide()))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  /* Navigation complete: fade out overlay */
+  /* Navigation complete → fade out + reinit motion.js for new page */
   useEffect(() => {
     if (!navigating.current) return
     navigating.current = false
-    const t = setTimeout(() => setVisible(false), 80)
-    return () => clearTimeout(t)
+    setTimeout(() => {
+      hide()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ;(window as any).motionReinit?.()
+    }, 100)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
   /* Click interceptor for data-transition links */
@@ -56,9 +87,9 @@ export function PageTransition() {
                ?? (key.charAt(0).toUpperCase() + key.slice(1))
 
       document.documentElement.dataset.page = key
-      setColor(bg)
+      show(bg)
       setWord(wt)
-      setVisible(true)
+      setWordColor(LIGHT_BG.has(bg) ? '#17130f' : '#f7f4ee')
       navigating.current = true
 
       setTimeout(() => router.push(href), 480)
@@ -70,15 +101,13 @@ export function PageTransition() {
 
   return (
     <div
+      ref={ref}
       aria-hidden="true"
       style={{
         position: 'fixed', inset: 0, zIndex: 9000,
-        background: color,
-        opacity: visible ? 1 : 0,
-        pointerEvents: visible ? 'auto' : 'none',
-        transition: visible
-          ? 'opacity 0.35s cubic-bezier(0.65,0,0.35,1)'
-          : 'opacity 0.6s cubic-bezier(0.22,1,0.36,1)',
+        background: PAGE_COLOR[pageKey(pathname)] ?? '#17130f',
+        opacity: 1,
+        pointerEvents: 'auto',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}
     >
@@ -86,7 +115,7 @@ export function PageTransition() {
         <span style={{
           fontFamily: 'var(--exp)',
           fontWeight: 700,
-          color: LIGHT_BG.has(color) ? '#17130f' : '#f7f4ee',
+          color: wordColor,
           fontSize: 'clamp(2.5rem, 9vw, 7rem)',
           letterSpacing: '-0.01em',
           whiteSpace: 'nowrap',

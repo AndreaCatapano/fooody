@@ -30,6 +30,10 @@
   const tw  = window.FOOODY_TWEAKS || {};
   let DENSITY = clamp(tw.particleCount || 80, 20, 120);
   let DIR     = tw.particleDir || 'sparpaglia';
+  let SIZE    = clamp(tw.particleSize || 100, 40, 260);
+
+  /* brief preview burst so direction change is visible without scrolling */
+  let previewE = 0, previewTimer = null;
 
   /* ---- mouse parallax ---- */
   let mx = 0, my = 0;
@@ -116,7 +120,7 @@
             dx = (x - cx) * 0.85 + Math.cos(ang) * W * 0.12;
             dy = (y - cy) * 0.85 + Math.sin(ang) * H * 0.12;
           }
-          parts.push({ hx: x, hy: y, dx, dy, ph: Math.random() * Math.PI * 2, sz: step * 0.55 });
+          parts.push({ hx: x, hy: y, dx, dy, ph: Math.random() * Math.PI * 2, sz: step * 0.55 * (SIZE / 100) });
         }
       }
     }
@@ -128,7 +132,7 @@
     if (!ctx || !built) return;
 
     const p  = scrollProg();
-    const e  = ease(p);
+    const e  = ease(Math.max(p, previewE));
     const t  = now * 0.001;
     const jitter = REDUCE ? 0 : 2.0;
     const AMT    = 14;                        /* parallax amplitude px */
@@ -174,9 +178,17 @@
   window.addEventListener('tweakchange', e => {
     const d = e.detail || {};
     let rebuild = false;
+    let preview = false;
     if ('particleCount' in d) { DENSITY = clamp(d.particleCount, 20, 120); rebuild = true; }
-    if ('particleDir'   in d) { DIR     = d.particleDir;                   rebuild = true; }
+    if ('particleSize'  in d) { SIZE    = clamp(d.particleSize,  40, 260); rebuild = true; }
+    if ('particleDir'   in d) { DIR     = d.particleDir; rebuild = true; preview = true; }
     if (rebuild) buildParticles();
+    if (preview) {
+      /* animate scatter so direction change is visible at rest */
+      previewE = 0.45;
+      clearTimeout(previewTimer);
+      previewTimer = setTimeout(() => { previewE = 0; }, 1400);
+    }
   });
 
   /* ---- boot: build now, then rebuild after fonts load ---- */
