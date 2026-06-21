@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</Script>
 
         <Script src="/motion.js" strategy="afterInteractive" />
-        <Script src="/hero-effects.js" strategy="afterInteractive" />
+        <Script src="/hero-cine.js" strategy="afterInteractive" />
         <SmoothScroll />
       </body>
     </html>

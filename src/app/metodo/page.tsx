@@ -149,7 +149,7 @@ export default function MetodoPage() {
       <section
         data-scrolly=""
         id="pilastri"
-        style={{ '--scene-bg': '#17130f' } as React.CSSProperties}
+        style={{ '--scene-bg': '#0f0c0a' } as React.CSSProperties}
       >
         <div
           className="wrap"
