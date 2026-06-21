@@ -279,6 +279,11 @@ body.has-cursor [data-magnetic] { cursor: none; }
   transition: border-color 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease);
 }
 .chip:hover { border-color: var(--ink); color: var(--ink); }
+/* per-page chip accent — uses html[data-page] set before first paint */
+html[data-page="social"]   .chip { border-color: var(--tomato); color: var(--tomato); }
+html[data-page="metodo"]   .chip { border-color: var(--gold-deep); color: var(--gold-deep); }
+html[data-page="web"]      .chip { border-color: var(--violet); color: var(--violet); }
+html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tomato); }
 
 /* ============ index number ============ */
 .idx { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--ink-3); }
@@ -611,24 +616,21 @@ body.has-cursor [data-magnetic] { cursor: none; }
   white-space: nowrap;
 }
 
-/* ---- page mask: per-page colour themes ---- */
-/* Social → tomato */
-.page-mask[data-theme="social"] .panel { background: var(--tomato); }
-/* Metodo → gold (light bg — use dark word) */
-.page-mask[data-theme="metodo"] .panel { background: var(--gold); }
-.page-mask[data-theme="metodo"] .mask-word span { color: var(--ink); }
-/* Web → violet */
-.page-mask[data-theme="web"] .panel { background: var(--violet); }
-/* Branding → gradient across the 5 columns (panels transparent) */
-.page-mask[data-theme="branding"] {
+/* ---- page mask: per-page colour themes ----
+   Set via html[data-page] by a beforeInteractive script → no first-paint flash.
+   Exit transitions update html.dataset.page before panels animate in. ---- */
+html[data-page="social"]   .page-mask .panel { background: var(--tomato); }
+html[data-page="metodo"]   .page-mask .panel { background: var(--gold); }
+html[data-page="metodo"]   .page-mask .mask-word span { color: var(--ink); }
+html[data-page="web"]      .page-mask .panel { background: var(--violet); }
+html[data-page="branding"] .page-mask {
   background: linear-gradient(90deg, var(--tomato) 0%, var(--gold) 50%, var(--violet) 100%);
 }
-.page-mask[data-theme="branding"] .panel { background: transparent; }
-/* Studio / Contatti → neutral paper (dark word for legibility) */
-.page-mask[data-theme="studio"] .panel,
-.page-mask[data-theme="contatti"] .panel { background: var(--paper); }
-.page-mask[data-theme="studio"] .mask-word span,
-.page-mask[data-theme="contatti"] .mask-word span { color: var(--ink); }
+html[data-page="branding"] .page-mask .panel { background: transparent; }
+html[data-page="studio"]   .page-mask .panel,
+html[data-page="contatti"] .page-mask .panel { background: var(--paper); }
+html[data-page="studio"]   .page-mask .mask-word span,
+html[data-page="contatti"] .page-mask .mask-word span { color: var(--ink); }
 
 /* scroll progress bar */
 .scroll-progress {

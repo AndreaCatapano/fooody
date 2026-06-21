@@ -300,13 +300,10 @@
     const introOn = () => (window.FOOODY_TWEAKS || {}).intro !== false;
     if (!introOn()) { mask.style.display = 'none'; return; }
 
-    // Derive theme slug from a pathname (empty slug = home)
-    function getTheme(href) {
+    // Derive page slug from a pathname (empty slug = home)
+    function getPageSlug(href) {
       return (href || window.location.pathname).replace(/^\//, '').split('/')[0] || 'home';
     }
-
-    // Set mask colour for the current page before entrance animation
-    mask.dataset.theme = getTheme(window.location.pathname);
 
     const sp = mask.querySelector('.mask-word span');
 
@@ -336,8 +333,8 @@
       if (!href || href.startsWith('#') || a.target === '_blank') return;
       e.preventDefault();
 
-      // Set destination page colour before panels animate in
-      mask.dataset.theme = getTheme(href);
+      // Update html data-page so CSS applies destination colours before panels animate in
+      document.documentElement.dataset.page = getPageSlug(href);
 
       const wt = a.getAttribute('data-transition-word');
       if (sp && wt) sp.textContent = wt;
@@ -429,22 +426,14 @@
     initTilt();
     initCursor();
     initPageMask();
-    // viewport engine: rAF loop + scroll/resize
-    tickViewport();
-    let scheduled = false;
-    const onScroll = () => {
-      if (scheduled) return; scheduled = true;
-      requestAnimationFrame(() => { tickViewport(); scheduled = false; });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-
-    // safety raf for first ~2s (covers mask retract + late layout/fonts)
-    let t0 = performance.now();
-    (function settle(now) {
+    // viewport engine: continuous rAF — Lenis suppresses native scroll events,
+    // so we run tickViewport every frame using BCR (always correct with Lenis)
+    (function viewportLoop() {
       tickViewport();
-      if (now - t0 < 2200) requestAnimationFrame(settle);
-    })(t0);
+      requestAnimationFrame(viewportLoop);
+    })();
+    window.addEventListener('resize', tickViewport, { passive: true });
+
     // absolute fail-safe: never leave content hidden
     setTimeout(() => {
       document.querySelectorAll('[data-reveal], .kinetic').forEach(el => el.classList.add('is-in'));

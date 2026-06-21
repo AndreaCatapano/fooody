@@ -91,6 +91,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <TweaksPanel />
 
+        <Script id="page-theme" strategy="beforeInteractive">{`
+          document.documentElement.dataset.page=(location.pathname.replace(/^\//,'').split('/')[0]||'home');
+        `}</Script>
+
         <Script id="tweaks-init" strategy="beforeInteractive">{`
           var _def = { intro:true, workHover:'tilt', particleCount:80, particleDir:'sparpaglia', particleSize:100, assemblySpeed:'normale', scrollSensitivity:'normale', particleColor:'ink', glow:false, exitMode:'radiale', exitCurve:'lineare', exitFade:'normale' };
           try {
