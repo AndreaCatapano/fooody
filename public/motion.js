@@ -402,6 +402,7 @@
     initReveal(main);
     initCounters(main);
     initScrolly(main);
+    if (window.heroReinit) window.heroReinit();
     setTimeout(() => $$('[data-reveal], .kinetic', main).forEach(el => el.classList.add('is-in')), 3000);
   };
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 type ParticleDir   = 'sparpaglia' | 'su' | 'giu' | 'esplode'
 type ParticleColor = 'ink' | 'tomato' | 'paper' | 'cream'
 type SensPreset    = 'dolce' | 'normale' | 'forte'
+type ParticleShape = 'quadrato' | 'cerchio' | 'rombo' | 'linea'
 
 interface Tweaks {
   particleCount:     number
@@ -12,6 +13,7 @@ interface Tweaks {
   particleColor:     ParticleColor
   glow:              boolean
   scrollSensitivity: SensPreset
+  particleShape:     ParticleShape
 }
 
 const DEFAULTS: Tweaks = {
@@ -21,6 +23,7 @@ const DEFAULTS: Tweaks = {
   particleColor:     'ink',
   glow:              false,
   scrollSensitivity: 'normale',
+  particleShape:     'quadrato',
 }
 
 const COLOR_SWATCHES: { key: ParticleColor; hex: string; label: string }[] = [
@@ -135,10 +138,27 @@ export default function TweaksPanel() {
 
           {/* ─── Direzione ─── */}
           <Label>Direzione</Label>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
             {(['sparpaglia', 'su', 'giu', 'esplode'] as ParticleDir[]).map(v => (
               <Chip key={v} active={tweaks.particleDir === v} onClick={() => update('particleDir', v)}>
                 {v}
+              </Chip>
+            ))}
+          </div>
+
+          <Divider />
+
+          {/* ─── Forma ─── */}
+          <SectionLabel>Forma</SectionLabel>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {([
+              { v: 'quadrato', label: '▪ quadrato' },
+              { v: 'cerchio',  label: '● cerchio'  },
+              { v: 'rombo',    label: '◆ rombo'    },
+              { v: 'linea',    label: '— linea'    },
+            ] as { v: ParticleShape; label: string }[]).map(({ v, label }) => (
+              <Chip key={v} active={tweaks.particleShape === v} onClick={() => update('particleShape', v)}>
+                {label}
               </Chip>
             ))}
           </div>

@@ -1,7 +1,8 @@
 /* ============================================================
    FOOODY — Hero engine · particelle
-   Canvas FOOODY text → particelle che si disperdono allo scroll.
-   BCR scroll (Lenis-safe) · per-particle speed variation · lerp smooth.
+   Entrata: assembly da scatter → FOOODY al caricamento.
+   Scroll: dispersione progressiva.
+   BCR (Lenis-safe) · per-particle speed · lerp smooth · forme.
    ============================================================ */
 (function () {
   'use strict';
@@ -9,42 +10,54 @@
   /* ---- utils ---- */
   const REDUCE    = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const CAN_HOVER = matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const lerp  = (a, b, t) => a + (b - a) * t;
-  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const lerp   = (a, b, t) => a + (b - a) * t;
+  const clamp  = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const easeIO = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+  const easeIn = p => p * p * p;   /* for assembly: fast rush → slow settle */
 
-  /* ---- elements ---- */
-  const hero = document.getElementById('hero');
-  if (!hero) return;
-
-  const stage     = hero.querySelector('.hero-stage');
-  const canvas    = hero.querySelector('.hero-particles, #hero-particles');
-  const paper     = hero.querySelector('.hero-paper, #hero-paper');
-  const vid       = document.getElementById('hero-vid') || hero.querySelector('.hero-vid');
-  const scrollCue = hero.querySelector('.hero-scroll');
-  const eyebrow   = hero.querySelector('.hero-eyebrow');
-  const cap       = hero.querySelector('.hero-cap');
-
-  if (!stage || !canvas) return;
-
-  /* ---- color map ---- */
+  /* ---- lookup tables ---- */
   const COLOR_HEX = { ink: '#17130f', tomato: '#e8442a', paper: '#f7f4ee', cream: '#d2b48c' };
-  /* ---- sensitivity map (scroll progress multiplier) ---- */
   const SENS_MAP  = { dolce: 0.6, normale: 1.0, forte: 1.55 };
+  const PI2       = Math.PI * 2;
+
+  /* ---- mutable element refs (re-bound by heroReinit on SPA nav) ---- */
+  let hero, stage, canvas, paper, vid, scrollCue, eyebrow, cap;
+
+  function bindElements() {
+    hero      = document.getElementById('hero');
+    if (!hero) return false;
+    stage     = hero.querySelector('.hero-stage');
+    canvas    = hero.querySelector('.hero-particles, #hero-particles');
+    paper     = hero.querySelector('.hero-paper, #hero-paper');
+    vid       = document.getElementById('hero-vid') || hero.querySelector('.hero-vid');
+    scrollCue = hero.querySelector('.hero-scroll');
+    eyebrow   = hero.querySelector('.hero-eyebrow');
+    cap       = hero.querySelector('.hero-cap');
+    return !!(stage && canvas);
+  }
 
   /* ---- tweaks state (mutable — updated by tweakchange) ---- */
   const tw   = window.FOOODY_TWEAKS || {};
-  let DENSITY = clamp(tw.particleCount    || 80,          20,  120);
-  let SIZE    = clamp(tw.particleSize     || 100,         40,  260);
-  let DIR     = tw.particleDir    || 'sparpaglia';
+  let DENSITY = clamp(tw.particleCount    || 80,   20,  120);
+  let SIZE    = clamp(tw.particleSize     || 100,  40,  260);
+  let DIR     = tw.particleDir            || 'sparpaglia';
   let PCOLOR  = COLOR_HEX[tw.particleColor] || '#17130f';
   let GLOW    = !!tw.glow;
-  let SENS    = tw.scrollSensitivity || 'normale';
+  let SENS    = tw.scrollSensitivity      || 'normale';
+  let SHAPE   = tw.particleShape          || 'quadrato';
 
-  /* ---- preview burst: show scatter direction without scrolling ---- */
-  let previewE = 0, previewTimer = null;
+  /* ---- animation state ---- */
+  let mx = 0, my = 0;
+  let ctx, parts = [], W = 0, H = 0, cx = 0, cy = 0;
+  let built = false;
+  let pmx = 0, pmy = 0;
+  let eSmooth    = 0;      /* lerped scroll scatter */
+  let previewE   = 0;      /* temporary burst for direction preview */
+  let previewTimer = null;
+  const ASSEMBLE_DUR = 1800; /* ms — entry assembly duration */
+  let assembleStart  = 0;
 
   /* ---- mouse parallax ---- */
-  let mx = 0, my = 0;
   if (!REDUCE && CAN_HOVER) {
     window.addEventListener('mousemove', e => {
       mx = (e.clientX / innerWidth  - 0.5) * 2;
@@ -52,23 +65,16 @@
     }, { passive: true });
   }
 
-  /* ---- scroll progress (BCR, Lenis-safe) ---- */
+  /* ---- BCR scroll progress (Lenis-safe) ---- */
   function scrollProg() {
+    if (!hero) return 0;
     const range = hero.offsetHeight - innerHeight;
     return clamp(range > 0 ? -hero.getBoundingClientRect().top / range : 0, 0, 1);
   }
 
-  /* ease-in-out quad */
-  function ease(p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
-
-  /* ---- canvas state ---- */
-  let ctx, parts = [], W = 0, H = 0, cx = 0, cy = 0;
-  let built = false;
-  let pmx = 0, pmy = 0;
-  let eSmooth = 0; /* lerped effective scatter — for silky transitions */
-
   /* ---- build particles from FOOODY text bitmap ---- */
   function buildParticles() {
+    if (!stage || !canvas) return;
     const r = stage.getBoundingClientRect();
     W = Math.round(r.width);
     H = Math.round(r.height);
@@ -85,9 +91,8 @@
 
     const bodyFont = getComputedStyle(document.body).fontFamily
       || '"Helvetica Neue", Helvetica, Arial, sans-serif';
-
-    o.fillStyle   = '#000';
-    o.textAlign   = 'center';
+    o.fillStyle    = '#000';
+    o.textAlign    = 'center';
     o.textBaseline = 'middle';
     o.font = `700 100px ${bodyFont}`;
     const measured = o.measureText('FOOODY').width || 100;
@@ -103,7 +108,7 @@
     for (let y = 0; y < H; y += step) {
       for (let x = 0; x < W; x += step) {
         if (px[(y * W + x) * 4 + 3] > 128) {
-          const ang = Math.random() * Math.PI * 2;
+          const ang = Math.random() * PI2;
           let dx, dy;
           if (DIR === 'su') {
             dx = (x - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
@@ -119,12 +124,10 @@
             dx = (x - cx) * 0.85 + Math.cos(ang) * W * 0.12;
             dy = (y - cy) * 0.85 + Math.sin(ang) * H * 0.12;
           }
-          /* sp: per-particle speed variation → organic stagger */
           parts.push({
-            hx: x, hy: y, dx, dy,
-            ph: Math.random() * Math.PI * 2,
-            sz,
-            sp: 0.65 + Math.random() * 0.7,
+            hx: x, hy: y, dx, dy, sz,
+            ph: Math.random() * PI2,
+            sp: 0.65 + Math.random() * 0.7, /* per-particle speed → organic stagger */
           });
         }
       }
@@ -136,16 +139,23 @@
   function draw(now) {
     if (!ctx || !built) return;
 
-    const p      = scrollProg();
-    const sens   = SENS_MAP[SENS] || 1.0;
-    const eBase  = ease(clamp(p * sens, 0, 1));
-    const eDisp  = Math.max(eBase, previewE); /* preview overrides scroll */
+    /* scroll + assembly effective scatter */
+    const p     = scrollProg();
+    const sens  = SENS_MAP[SENS] || 1.0;
+    const eBase = easeIO(clamp(p * sens, 0, 1));
+    const eDisp = Math.max(eBase, previewE);
+    eSmooth = REDUCE ? eDisp : lerp(eSmooth, eDisp, 0.09);
+
+    /* entry assembly: 1→0 over ASSEMBLE_DUR ms (fast rush, slow settle) */
+    const elapsed    = REDUCE ? ASSEMBLE_DUR : (now - assembleStart);
+    const rawAsm     = clamp(1 - elapsed / ASSEMBLE_DUR, 0, 1);
+    const assembleE  = easeIn(rawAsm); /* easeIn: fast start → slow landing */
+
+    const effectiveE = Math.max(eSmooth, assembleE);
+
     const t      = now * 0.001;
     const jitter = REDUCE ? 0 : 2.2;
     const AMT    = 14;
-
-    /* smooth lerp — particles drift into position rather than snapping */
-    eSmooth = REDUCE ? eDisp : lerp(eSmooth, eDisp, 0.09);
 
     pmx = lerp(pmx, -mx * AMT,        0.08);
     pmy = lerp(pmy, -my * AMT * 0.65, 0.08);
@@ -161,14 +171,32 @@
       ctx.shadowBlur = 0;
     }
 
+    /* batched single-path draw for all shapes */
+    ctx.beginPath();
     for (let i = 0; i < parts.length; i++) {
       const o  = parts[i];
-      /* each particle uses its own speed to scatter — staggered effect */
-      const pE = ease(clamp(eSmooth * o.sp, 0, 1));
+      const pE = easeIO(clamp(effectiveE * o.sp, 0, 1));
       const x  = o.hx + pmx + o.dx * pE + (jitter ? Math.sin(t * 1.3 + o.ph) * jitter : 0);
       const y  = o.hy + pmy + o.dy * pE + (jitter ? Math.cos(t * 1.1 + o.ph) * jitter : 0);
-      ctx.fillRect(x, y, o.sz, o.sz);
+      const sz = o.sz;
+      const h  = sz * 0.5;
+
+      if (SHAPE === 'cerchio') {
+        ctx.moveTo(x + sz, y + h);
+        ctx.arc(x + h, y + h, h, 0, PI2);
+      } else if (SHAPE === 'rombo') {
+        ctx.moveTo(x + h, y);
+        ctx.lineTo(x + sz, y + h);
+        ctx.lineTo(x + h, y + sz);
+        ctx.lineTo(x, y + h);
+        ctx.closePath();
+      } else if (SHAPE === 'linea') {
+        ctx.rect(x, y + h - 0.7, sz * 1.5, Math.max(sz * 0.14, 1));
+      } else { /* quadrato */
+        ctx.rect(x, y, sz, sz);
+      }
     }
+    ctx.fill();
 
     ctx.globalAlpha = 1;
     ctx.shadowBlur  = 0;
@@ -180,7 +208,7 @@
     [eyebrow, cap, scrollCue].forEach(el => el && (el.style.opacity = uiFade));
   }
 
-  /* ---- rAF loop ---- */
+  /* ---- rAF loop (started once, runs forever) ---- */
   function loop(now) { draw(now); requestAnimationFrame(loop); }
 
   /* ---- resize ---- */
@@ -199,6 +227,7 @@
     if ('particleColor'     in d) { PCOLOR  = COLOR_HEX[d.particleColor] || PCOLOR; }
     if ('glow'              in d) { GLOW    = !!d.glow; }
     if ('scrollSensitivity' in d) { SENS    = d.scrollSensitivity; }
+    if ('particleShape'     in d) { SHAPE   = d.particleShape; }
     if ('particleDir'       in d) { DIR     = d.particleDir; rebuild = true; preview = true; }
     if (rebuild) buildParticles();
     if (preview) {
@@ -208,7 +237,17 @@
     }
   });
 
+  /* ---- heroReinit: re-bind DOM + restart assembly (called by motionReinit on nav) ---- */
+  window.heroReinit = function () {
+    if (!bindElements()) return;
+    assembleStart = performance.now();
+    eSmooth = 0;
+    buildParticles();
+  };
+
   /* ---- boot ---- */
+  if (!bindElements()) return;
+  assembleStart = performance.now();
   buildParticles();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildParticles);
   requestAnimationFrame(loop);

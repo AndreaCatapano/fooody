@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { Cormorant_Garamond, JetBrains_Mono } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import Nav from '@/components/layout/Nav'
@@ -16,21 +15,6 @@ const mont = localFont({
     { path: './fonts/Mont-Bold.otf',     weight: '700', style: 'normal' },
   ],
   variable: '--font-mont',
-  display: 'swap',
-})
-
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-cormorant',
-  display: 'swap',
-})
-
-const mono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -66,7 +50,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={`${mont.variable} ${cormorant.variable} ${mono.variable}`}>
+    <html lang="it" className={mont.variable}>
       <body>
         <a href="#main-content" className="skip-link">
           Vai al contenuto principale
@@ -88,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</Script>
 
         <Script id="tweaks-init" strategy="beforeInteractive">{`
-          var _def = { particleCount:80, particleSize:100, particleDir:'sparpaglia', particleColor:'ink', glow:false, scrollSensitivity:'normale' };
+          var _def = { particleCount:80, particleSize:100, particleDir:'sparpaglia', particleColor:'ink', glow:false, scrollSensitivity:'normale', particleShape:'quadrato' };
           try {
             var s = localStorage.getItem('fooody_tweaks');
             window.FOOODY_TWEAKS = s ? Object.assign({}, _def, JSON.parse(s)) : _def;

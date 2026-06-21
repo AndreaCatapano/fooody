@@ -41,8 +41,8 @@
 
   /* ---- type: fonts injected via className on <html> ---- */
   --sans: var(--font-mont), 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --exp:  var(--font-cormorant), Georgia, 'Times New Roman', serif;
-  --mono: var(--font-mono), ui-monospace, 'Courier New', monospace;
+  --exp:  var(--font-mont), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: var(--font-mont), 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* ---- fluid type scale ---- */
   --t-mega:  clamp(3.4rem, 1.2rem + 9vw, 9.5rem);
