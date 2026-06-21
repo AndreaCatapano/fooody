@@ -599,12 +599,8 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   position: fixed; inset: 0; z-index: 9000; pointer-events: none;
   display: grid; grid-template-columns: repeat(5, 1fr);
 }
-.page-mask .panel { transform: scaleY(1); transform-origin: top; }
-.page-mask .panel:nth-child(1) { background: var(--violet); }
-.page-mask .panel:nth-child(2) { background: var(--tomato); }
-.page-mask .panel:nth-child(3) { background: var(--violet); position: relative; z-index: 1; overflow: visible; }
-.page-mask .panel:nth-child(4) { background: var(--gold); }
-.page-mask .panel:nth-child(5) { background: var(--ink); }
+.page-mask .panel { transform: scaleY(1); transform-origin: top; background: var(--ink); }
+.page-mask .panel:nth-child(3) { position: relative; z-index: 1; overflow: visible; }
 .page-mask .mask-word {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   pointer-events: none; opacity: 1;
