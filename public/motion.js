@@ -138,12 +138,16 @@
   }
 
   /* ---------------------------------------------------------
-     VIEWPORT ENGINE — rAF + scroll driven (IO-free, robust)
+     VIEWPORT ENGINE — rAF only (IO-free, Lenis-safe)
+     BCR is always accurate regardless of Lenis scroll mode
+     (native or virtual/transform). scrollY is derived from
+     the html element's BCR top so it also works in both modes.
   --------------------------------------------------------- */
   const _revealers = [];   // {el, off}
   const _counters  = [];   // {el}
   let _bgSections = [];
   let _navEl = null;
+  let _progressBar = null;
   const _bgMap = {
     paper:     { bg: '#f7f4ee', fg: '#17130f', ink: false },
     'paper-2': { bg: '#efeae1', fg: '#17130f', ink: false },
@@ -163,6 +167,8 @@
 
   function tickViewport() {
     const vh = window.innerHeight;
+    // BCR-derived scroll position — works with Lenis native and virtual scroll modes
+    const scrollY = -document.documentElement.getBoundingClientRect().top;
     // reveals
     for (let i = _revealers.length - 1; i >= 0; i--) {
       const r = _revealers[i].el.getBoundingClientRect();
@@ -179,6 +185,13 @@
         _counters.splice(i, 1);
       }
     }
+    // progress bar
+    if (_progressBar) {
+      const h = document.documentElement.scrollHeight - vh;
+      _progressBar.style.width = clamp(scrollY / (h || 1), 0, 1) * 100 + '%';
+    }
+    // nav scrolled state
+    if (_navEl) _navEl.classList.toggle('scrolled', scrollY > 24);
     // reactive bg — section whose band crosses viewport middle
     if (_bgSections.length) {
       let active = null;
@@ -213,9 +226,7 @@
   function initNav() {
     const nav = document.querySelector('.nav');
     if (!nav) return;
-    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    // scrolled state is now driven by tickViewport (rAF) via _navEl
 
     // mobile toggle
     const toggle = nav.querySelector('.nav-toggle');
@@ -251,14 +262,8 @@
      7. SCROLL PROGRESS
   --------------------------------------------------------- */
   function initProgress() {
-    const bar = document.querySelector('.scroll-progress');
-    if (!bar) return;
-    const onScroll = () => {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = clamp(window.scrollY / (h || 1), 0, 1) * 100 + '%';
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    _progressBar = document.querySelector('.scroll-progress');
+    // width is driven by tickViewport (rAF) — no scroll event needed
   }
 
   /* ---------------------------------------------------------
