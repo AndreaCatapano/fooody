@@ -43,7 +43,7 @@
      Mobile (touch) gets 35 (step≈11): ~60% fewer particles. */
   const IS_MOBILE = !CAN_HOVER;
   let DENSITY = clamp(tw.particleCount    || (IS_MOBILE ? 35 : 55), 20,  120);
-  let SIZE    = clamp(tw.particleSize     || 100,  40,  260);
+  let SIZE    = clamp(tw.particleSize     || 100,  40,  520);
   let DIR     = tw.particleDir            || 'sparpaglia';
   let PCOLOR  = COLOR_HEX[tw.particleColor] || '#17130f';
   let GLOW    = !!tw.glow;
@@ -283,7 +283,7 @@
     const d = e.detail || {};
     let rebuild = false, preview = false;
     if ('particleCount'     in d) { DENSITY = clamp(d.particleCount, 20, 120);     rebuild = true; }
-    if ('particleSize'      in d) { SIZE    = clamp(d.particleSize,  40, 260);     rebuild = true; }
+    if ('particleSize'      in d) { SIZE    = clamp(d.particleSize,  40, 520);     rebuild = true; }
     if ('particleColor'     in d) { PCOLOR  = COLOR_HEX[d.particleColor] || PCOLOR; cachedGrad = null; }
     if ('glow'              in d) { GLOW    = !!d.glow; }
     if ('scrollSensitivity' in d) { SENS    = d.scrollSensitivity; }

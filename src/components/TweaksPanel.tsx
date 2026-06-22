@@ -118,7 +118,7 @@ export default function TweaksPanel() {
           {/* ─── Grandezza ─── */}
           <Label>Grandezza — {tweaks.particleSize}%</Label>
           <input
-            type="range" min={40} max={260} step={10}
+            type="range" min={40} max={520} step={10}
             value={tweaks.particleSize}
             onChange={e => update('particleSize', Number(e.target.value))}
             style={rangeStyle}
