@@ -435,6 +435,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 .nav-link.active::before { transform: scaleX(1); }
 
 .nav-cta { display: inline-flex; }
+.nav-mobile-cta { display: none; }
 .nav-toggle { display: none; }
 
 @media (max-width: 860px) {
@@ -480,7 +481,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   }
   .nav.on-ink.menu-open .nav-link { border-bottom-color: var(--line-ink); }
   .nav.menu-open .nav-link::before { display: none; }
-  .nav-mobile-cta { margin-top: 18px; justify-content: center; width: 100%; }
+  .nav.menu-open .nav-mobile-cta { display: inline-flex; margin-top: 18px; justify-content: center; width: 100%; }
 }
 
 /* ============ footer ============ */
@@ -723,8 +724,9 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
     position: sticky; top: 68px;
     height: auto; align-items: stretch;
     margin-bottom: 4px; z-index: 5;
+    margin-inline: calc(-1 * var(--gutter));
   }
-  .scene-stack { aspect-ratio: 16/11; }
+  .scene-stack { aspect-ratio: 16/11; border-radius: 0; }
   .scrolly-step { min-height: 0; padding-block: 7vh; }
   .scrolly-step:first-of-type { padding-top: 3vh; }
   .chapter-steps .chapter-dot { display: none; }

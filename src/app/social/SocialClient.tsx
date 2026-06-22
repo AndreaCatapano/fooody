@@ -81,6 +81,7 @@ function FeedMarquee() {
               delay: 0,
               disableOnInteraction: false,
               reverseDirection: ROW_REVERSE[rowIdx],
+              waitForTransition: false,
             }}
             speed={ROW_SPEEDS[rowIdx]}
             allowTouchMove={false}
