@@ -412,7 +412,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 }
 .brand .dot { color: var(--tomato); font-style: normal; }
 
-.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-links { display: flex; align-items: center; gap: 4px; position: absolute; left: 50%; transform: translateX(-50%); }
 .nav-link {
   position: relative;
   padding: 8px 14px;
