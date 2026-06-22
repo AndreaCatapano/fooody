@@ -112,8 +112,16 @@ const PUNTI = [
 function SocCosaSection() {
   const [active, setActive] = useState(1)
   const sectionRef = useRef<HTMLElement>(null)
+  const puntiNavRef = useRef<HTMLElement>(null)
   const N = PUNTI.length
   const p = PUNTI[active - 1]
+
+  useEffect(() => {
+    const nav = puntiNavRef.current
+    if (!nav || window.matchMedia('(min-width: 880px)').matches) return
+    const btn = nav.querySelector<HTMLElement>(`[data-punto="${active}"]`)
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+  }, [active])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -155,7 +163,7 @@ function SocCosaSection() {
               Cinque mosse.<br />Un solo feed.
             </h2>
           </div>
-          <nav className="soc-punti" role="tablist" aria-label="Servizi social">
+          <nav className="soc-punti" ref={puntiNavRef} role="tablist" aria-label="Servizi social">
             {PUNTI.map(pt => (
               <button
                 key={pt.n}
