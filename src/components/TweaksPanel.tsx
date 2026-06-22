@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 
 type ParticleDir   = 'sparpaglia' | 'su' | 'giu' | 'esplode'
-type ParticleColor = 'ink' | 'tomato' | 'paper' | 'cream'
+type ParticleColor = 'ink' | 'tomato' | 'paper' | 'cream' | 'gradient'
 type SensPreset    = 'dolce' | 'normale' | 'forte'
 type ParticleShape = 'quadrato' | 'cerchio' | 'rombo' | 'linea' | 'o'
 
@@ -27,10 +27,11 @@ const DEFAULTS: Tweaks = {
 }
 
 const COLOR_SWATCHES: { key: ParticleColor; hex: string; label: string }[] = [
-  { key: 'ink',    hex: '#17130f', label: 'Inchiostro' },
-  { key: 'tomato', hex: '#e8442a', label: 'Pomodoro'   },
-  { key: 'paper',  hex: '#f7f4ee', label: 'Carta'      },
-  { key: 'cream',  hex: '#d2b48c', label: 'Crema'      },
+  { key: 'ink',      hex: '#17130f',                                                       label: 'Inchiostro' },
+  { key: 'tomato',   hex: '#e8442a',                                                       label: 'Pomodoro'   },
+  { key: 'paper',    hex: '#f7f4ee',                                                       label: 'Carta'      },
+  { key: 'cream',    hex: '#d2b48c',                                                       label: 'Crema'      },
+  { key: 'gradient', hex: 'linear-gradient(90deg, #DD5049, #c88a1a, #6352F0)',             label: 'Spectrum'   },
 ]
 
 function applyTweaks(t: Tweaks) {

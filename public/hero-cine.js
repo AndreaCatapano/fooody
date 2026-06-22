@@ -16,7 +16,8 @@
   const easeIn = p => p * p * p;   /* for assembly: fast rush → slow settle */
 
   /* ---- lookup tables ---- */
-  const COLOR_HEX = { ink: '#17130f', tomato: '#e8442a', paper: '#f7f4ee', cream: '#d2b48c' };
+  const COLOR_HEX = { ink: '#17130f', tomato: '#e8442a', paper: '#f7f4ee', cream: '#d2b48c', gradient: 'gradient' };
+  const GRAD_STOPS = [{ p: 0, c: '#DD5049' }, { p: 0.48, c: '#c88a1a' }, { p: 1, c: '#6352F0' }];
   const SENS_MAP  = { dolce: 0.6, normale: 1.0, forte: 1.55 };
   const PI2       = Math.PI * 2;
 
@@ -54,6 +55,8 @@
   let eSmooth    = 0;      /* lerped scroll scatter */
   let previewE   = 0;      /* temporary burst for direction preview */
   let previewTimer = null;
+  let cachedGrad = null;   /* CanvasLinearGradient — recreated on resize */
+  let cachedGradW = 0;
   const ASSEMBLE_DUR = 1800; /* ms — entry assembly duration */
   let assembleStart  = 0;
 
@@ -161,12 +164,23 @@
     pmy = lerp(pmy, -my * AMT * 0.65, 0.08);
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle   = PCOLOR;
     ctx.globalAlpha = clamp(1 - p * 1.5, 0, 1);
+
+    /* gradient fillStyle — cached per canvas width */
+    if (PCOLOR === 'gradient') {
+      if (!cachedGrad || cachedGradW !== W) {
+        cachedGrad = ctx.createLinearGradient(0, 0, W, 0);
+        GRAD_STOPS.forEach(s => cachedGrad.addColorStop(s.p, s.c));
+        cachedGradW = W;
+      }
+      ctx.fillStyle = cachedGrad;
+    } else {
+      ctx.fillStyle = PCOLOR;
+    }
 
     if (GLOW && !REDUCE) {
       ctx.shadowBlur  = 7 * (SIZE / 100);
-      ctx.shadowColor = PCOLOR;
+      ctx.shadowColor = PCOLOR === 'gradient' ? '#c88a1a' : PCOLOR;
     } else {
       ctx.shadowBlur = 0;
     }
@@ -230,7 +244,7 @@
     let rebuild = false, preview = false;
     if ('particleCount'     in d) { DENSITY = clamp(d.particleCount, 20, 120);     rebuild = true; }
     if ('particleSize'      in d) { SIZE    = clamp(d.particleSize,  40, 260);     rebuild = true; }
-    if ('particleColor'     in d) { PCOLOR  = COLOR_HEX[d.particleColor] || PCOLOR; }
+    if ('particleColor'     in d) { PCOLOR  = COLOR_HEX[d.particleColor] || PCOLOR; cachedGrad = null; }
     if ('glow'              in d) { GLOW    = !!d.glow; }
     if ('scrollSensitivity' in d) { SENS    = d.scrollSensitivity; }
     if ('particleShape'     in d) { SHAPE   = d.particleShape; }
