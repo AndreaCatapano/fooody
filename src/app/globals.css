@@ -1893,10 +1893,10 @@ body.sig-off #board .board { display: none; }
    il taglio orizzontale causato da white-space: nowrap + overflow: hidden. */
 @media (max-width: 450px) {
   :root {
-    --t-mega: 1.75rem;
-    --t-hero: 1.5rem;
-    --t-h1:   1.35rem;
-    --t-h2:   1.15rem;
+    --t-mega: 2.15rem;
+    --t-hero: 1.85rem;
+    --t-h1:   1.6rem;
+    --t-h2:   1.3rem;
   }
   .kline-inner { white-space: normal; }
 }
