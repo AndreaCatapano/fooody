@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import { buildMetadata, buildServiceSchema } from '@/lib/seo'
+import PageHero from '@/components/blocks/PageHero'
+import CtaSection from '@/components/blocks/CtaSection'
+import CaseStudyBlock from '@/components/blocks/CaseStudyBlock'
 
 const jsonLd = buildServiceSchema({
   name: 'Metodo Fooody — Sistema integrato per la ristorazione',
@@ -23,52 +26,28 @@ export default function MetodoPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* ============================================================
-          HERO (sfondo inchiostro)
-          ============================================================ */}
-      <header
-        className="section ink-region"
-        data-bg="ink"
-        style={{
-          paddingTop: 'clamp(130px,18vh,220px)',
-          paddingBottom: 'clamp(60px,8vh,110px)',
+
+      <PageHero
+        paddingBottom="clamp(60px,8vh,110px)"
+        eyebrow={<div className="eyebrow no-slash met-accent-fg">— il metodo · per chi vive di coperti</div>}
+        heading={<>Cinque mosse<br />per riempire<br /><span className="met-accent-fg">i tavoli.</span></>}
+        headingStyle={{ marginTop: 22, maxWidth: '15ch' }}
+        lead="Il Metodo Fooody è il nostro sistema completo per la ristorazione. Non una lista di servizi sciolti: un percorso unico che parte dall'identità e arriva ai numeri. Lo stesso che usiamo ogni giorno per chi cucina sul serio."
+        leadStyle={{ maxWidth: '48ch' }}
+        footerClass="metodo-hero-foot"
+        ctaClass="metodo-hero-cta"
+        ctaPrimary={{
+          label: <>Scopri i 5 pilastri <span className="arrow">↓</span></>,
+          href: '#panoramica',
+          className: 'btn met-btn',
+          dataMagnetic: '0.3',
         }}
-      >
-        <div className="wrap">
-          <div className="eyebrow no-slash met-accent-fg">
-            — il metodo · per chi vive di coperti
-          </div>
-          <h1
-            className="mega"
-            data-kinetic="lines"
-            style={{ marginTop: 22, maxWidth: '15ch' }}
-          >
-            Cinque mosse<br />per riempire<br /><span className="met-accent-fg">i tavoli.</span>
-          </h1>
-          <div className="metodo-hero-foot">
-            <p
-              className="lead text-pretty"
-              data-reveal=""
-              data-reveal-d="2"
-              style={{ maxWidth: '48ch' }}
-            >
-              Il Metodo Fooody è il nostro sistema completo per la ristorazione. Non una lista di
-              servizi sciolti: un percorso unico che parte dall&apos;identità e arriva ai numeri.
-              Lo stesso che usiamo ogni giorno per chi cucina sul serio.
-            </p>
-            <div className="metodo-hero-cta" data-reveal="" data-reveal-d="3">
-              <a className="btn met-btn" href="#panoramica" data-magnetic="0.3">
-                <span className="btn-label">
-                  Scopri i 5 pilastri <span className="arrow">↓</span>
-                </span>
-              </a>
-              <span className="mono-xs" style={{ color: 'rgba(247,244,238,.5)' }}>
-                tempo di lettura · 4 min di scroll
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
+        ctaSecondary={
+          <span className="mono-xs" style={{ color: 'rgba(247,244,238,.5)' }}>
+            tempo di lettura · 4 min di scroll
+          </span>
+        }
+      />
 
       {/* ============================================================
           INTRO — il problema
@@ -354,78 +333,41 @@ export default function MetodoPage() {
         </div>
       </section>
 
-      {/* ============================================================
-          CASO INTEGRATO
-          ============================================================ */}
-      <section className="section" data-bg="paper-2" style={{ background: 'var(--paper-2)' }} id="caso">
-        <div className="wrap">
-          <div className="eyebrow met-eyebrow" data-reveal="">caso · ristorazione</div>
-          <div className="case-grid">
-            {/* TODO: sostituire con immagini/reel reali */}
-            <figure
-              className="ph tall case-cover"
-              data-reveal=""
-              data-tilt="4"
-              data-cursor="guarda"
-              data-placeholder="case study · cover + reel · 4:5"
-            >
-              <span className="ph-label">case · cover / reel</span>
-            </figure>
-            <div>
-              <h2 className="h1 text-balance" data-kinetic="words" style={{ maxWidth: '16ch' }}>
-                {/* TODO: sostituire con nome cliente reale */}
-                Trattoria Tale, da insegna a indirizzo.
-              </h2>
-              <p className="lead text-pretty" data-reveal="" style={{ marginTop: 20, maxWidth: '46ch' }}>
-                Identità rifatta, social ripensato, menù ridisegnato e sito con prenotazioni. In sei
-                mesi la trattoria è passata dal passaparola al tutto-esaurito del sabato.
-              </p>
-              <div className="case-kpis" data-reveal="" data-reveal-d="2">
-                <div className="case-kpi">
-                  <span className="numeral" style={{ color: 'var(--gold-deep)' }}>+340%</span>
-                  <span className="mono-xs">engagement</span>
-                </div>
-                <div className="case-kpi">
-                  <span className="numeral" style={{ color: 'var(--gold-deep)' }}>+180%</span>
-                  <span className="mono-xs">prenotazioni</span>
-                </div>
-                <div className="case-kpi">
-                  <span className="numeral">6</span>
-                  <span className="mono-xs">mesi</span>
-                </div>
-              </div>
-              <a className="tlink" href="/lavori/trattoria-tale" style={{ marginTop: 28, display: 'inline-flex' }}>
-                leggi il caso completo <span className="arrow">↗</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CaseStudyBlock
+        eyebrow="caso · ristorazione"
+        eyebrowClass="met-eyebrow"
+        coverLabel="case · cover / reel"
+        coverPlaceholder="case study · cover + reel · 4:5"
+        heading={<>Trattoria Tale, da insegna a indirizzo.</>}
+        lead="Identità rifatta, social ripensato, menù ridisegnato e sito con prenotazioni. In sei mesi la trattoria è passata dal passaparola al tutto-esaurito del sabato."
+        kpis={[
+          { value: '+340%', label: 'engagement', color: 'var(--gold-deep)' },
+          { value: '+180%', label: 'prenotazioni', color: 'var(--gold-deep)' },
+          { value: '6', label: 'mesi' },
+        ]}
+        caseHref="/lavori/trattoria-tale"
+        dataBg="paper-2"
+        sectionStyle={{ background: 'var(--paper-2)' }}
+      />
 
-      {/* ============================================================
-          CTA (sfondo inchiostro)
-          ============================================================ */}
-      <section className="section ink-region" data-bg="ink" id="contatti">
-        <div className="wrap" style={{ textAlign: 'center' }}>
-          <div className="eyebrow no-slash met-accent-fg" style={{ justifyContent: 'center' }}>
-            — pronti a ordinare?
-          </div>
-          <h2 className="mega" data-kinetic="lines" style={{ margin: '22px auto 0', maxWidth: '15ch' }}>
-            Mettiamo il<br />Metodo a tavola.
-          </h2>
-          <p className="lead text-pretty" data-reveal="" style={{ margin: '26px auto 0', maxWidth: '42ch' }}>
-            Raccontaci il tuo locale. Prima call gratuita: capiamo se c&apos;è feeling — e da dove partire.
-          </p>
-          <div data-reveal="" data-reveal-d="2" style={{ marginTop: 36, display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a className="btn accent lg" href="/contatti" data-magnetic="0.3" data-transition="" data-transition-word="Contatti">
-              <span className="btn-label">Prenota una call <span className="arrow">↗</span></span>
-            </a>
-            <a className="btn on-ink ghost lg" href="/" data-transition="" data-transition-word="Fooody.">
-              <span className="btn-label">Torna alla home</span>
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaSection
+        eyebrow="— pronti a ordinare?"
+        eyebrowClass="met-accent-fg"
+        heading={<>Mettiamo il<br />Metodo a tavola.</>}
+        lead="Raccontaci il tuo locale. Prima call gratuita: capiamo se c'è feeling — e da dove partire."
+        ctaPrimary={{
+          label: <>Prenota una call <span className="arrow">↗</span></>,
+          href: '/contatti',
+          className: 'btn accent lg',
+          dataTransitionWord: 'Contatti',
+          dataMagnetic: '0.3',
+        }}
+        ctaSecondary={
+          <a className="btn on-ink ghost lg" href="/" data-transition="" data-transition-word="Fooody.">
+            <span className="btn-label">Torna alla home</span>
+          </a>
+        }
+      />
     </>
   )
 }
