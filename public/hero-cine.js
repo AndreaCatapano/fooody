@@ -97,8 +97,15 @@
     cx = W / 2; cy = H / 2;
     ctx = canvas.getContext('2d');
 
+    /* Sample offscreen canvas at max 960×600 to cap getImageData cost.
+       Scale factor maps sample coords back to screen coords. */
+    const SW  = Math.min(W, 960);
+    const SH  = Math.min(H, 600);
+    const scX = W / SW;
+    const scY = H / SH;
+
     const off = document.createElement('canvas');
-    off.width = W; off.height = H;
+    off.width = SW; off.height = SH;
     const o = off.getContext('2d');
 
     const bodyFont = getComputedStyle(document.body).fontFamily
@@ -108,36 +115,38 @@
     o.textBaseline = 'middle';
     o.font = `700 100px ${bodyFont}`;
     const measured = o.measureText('Fooody').width || 100;
-    const fs = Math.min(100 * (W * 0.88) / measured, H * 0.46);
+    const fs = Math.min(100 * (SW * 0.88) / measured, SH * 0.46);
     o.font = `700 ${fs}px ${bodyFont}`;
-    o.fillText('Fooody', W / 2, H * 0.46);
+    o.fillText('Fooody', SW / 2, SH * 0.46);
 
-    const px   = o.getImageData(0, 0, W, H).data;
+    const px   = o.getImageData(0, 0, SW, SH).data;
     const step = clamp(Math.round(14 - (DENSITY / 120) * 10), 3, 14);
-    const sz   = step * 0.55 * (SIZE / 100);
+    const sz   = step * scX * 0.55 * (SIZE / 100);
 
     parts = [];
-    for (let y = 0; y < H; y += step) {
-      for (let x = 0; x < W; x += step) {
-        if (px[(y * W + x) * 4 + 3] > 128) {
+    for (let y = 0; y < SH; y += step) {
+      for (let x = 0; x < SW; x += step) {
+        if (px[(y * SW + x) * 4 + 3] > 128) {
+          const sx  = x * scX;   /* screen position */
+          const sy  = y * scY;
           const ang = Math.random() * PI2;
           let dx, dy;
           if (DIR === 'su') {
-            dx = (x - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
+            dx = (sx - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
             dy = -(0.5 + Math.random() * 0.7) * H;
           } else if (DIR === 'giu') {
-            dx = (x - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
+            dx = (sx - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
             dy =  (0.5 + Math.random() * 0.7) * H;
           } else if (DIR === 'sparpaglia') {
             const d = (0.4 + Math.random()) * W * 0.4;
             dx = Math.cos(ang) * d;
             dy = Math.sin(ang) * d * 0.65;
           } else { /* esplode */
-            dx = (x - cx) * 0.85 + Math.cos(ang) * W * 0.12;
-            dy = (y - cy) * 0.85 + Math.sin(ang) * H * 0.12;
+            dx = (sx - cx) * 0.85 + Math.cos(ang) * W * 0.12;
+            dy = (sy - cy) * 0.85 + Math.sin(ang) * H * 0.12;
           }
           parts.push({
-            hx: x, hy: y, dx, dy, sz,
+            hx: sx, hy: sy, dx, dy, sz,
             ph: Math.random() * PI2,
             sp: 0.65 + Math.random() * 0.7, /* per-particle speed → organic stagger */
           });
