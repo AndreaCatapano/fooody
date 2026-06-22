@@ -1886,3 +1886,17 @@ body.sig-off #board .board { display: none; }
 @media (max-width: 640px) {
   .brd-caps { grid-template-columns: 1fr; }
 }
+
+/* ─── Mobile type scale ≤450px ─────────────────────────────────────────────
+   Il clamp fluido produce valori troppo grandi su schermi stretti.
+   Override fisso + white-space: normal su .kline-inner per evitare
+   il taglio orizzontale causato da white-space: nowrap + overflow: hidden. */
+@media (max-width: 450px) {
+  :root {
+    --t-mega: 1.75rem;
+    --t-hero: 1.5rem;
+    --t-h1:   1.35rem;
+    --t-h2:   1.15rem;
+  }
+  .kline-inner { white-space: normal; }
+}
