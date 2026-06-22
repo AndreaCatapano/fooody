@@ -199,22 +199,22 @@ export default function MetodoPage() {
               </div>
             </div>
 
-            <div className="scrolly-step" data-scene="2" data-scene-bg="ink">
+            <div className="scrolly-step" data-scene="2" data-scene-bg="paper">
               <div className="step-pillar"><span>Pilastro 02</span> — social</div>
-              <h3 className="step-title">Riempire i tavoli, non solo il feed.</h3>
-              <p className="step-body">
+              <h3 className="step-title" style={{ color: 'var(--ink)' }}>Riempire i tavoli, non solo il feed.</h3>
+              <p className="step-body" style={{ color: 'rgba(23,19,15,.72)' }}>
                 Contenuti che fanno venire fame e community che prenota davvero. Reel, food
                 photography, calendario editoriale: ogni post ha un coperto come obiettivo.
               </p>
               <div className="step-list">
-                <span className="chip">Content plan</span>
-                <span className="chip">Reel &amp; UGC</span>
-                <span className="chip">Food photo</span>
-                <span className="chip">Community</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Content plan</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Reel &amp; UGC</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Food photo</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Community</span>
               </div>
-              <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(247,244,238,.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '5px 10px' }}>
-                <span className="mono-xs" style={{ color: 'rgba(247,244,238,.45)' }}>Vuoi solo il social?</span>
-                <a className="tlink" href="/social" data-transition="" data-transition-word="Social" style={{ color: 'rgba(247,244,238,.75)' }}>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(23,19,15,.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '5px 10px' }}>
+                <span className="mono-xs" style={{ color: 'rgba(23,19,15,.45)' }}>Vuoi solo il social?</span>
+                <a className="tlink" href="/social" data-transition="" data-transition-word="Social" style={{ color: 'rgba(23,19,15,.75)' }}>
                   Scopri il servizio Social <span className="arrow">↗</span>
                 </a>
               </div>
@@ -239,22 +239,22 @@ export default function MetodoPage() {
               </div>
             </div>
 
-            <div className="scrolly-step" data-scene="4" data-scene-bg="ink">
+            <div className="scrolly-step" data-scene="4" data-scene-bg="paper">
               <div className="step-pillar"><span>Pilastro 04</span> — esperienza</div>
-              <h3 className="step-title">Dal primo scroll all&apos;ultimo boccone.</h3>
-              <p className="step-body">
+              <h3 className="step-title" style={{ color: 'var(--ink)' }}>Dal primo scroll all&apos;ultimo boccone.</h3>
+              <p className="step-body" style={{ color: 'rgba(23,19,15,.72)' }}>
                 Sito veloce, prenotazione in due tap, recensioni gestite, QR del menù che funziona
                 davvero. Tutto quello che succede tra &ldquo;ho fame&rdquo; e &ldquo;torno di sicuro&rdquo;.
               </p>
               <div className="step-list">
-                <span className="chip">Sito &amp; prenotazioni</span>
-                <span className="chip">Menu digitale</span>
-                <span className="chip">Recensioni</span>
-                <span className="chip">CRM</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Sito &amp; prenotazioni</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Menu digitale</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Recensioni</span>
+                <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>CRM</span>
               </div>
-              <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(247,244,238,.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '5px 10px' }}>
-                <span className="mono-xs" style={{ color: 'rgba(247,244,238,.45)' }}>Vuoi solo il sito?</span>
-                <a className="tlink" href="/web" data-transition="" data-transition-word="Web" style={{ color: 'rgba(247,244,238,.75)' }}>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(23,19,15,.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '5px 10px' }}>
+                <span className="mono-xs" style={{ color: 'rgba(23,19,15,.45)' }}>Vuoi solo il sito?</span>
+                <a className="tlink" href="/web" data-transition="" data-transition-word="Web" style={{ color: 'rgba(23,19,15,.75)' }}>
                   Scopri il servizio Web Design <span className="arrow">↗</span>
                 </a>
               </div>
