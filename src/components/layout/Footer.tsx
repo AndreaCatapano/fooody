@@ -14,7 +14,7 @@ export default function Footer() {
 
           <div className="foot-cols">
             <span className="mono-xs">menu</span>
-            <a href="/metodo" data-transition="" data-transition-word="Metodo">Metodo</a>
+            <a href="/metodo" data-transition="" data-transition-word="Metodo">Metodo Fooody</a>
             <a href="/social"   data-transition="" data-transition-word="Social">Social</a>
             <a href="/web"      data-transition="" data-transition-word="Web">Web Design</a>
             <a href="/branding" data-transition="" data-transition-word="Branding">Branding</a>

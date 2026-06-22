@@ -1057,6 +1057,43 @@ body.sig-off #panoramica .pillars-map { display: none; }
 .soc-live-item:nth-child(1) .soc-live-num,
 .soc-live-item:nth-child(3) .soc-live-num { color: var(--tomato-deep); }
 
+/* feed head — 2-col layout (lede + stats) */
+.soc-feed-head {
+  display: grid; grid-template-columns: 1.25fr 0.75fr;
+  gap: clamp(32px,6vw,88px); align-items: end;
+  padding-bottom: clamp(28px,3.5vw,44px);
+  border-bottom: 1px solid var(--line-ink);
+  margin-bottom: clamp(28px,3vw,44px);
+}
+.soc-feed-lede { display: flex; flex-direction: column; }
+/* stats grid override inside feed head */
+.soc-live-feed {
+  grid-template-columns: 1fr 1fr;
+  border: none; padding-block: 0; margin-bottom: 0;
+  gap: clamp(20px,2.5vw,28px);
+  row-gap: clamp(28px,3.5vw,40px);
+}
+/* ink colours for stats in feed */
+.ink-region .soc-live-num { color: var(--paper); }
+.ink-region .soc-live-item:nth-child(1) .soc-live-num,
+.ink-region .soc-live-item:nth-child(3) .soc-live-num { color: var(--tomato); }
+.ink-region .soc-live .mono-xs { color: rgba(247,244,238,.5); }
+/* live pulse dot */
+.soc-live-dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--tomato); margin-right: 8px; vertical-align: middle;
+  animation: livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+@media (prefers-reduced-motion: reduce) { .soc-live-dot { animation: none; } }
+@media (max-width: 860px) {
+  .soc-feed-head { grid-template-columns: 1fr; gap: clamp(28px,4vw,40px); }
+  .soc-live-feed { grid-template-columns: 1fr 1fr; }
+}
+
 /* feed marquee */
 .feed-marquee {
   display: flex; flex-direction: column; gap: clamp(10px,1.4vw,16px);
@@ -1070,9 +1107,10 @@ body.sig-off #panoramica .pillars-map { display: none; }
 .mq-swiper { overflow: visible; width: 100%; }
 .mq-swiper .swiper-wrapper { will-change: transform; transition-timing-function: linear !important; }
 .mq-swiper .swiper-slide { width: auto; flex-shrink: 0; }
+.feed-row-3 { display: none; }
 .reel-card {
   aspect-ratio: 9/16; border-radius: 14px; position: relative; flex: 0 0 auto;
-  width: clamp(130px,14vw,200px); display: flex; align-items: flex-end;
+  width: clamp(140px,15vw,215px); display: flex; align-items: flex-end;
   justify-content: flex-start; padding: 12px; overflow: hidden;
   background-color: #0d0d0d;
   background-image:
@@ -1111,7 +1149,6 @@ body.sig-off #panoramica .pillars-map { display: none; }
 .reel-card.video:hover::before { background: rgba(255,255,255,.28); transform: translate(-50%,-60%) scale(1.14); }
 @media (max-width: 640px) {
   .feed-row-2 { display: none; }
-  .feed-row-3 { display: none; }
   .reel-card { width: clamp(110px,30vw,160px); }
 }
 @media (prefers-reduced-motion: reduce) {

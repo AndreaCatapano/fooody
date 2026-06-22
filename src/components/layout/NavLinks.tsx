@@ -2,7 +2,7 @@
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { label: 'Metodo',   href: '/metodo',   word: 'Metodo' },
+  { label: 'Metodo Fooody', href: '/metodo', word: 'Metodo' },
   { label: 'Social',   href: '/social',   word: 'Social' },
   { label: 'Web',      href: '/web',      word: 'Web' },
   { label: 'Branding', href: '/branding', word: 'Branding' },
