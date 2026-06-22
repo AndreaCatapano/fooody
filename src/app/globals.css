@@ -103,7 +103,12 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 body.has-cursor,
 body.has-cursor a,
 body.has-cursor button,
-body.has-cursor [data-magnetic] { cursor: none; }
+body.has-cursor [data-magnetic],
+body.has-cursor [data-cursor],
+body.has-cursor .chip,
+body.has-cursor input,
+body.has-cursor textarea,
+body.has-cursor select { cursor: none; }
 
 /* ============ skip link ============ */
 .skip-link {
@@ -560,34 +565,39 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 [data-reveal-d="5"] { transition-delay: 0.40s; }
 
 /* ============ custom cursor ============ */
-.cursor      { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; will-change: transform; }
-.cursor-dot  { position: fixed; top: 0; left: 0; width: 7px; height: 7px; border-radius: 50%; background: #fff; transform: translate(-50%,-50%); z-index: 9999; pointer-events: none; will-change: transform; }
+/* --cursor-c is set by JS in tick() based on the current data-bg section */
+.cursor-dot {
+  position: fixed; top: 0; left: 0; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--cursor-c, #17130f);
+  z-index: 9999; pointer-events: none; will-change: transform;
+}
 .cursor-ring {
   position: fixed; top: 0; left: 0; width: 42px; height: 42px;
-  border: 1px solid #fff; border-radius: 50%; transform: translate(-50%,-50%);
+  border: 1.5px solid var(--cursor-c, #17130f); border-radius: 50%;
   z-index: 9998; pointer-events: none; will-change: transform, width, height;
-  transition: width 0.35s var(--ease), height 0.35s var(--ease), background-color 0.35s var(--ease), border-color 0.35s var(--ease);
+  transition: width 0.35s var(--ease), height 0.35s var(--ease),
+              background-color 0.35s var(--ease), border-color 0.35s var(--ease);
 }
-.cursor-ring.is-hover { width: 64px; height: 64px; background: rgba(255,255,255,0.12); }
+.cursor-ring.is-hover {
+  width: 64px; height: 64px;
+  background: color-mix(in srgb, var(--cursor-c, #17130f) 10%, transparent);
+}
 .cursor-ring.is-label { width: 84px; height: 84px; background: var(--tomato); border-color: var(--tomato); mix-blend-mode: normal; }
 .cursor-label {
-  position: fixed; z-index: 9999; pointer-events: none;
+  position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
   font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase;
   letter-spacing: 0.1em; color: #fff;
-  transform: translate(-50%,-50%);
   opacity: 0; transition: opacity 0.25s var(--ease); white-space: nowrap;
 }
 .cursor-label.show { opacity: 1; }
 .cursor-preview {
   position: fixed; top: 0; left: 0; z-index: 9997;
   width: 220px; height: 150px; border-radius: 10px; overflow: hidden;
-  pointer-events: none;
-  transform: translate(-50%,-50%) scale(0.6);
-  opacity: 0;
-  transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
-  box-shadow: var(--shadow-lift); will-change: transform;
+  pointer-events: none; scale: 0.6; opacity: 0;
+  transition: opacity 0.4s var(--ease), scale 0.5s var(--ease);
+  box-shadow: var(--shadow-lift); will-change: scale, opacity;
 }
-.cursor-preview.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+.cursor-preview.show { opacity: 1; scale: 1; }
 
 @media (hover: none), (max-width: 760px) {
   .cursor, .cursor-dot, .cursor-ring, .cursor-label, .cursor-preview { display: none !important; }

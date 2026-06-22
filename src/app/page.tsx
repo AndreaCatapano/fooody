@@ -1,16 +1,7 @@
 import type { Metadata } from 'next'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Fooody — Agenzia creativa food',
-  description:
-    'Strategia, social, branding e web per chi ha qualcosa di buono da dire. Agenzia creativa specializzata nel food.',
-  alternates: { canonical: '/' },
-  openGraph: {
-    title: 'Fooody — Agenzia creativa food',
-    description: 'Strategia, social, branding e web per chi ha qualcosa di buono da dire.',
-    url: '/',
-  },
-}
+export const metadata: Metadata = buildMetadata('home')
 
 export default function Home() {
   return (

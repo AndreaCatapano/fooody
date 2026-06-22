@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer'
 import TweaksPanel from '@/components/TweaksPanel'
 import { PageTransition } from '@/components/PageTransition'
 import SmoothScroll from '@/components/SmoothScroll'
+import { SITE, buildOrganizationSchema } from '@/lib/seo'
 
 const mont = localFont({
   src: [
@@ -19,29 +20,27 @@ const mont = localFont({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://fooody.it'),
+  metadataBase: new URL(SITE.url),
   title: {
-    default: 'Fooody — Agenzia creativa food',
-    template: '%s · Fooody',
+    default: `${SITE.name} — Agenzia creativa food`,
+    template: `%s · ${SITE.name}`,
   },
-  description:
-    'Strategia, social, branding e web per chi ha qualcosa di buono da dire. Agenzia creativa specializzata nel food.',
-  authors: [{ name: 'Fooody' }],
-  creator: 'Fooody',
+  description: SITE.description,
+  authors: [{ name: SITE.name }],
+  creator: SITE.name,
   openGraph: {
     type: 'website',
-    locale: 'it_IT',
-    siteName: 'Fooody',
-    title: 'Fooody — Agenzia creativa food',
-    description:
-      'Strategia, social, branding e web per chi ha qualcosa di buono da dire.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Fooody — Agenzia creativa food' }],
+    locale: SITE.locale,
+    siteName: SITE.name,
+    title: `${SITE.name} — Agenzia creativa food`,
+    description: SITE.descriptionShort,
+    images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: `${SITE.name} — Agenzia creativa food` }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Fooody — Agenzia creativa food',
-    description: 'Strategia, social, branding e web per chi ha qualcosa di buono da dire.',
-    images: ['/og-image.png'],
+    title: `${SITE.name} — Agenzia creativa food`,
+    description: SITE.descriptionShort,
+    images: [SITE.ogImage],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   icons: { icon: '/favicon.ico' },
@@ -52,6 +51,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="it" className={mont.variable}>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationSchema()) }}
+        />
         <a href="#main-content" className="skip-link">
           Vai al contenuto principale
         </a>

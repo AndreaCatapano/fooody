@@ -1,21 +1,28 @@
 import type { Metadata } from 'next'
+import { buildMetadata, buildServiceSchema } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Il Metodo — Cinque pilastri per riempire i tavoli',
-  description:
-    'Il sistema Fooody per la ristorazione: identità, social, menu engineering, esperienza digitale e crescita. Cinque pilastri, zero fronzoli.',
-  alternates: { canonical: '/metodo' },
-  openGraph: {
-    title: 'Il Metodo Fooody — Cinque pilastri per riempire i tavoli',
-    description:
-      'Il sistema Fooody per la ristorazione: identità, social, menu engineering, esperienza digitale e crescita.',
-    url: '/metodo',
-  },
-}
+const jsonLd = buildServiceSchema({
+  name: 'Metodo Fooody — Sistema integrato per la ristorazione',
+  description: 'Sistema completo per ristoranti: identità visiva, social media, menu engineering, esperienza digitale e crescita misurata.',
+  serviceType: 'Consulenza marketing per la ristorazione',
+  offers: [
+    'Identità visiva per ristoranti',
+    'Social media per la ristorazione',
+    'Menu engineering',
+    'Esperienza digitale (sito, prenotazioni, QR)',
+    'Crescita e advertising',
+  ],
+})
+
+export const metadata: Metadata = buildMetadata('metodo')
 
 export default function MetodoPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ============================================================
           HERO (sfondo inchiostro)
           ============================================================ */}

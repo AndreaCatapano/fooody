@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
 import ContattiClient from './ContattiClient'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'Lavoriamo insieme — Fooody',
-  description: 'Raccontaci il tuo progetto. Prima call gratuita: guardiamo i numeri di oggi e da dove far partire la crescita.',
-}
+export const metadata: Metadata = buildMetadata('contatti')
 
 export default function ContattiPage() {
   return <ContattiClient />

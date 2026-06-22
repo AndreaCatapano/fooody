@@ -159,6 +159,7 @@
             document.body.style.setProperty('--fg', t.fg);
             document.body.classList.toggle('on-ink-mode', t.ink);
             if (navEl) navEl.classList.toggle('on-ink', t.ink);
+            document.body.style.setProperty('--cursor-c', t.ink ? '#f7f4ee' : '#17130f');
           }
         }
       }
@@ -251,26 +252,32 @@
     preview.appendChild(pImg);
     document.body.append(dot, ring, label, preview);
 
+    // Set initial cursor color from the first visible bg section
+    const firstBg = bgSects.find(s => s.getBoundingClientRect().top <= innerHeight * 0.5) || bgSects[0];
+    const initKey = firstBg?.getAttribute('data-bg') || 'paper';
+    const initT = BG[initKey];
+    if (initT) document.body.style.setProperty('--cursor-c', initT.ink ? '#f7f4ee' : '#17130f');
+
     let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, down = false;
 
     window.addEventListener('mousemove', e => {
       mx = e.clientX; my = e.clientY;
+      // dot and label: GPU transform, no layout cost
       dot.style.transform   = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-      label.style.left      = mx + 'px';
-      label.style.top       = (my + 46) + 'px';
-      preview.style.left    = mx + 'px';
-      preview.style.top     = my + 'px';
+      label.style.transform = `translate(${mx}px,${my + 46}px) translate(-50%,-50%)`;
+      // preview: position via transform; scale is handled by CSS `scale` property separately
+      preview.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
     });
     window.addEventListener('mousedown', () => { down = true; });
     window.addEventListener('mouseup',   () => { down = false; });
 
     (function rafRing() {
-      rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
-      ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%) scale(${down ? 0.8 : 1})`;
+      rx = lerp(rx, mx, 0.14); ry = lerp(ry, my, 0.14);
+      ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%) scale(${down ? 0.75 : 1})`;
       requestAnimationFrame(rafRing);
     })();
 
-    const SEL = 'a,button,[data-magnetic],.chip,input,textarea,[data-cursor]';
+    const SEL = 'a,button,[data-magnetic],.chip,input,textarea,select,[data-cursor]';
     document.addEventListener('mouseover', e => {
       const t = e.target.closest(SEL);
       if (!t) return;
@@ -288,8 +295,12 @@
         preview.classList.add('show');
       }
     });
+    // Use relatedTarget to avoid flickering when mouse moves between children of the same SEL element
     document.addEventListener('mouseout', e => {
-      if (!e.target.closest(SEL)) return;
+      const from = e.target.closest(SEL);
+      if (!from) return;
+      const to = e.relatedTarget?.closest(SEL);
+      if (to === from) return; // still inside the same interactive element
       ring.classList.remove('is-hover', 'is-label');
       label.classList.remove('show');
       preview.classList.remove('show');
@@ -299,9 +310,9 @@
   /* ============================================================
      MAGNETIC ELEMENTS
   ============================================================ */
-  function initMagnetic() {
+  function initMagnetic(root) {
     if (!CAN_HOVER || REDUCE) return;
-    $$('[data-magnetic]').forEach(el => {
+    $$('[data-magnetic]', root).forEach(el => {
       const str   = parseFloat(el.getAttribute('data-magnetic')) || 0.3;
       const inner = $('[data-magnetic-inner]', el) || el;
       el.addEventListener('mousemove', e => {
@@ -323,9 +334,9 @@
   /* ============================================================
      TILT cards
   ============================================================ */
-  function initTilt() {
+  function initTilt(root) {
     if (!CAN_HOVER || REDUCE) return;
-    $$('[data-tilt]').forEach(card => {
+    $$('[data-tilt]', root).forEach(card => {
       const max = parseFloat(card.getAttribute('data-tilt')) || 6;
       card.style.transformStyle = 'preserve-3d';
       card.addEventListener('mousemove', e => {
@@ -345,11 +356,11 @@
   /* ============================================================
      WORK hover (home)
   ============================================================ */
-  function initWork() {
+  function initWork(root) {
     const mode = () => (window.FOOODY_TWEAKS || {}).workHover || 'tilt';
-    document.body.classList.add('wh-' + mode());
+    if (!root) document.body.classList.add('wh-' + mode()); // only set body class on first boot
     if (!CAN_HOVER || REDUCE) return;
-    $$('.work').forEach(card => {
+    $$('.work', root).forEach(card => {
       card.addEventListener('mousemove', e => {
         if (mode() !== 'tilt') return;
         const r  = card.getBoundingClientRect();
@@ -402,6 +413,9 @@
     initReveal(main);
     initCounters(main);
     initScrolly(main);
+    initMagnetic(main);
+    initTilt(main);
+    initWork(main);
     if (window.heroReinit) window.heroReinit();
     setTimeout(() => $$('[data-reveal], .kinetic', main).forEach(el => el.classList.add('is-in')), 3000);
   };
