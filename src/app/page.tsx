@@ -48,7 +48,7 @@ export default function Home() {
                   fill="#000"
                   fontWeight="800"
                 >
-                  FOOODY
+                  Fooody
                 </text>
               </mask>
             </defs>
