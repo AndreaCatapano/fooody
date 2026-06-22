@@ -45,7 +45,7 @@
   --mono: var(--font-mont), 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* ---- fluid type scale ---- */
-  --t-mega:  clamp(2.2rem, 1.2rem + 9vw, 9.5rem);
+  --t-mega:  clamp(2.2rem, 1.2rem + 9vw, 7.5rem);
   --t-hero:  clamp(2rem,   1.4rem + 5.2vw, 6rem);
   --t-h1:    clamp(1.8rem, 1.4rem + 3vw, 3.8rem);
   --t-h2:    clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem);
@@ -539,7 +539,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 /* ============ kinetic type ============ */
 .kinetic { display: block; }
 .kline   { display: block; overflow: hidden; padding: 0 0.12em; margin: 0 -0.12em; }
-.kline-inner { display: block; transform: translateY(110%); white-space: nowrap; }
+.kline-inner { display: block; transform: translateY(110%); }
 .kinetic.is-in .kline-inner {
   transform: translateY(0);
   transition: transform 0.9s var(--ease);
@@ -1107,7 +1107,6 @@ body.sig-off #panoramica .pillars-map { display: none; }
 .mq-swiper { overflow: visible; width: 100%; }
 .mq-swiper .swiper-wrapper { will-change: transform; transition-timing-function: linear !important; }
 .mq-swiper .swiper-slide { width: auto; flex-shrink: 0; }
-.feed-row-3 { display: none; }
 .reel-card {
   aspect-ratio: 9/16; border-radius: 14px; position: relative; flex: 0 0 auto;
   width: clamp(140px,15vw,215px); display: flex; align-items: flex-end;
@@ -1965,10 +1964,7 @@ body.sig-off #board .board { display: none; }
   .brd-caps { grid-template-columns: 1fr; }
 }
 
-/* ─── Mobile type scale ≤450px ─────────────────────────────────────────────
-   Il clamp fluido produce valori troppo grandi su schermi stretti.
-   Override fisso + white-space: normal su .kline-inner per evitare
-   il taglio orizzontale causato da white-space: nowrap + overflow: hidden. */
+/* ─── Mobile type scale ≤450px ───────────────────────────────────────────── */
 @media (max-width: 450px) {
   :root {
     --t-mega: 2.15rem;
@@ -1976,5 +1972,4 @@ body.sig-off #board .board { display: none; }
     --t-h1:   1.6rem;
     --t-h2:   1.3rem;
   }
-  .kline-inner { white-space: normal; }
 }
