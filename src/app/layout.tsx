@@ -44,8 +44,10 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   icons: { icon: '/favicon.ico' },
-  alternates: { canonical: '/' },
+  alternates: { canonical: '/', languages: { 'it': 'https://fooody.it' } },
 }
+
+const orgSchema = JSON.stringify(buildOrganizationSchema())
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -53,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationSchema()) }}
+          dangerouslySetInnerHTML={{ __html: orgSchema }}
         />
         <a href="#main-content" className="skip-link">
           Vai al contenuto principale

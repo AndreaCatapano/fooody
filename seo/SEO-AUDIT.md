@@ -1,7 +1,7 @@
 # Audit SEO Tecnico — Fooody
 *Generato: giugno 2026*
 
-## Score Tecnico: 81/100 (post-fix Fase 1)
+## Score Tecnico: 87/100 (post-fix Fase 1+2)
 
 | Categoria | Stato | Score |
 |-----------|-------|-------|
@@ -14,6 +14,14 @@
 | Structured Data | ✅ pass (aggiunto Fase 1) | 90/100 |
 | JS Rendering (SSG) | ✅ pass | 95/100 |
 | AI Crawler Management | ✅ pass (fix applicato) | 80/100 |
+
+---
+
+## Problemi risolti in Fase 2
+
+- ✅ **Studio page metadata** — aggiunto `buildMetadata('studio')` con canonical, OG, Twitter Card; aggiunta entry `studio` in PAGES (seo.ts)
+- ✅ **Studio in sitemap** — aggiunta URL `/studio` con `priority: 0.6`
+- ✅ **hreflang self-referencing** — aggiunto `alternates.languages['it']` nel layout root
 
 ---
 
@@ -51,10 +59,7 @@ Usare il logo Fooody su sfondo scuro (colore ink) con tagline.
 
 ## Problemi aperti — priorità media
 
-### 4. `og-image` mancante sullo studio page
-La pagina `/studio` non ha metadata propri — eredita quelli del root layout (OK), ma non ha OG specifico né canonical.
-
-### 5. H1 homepage è `visually-hidden`
+### 4. H1 homepage è `visually-hidden`
 L'H1 "Fooody — agenzia creativa food" è presente ma nascosto visivamente. Google lo legge ✅, ma il visual knockout SVG non è testo indicizzabile. Considerare di rendere l'H1 visibile (o almeno non `display:none`).
 
 ### 6. IndexNow non implementato
@@ -64,8 +69,5 @@ Bing/Yandex indexano più lentamente senza IndexNow. Aggiungere il file di verif
 
 ## Problemi aperti — priorità bassa
 
-### 7. Nessun `apple-touch-icon` dichiarato
-Aggiungere in metadata: `icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' }`.
-
-### 8. `<html>` manca di `hreflang` self-referencing
-Per un sito mono-lingua non è necessario, ma aggiungere `<link rel="alternate" hreflang="it" href="https://fooody.it">` nella root è best practice per chiarire la lingua a Google.
+### 5. IndexNow non implementato
+Bing/Yandex indexano più lentamente senza IndexNow. Aggiungere il file di verifica in `public/` e l'API call su ogni deploy.

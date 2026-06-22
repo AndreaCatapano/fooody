@@ -73,7 +73,13 @@ export const PAGES = {
       'Raccontaci il tuo progetto food. Prima call gratuita: guardiamo i numeri di oggi e costruiamo insieme la strategia per far crescere il tuo brand.',
     canonical: '/contatti',
   },
-} as const satisfies Record<string, { title: string; description: string; canonical: string }>
+  studio: {
+    title: 'Chi siamo — Fooody',
+    description:
+      'Un gruppo di golosi con il vizio del buon lavoro. Strategist, designer, video-maker e copy che vivono nel food perché ci credono davvero.',
+    canonical: '/studio',
+  },
+} as const
 
 // ─── Helper: costruisce metadata Next.js da una entry PAGES ─────────────────
 
