@@ -10,6 +10,7 @@ interface CaseStudyBlockProps {
   eyebrow: ReactNode
   eyebrowClass?: string
   coverLabel: string
+  coverPlaceholder?: string
   heading: ReactNode
   lead: ReactNode
   kpis: KpiItem[]
@@ -22,6 +23,7 @@ export default function CaseStudyBlock({
   eyebrow,
   eyebrowClass,
   coverLabel,
+  coverPlaceholder,
   heading,
   lead,
   kpis,
@@ -41,6 +43,7 @@ export default function CaseStudyBlock({
             data-reveal=""
             data-tilt="4"
             data-cursor="guarda"
+            {...(coverPlaceholder ? { 'data-placeholder': coverPlaceholder } : {})}
           >
             <span className="ph-label">{coverLabel}</span>
           </figure>
