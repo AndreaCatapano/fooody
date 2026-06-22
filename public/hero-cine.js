@@ -39,7 +39,10 @@
 
   /* ---- tweaks state (mutable — updated by tweakchange) ---- */
   const tw   = window.FOOODY_TWEAKS || {};
-  let DENSITY = clamp(tw.particleCount    || 80,   20,  120);
+  /* Default density 55 (step≈9): ~40% fewer particles than the previous 80 (step≈7).
+     Mobile (touch) gets 35 (step≈11): ~60% fewer particles. */
+  const IS_MOBILE = !CAN_HOVER;
+  let DENSITY = clamp(tw.particleCount    || (IS_MOBILE ? 35 : 55), 20,  120);
   let SIZE    = clamp(tw.particleSize     || 100,  40,  260);
   let DIR     = tw.particleDir            || 'sparpaglia';
   let PCOLOR  = COLOR_HEX[tw.particleColor] || '#17130f';
@@ -59,6 +62,12 @@
   let cachedGradW = 0;
   const ASSEMBLE_DUR = 1800; /* ms — entry assembly duration */
   let assembleStart  = 0;
+
+  /* ---- rAF loop control ---- */
+  let looping   = false;  /* true only when hero is in viewport */
+  let rafActive = false;  /* prevent duplicate rAF chains */
+  const FPS_MS  = 1000 / 45; /* cap at 45fps — smooth assembly + lower GPU load */
+  let lastFrame = 0;
 
   /* ---- mouse parallax ---- */
   if (!REDUCE && CAN_HOVER) {
@@ -156,6 +165,14 @@
 
     const effectiveE = Math.max(eSmooth, assembleE);
 
+    /* skip draw when fully invisible — canvas alpha 0 + assembly done */
+    const alpha = clamp(1 - p * 1.5, 0, 1);
+    if (alpha <= 0 && assembleE <= 0) {
+      if (paper) paper.style.opacity = '0';
+      if (vid)   vid.style.transform = 'scale(1.24)';
+      return;
+    }
+
     const t      = now * 0.001;
     const jitter = REDUCE ? 0 : 2.2;
     const AMT    = 14;
@@ -164,7 +181,7 @@
     pmy = lerp(pmy, -my * AMT * 0.65, 0.08);
 
     ctx.clearRect(0, 0, W, H);
-    ctx.globalAlpha = clamp(1 - p * 1.5, 0, 1);
+    ctx.globalAlpha = alpha;
 
     /* gradient fillStyle — cached per canvas width */
     if (PCOLOR === 'gradient') {
@@ -228,8 +245,31 @@
     [eyebrow, cap, scrollCue].forEach(el => el && (el.style.opacity = uiFade));
   }
 
-  /* ---- rAF loop (started once, runs forever) ---- */
-  function loop(now) { draw(now); requestAnimationFrame(loop); }
+  /* ---- rAF loop — pauses when hero is off-screen ---- */
+  function loop(now) {
+    if (!looping) { rafActive = false; return; }
+    if (now - lastFrame >= FPS_MS) {
+      lastFrame = now;
+      draw(now);
+    }
+    requestAnimationFrame(loop);
+  }
+
+  function startLoop() {
+    if (rafActive) return;
+    rafActive = true;
+    requestAnimationFrame(loop);
+  }
+
+  /* ---- IntersectionObserver: pause loop when hero is off-screen ---- */
+  function attachObserver() {
+    if (!hero) return;
+    const io = new IntersectionObserver(entries => {
+      looping = entries[0].isIntersecting;
+      if (looping) startLoop();
+    }, { threshold: 0 });
+    io.observe(hero);
+  }
 
   /* ---- resize ---- */
   let resizeTimer;
@@ -262,13 +302,18 @@
     if (!bindElements()) return;
     assembleStart = performance.now();
     eSmooth = 0;
+    looping = true;
     buildParticles();
+    startLoop();
+    attachObserver();
   };
 
   /* ---- boot ---- */
   if (!bindElements()) return;
   assembleStart = performance.now();
+  looping = true;
   buildParticles();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildParticles);
-  requestAnimationFrame(loop);
+  startLoop();
+  attachObserver();
 })();
