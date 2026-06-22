@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { buildMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = buildMetadata('home')
@@ -495,6 +496,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <Script src="/hero-cine.js" strategy="afterInteractive" />
     </>
   )
 }

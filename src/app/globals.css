@@ -801,7 +801,8 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 @media (prefers-reduced-motion: reduce) { .hero-scroll-arrow { animation: none; } }
 
 /* hero — particles mode (hidden by default) */
-.hero-paper    { position: absolute; inset: 0; z-index: 1; background: var(--paper); pointer-events: none; opacity: 0; will-change: opacity; }
+.hero-paper    { position: absolute; inset: 0; z-index: 1; background: var(--paper); pointer-events: none; opacity: 0; }
+.hero100.mode-particelle .hero-paper { will-change: opacity; }
 .hero-particles { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; opacity: 0; }
 .hero100.mode-particelle .hero-paper,
 .hero100.mode-particelle .hero-particles { opacity: 1; }
@@ -1064,7 +1065,7 @@ body.sig-off #panoramica .pillars-map { display: none; }
   mask-image: linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
 }
 .mq-row { overflow: visible; }
-.mq-track { display: flex; gap: clamp(10px,1.4vw,16px); width: max-content; will-change: transform; }
+.mq-track { display: flex; gap: clamp(10px,1.4vw,16px); width: max-content; }
 /* Swiper marquee overrides */
 .mq-swiper { overflow: visible; width: 100%; }
 .mq-swiper .swiper-wrapper { will-change: transform; transition-timing-function: linear !important; }

@@ -6,13 +6,12 @@ function DevicePreview() {
     const stage = document.getElementById('preview-stage')
     const sizeEl = document.getElementById('vp-size')
     const sizes: Record<string, string> = { desktop: '1280 × 800', tablet: '768 × 1024', mobile: '390 × 844' }
+    const btns = document.querySelectorAll<HTMLButtonElement>('.vp-btn')
+    const handlers = new Map<Element, () => void>()
 
-    document.querySelectorAll<HTMLButtonElement>('.vp-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll<HTMLButtonElement>('.vp-btn').forEach(x => {
-          x.classList.remove('active')
-          x.setAttribute('aria-selected', 'false')
-        })
+    btns.forEach(btn => {
+      const handler = () => {
+        btns.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected', 'false') })
         btn.classList.add('active')
         btn.setAttribute('aria-selected', 'true')
         const vp = btn.getAttribute('data-vp') || 'desktop'
@@ -20,8 +19,12 @@ function DevicePreview() {
         if (vp === 'tablet') stage?.classList.add('is-tablet')
         if (vp === 'mobile') stage?.classList.add('is-mobile')
         if (sizeEl) sizeEl.textContent = sizes[vp]
-      })
+      }
+      handlers.set(btn, handler)
+      btn.addEventListener('click', handler)
     })
+
+    return () => { handlers.forEach((h, btn) => btn.removeEventListener('click', h)) }
   }, [])
 
   return (

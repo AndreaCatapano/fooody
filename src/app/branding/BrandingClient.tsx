@@ -54,13 +54,17 @@ function BrandBoard() {
       if (packEl) { packEl.style.setProperty('--pack-grad', b.pack) }
     }
 
+    let handler: (() => void) | null = null
     if (btn) {
-      btn.addEventListener('click', () => {
+      handler = () => {
         i = (i + 1) % BRANDS.length
         card?.classList.add('is-shuffling')
         setTimeout(() => { render(BRANDS[i]); card?.classList.remove('is-shuffling') }, 180)
-      })
+      }
+      btn.addEventListener('click', handler)
     }
+
+    return () => { if (btn && handler) btn.removeEventListener('click', handler) }
   }, [])
 
   return (
