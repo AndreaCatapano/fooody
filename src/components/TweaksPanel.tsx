@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 type ParticleDir   = 'sparpaglia' | 'su' | 'giu' | 'esplode'
 type ParticleColor = 'ink' | 'tomato' | 'paper' | 'cream'
 type SensPreset    = 'dolce' | 'normale' | 'forte'
-type ParticleShape = 'quadrato' | 'cerchio' | 'rombo' | 'linea'
+type ParticleShape = 'quadrato' | 'cerchio' | 'rombo' | 'linea' | 'o'
 
 interface Tweaks {
   particleCount:     number
@@ -156,6 +156,7 @@ export default function TweaksPanel() {
               { v: 'cerchio',  label: '● cerchio'  },
               { v: 'rombo',    label: '◆ rombo'    },
               { v: 'linea',    label: '— linea'    },
+              { v: 'o',        label: '○ o'        },
             ] as { v: ParticleShape; label: string }[]).map(({ v, label }) => (
               <Chip key={v} active={tweaks.particleShape === v} onClick={() => update('particleShape', v)}>
                 {label}

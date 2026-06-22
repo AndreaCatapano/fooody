@@ -192,6 +192,12 @@
         ctx.closePath();
       } else if (SHAPE === 'linea') {
         ctx.rect(x, y + h - 0.7, sz * 1.5, Math.max(sz * 0.14, 1));
+      } else if (SHAPE === 'o') {
+        /* ring: outer CW + inner CCW → nonzero winding creates hole */
+        ctx.moveTo(x + sz, y + h);
+        ctx.arc(x + h, y + h, h, 0, PI2, false);
+        ctx.moveTo(x + h + h * 0.52, y + h);
+        ctx.arc(x + h, y + h, h * 0.52, 0, PI2, true);
       } else { /* quadrato */
         ctx.rect(x, y, sz, sz);
       }

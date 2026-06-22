@@ -2,17 +2,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
-const PAGE_COLOR: Record<string, string> = {
+const PAGE_BG: Record<string, string> = {
   home:     '#17130f',
   metodo:   '#c88a1a',
   social:   '#DD5049',
   web:      '#6352F0',
-  branding: '#e8442a',
+  branding: 'linear-gradient(110deg, #DD5049 0%, #c88a1a 48%, #6352F0 100%)',
   studio:   '#17130f',
   contatti: '#17130f',
   lavori:   '#17130f',
 }
 
+/* solid colours that need dark text */
 const LIGHT_BG = new Set(['#c88a1a'])
 
 function pageKey(path: string) {
@@ -55,7 +56,7 @@ export function PageTransition() {
 
   /* Entry: show current-page colour, then fade out after a beat */
   useEffect(() => {
-    const bg = PAGE_COLOR[pageKey(pathname)] ?? '#17130f'
+    const bg = PAGE_BG[pageKey(pathname)] ?? '#17130f'
     show(bg)
     requestAnimationFrame(() => requestAnimationFrame(() => hide(120)))
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +83,7 @@ export function PageTransition() {
       if (navigating.current) return
 
       const key = pageKey(href)
-      const bg  = PAGE_COLOR[key] ?? '#17130f'
+      const bg  = PAGE_BG[key] ?? '#17130f'
       const wt  = a.getAttribute('data-transition-word')
                ?? (key.charAt(0).toUpperCase() + key.slice(1))
 
@@ -105,7 +106,7 @@ export function PageTransition() {
       aria-hidden="true"
       style={{
         position: 'fixed', inset: 0, zIndex: 9000,
-        background: PAGE_COLOR[pageKey(pathname)] ?? '#17130f',
+        background: PAGE_BG[pageKey(pathname)] ?? '#17130f',
         opacity: 1,
         pointerEvents: 'auto',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
