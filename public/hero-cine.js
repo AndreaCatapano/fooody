@@ -98,10 +98,10 @@
     o.textAlign    = 'center';
     o.textBaseline = 'middle';
     o.font = `700 100px ${bodyFont}`;
-    const measured = o.measureText('Fooody').width || 100;
+    const measured = o.measureText('FOOODY').width || 100;
     const fs = Math.min(100 * (W * 0.88) / measured, H * 0.46);
     o.font = `700 ${fs}px ${bodyFont}`;
-    o.fillText('Fooody', W / 2, H * 0.46);
+    o.fillText('FOOODY', W / 2, H * 0.46);
 
     const px   = o.getImageData(0, 0, W, H).data;
     const step = clamp(Math.round(14 - (DENSITY / 120) * 10), 3, 14);
