@@ -516,6 +516,15 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   border-top: 1px solid var(--line-ink);
   color: rgba(247,244,238,0.55);
 }
+.footer .foot-bottom a {
+  text-decoration: underline;
+  text-decoration-color: rgba(247,244,238,0.3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.25s;
+}
+.footer .foot-bottom a:hover {
+  text-decoration-color: rgba(247,244,238,0.7);
+}
 @media (max-width: 860px) {
   .footer .foot-grid { grid-template-columns: 1fr; gap: var(--s6); }
 }
