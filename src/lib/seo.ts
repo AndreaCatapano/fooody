@@ -50,31 +50,31 @@ export const PAGES = {
     canonical: '/metodo',
   },
   social: {
-    title: 'Social Media per ristoranti e food brand — Fooody',
+    title: 'Social Media per ristoranti e food brand',
     description:
       'Strategia, contenuti e community per chi lavora nel food. Dal reel virale alla campagna che converte: pensiamo, giriamo, pubblichiamo, misuriamo.',
     canonical: '/social',
   },
   web: {
-    title: 'Web Design per ristoranti e food brand — Fooody',
+    title: 'Web Design per ristoranti e food brand',
     description:
       'Siti veloci, belli e onesti per il food. UX, UI, sviluppo e SEO sotto lo stesso tetto — dove il bottone giusto è sempre a portata di pollice.',
     canonical: '/web',
   },
   branding: {
-    title: 'Branding per il food — Fooody',
+    title: 'Branding per il food',
     description:
       'Strategia, naming, identità visiva e packaging per ristoranti e brand food. Diamo al tuo brand una faccia che non si scorda — dal logo al packaging.',
     canonical: '/branding',
   },
   contatti: {
-    title: 'Lavoriamo insieme — Fooody',
+    title: 'Lavoriamo insieme',
     description:
       'Raccontaci il tuo progetto food. Prima call gratuita: guardiamo i numeri di oggi e costruiamo insieme la strategia per far crescere il tuo brand.',
     canonical: '/contatti',
   },
   studio: {
-    title: 'Chi siamo — Fooody',
+    title: 'Chi siamo',
     description:
       'Un gruppo di golosi con il vizio del buon lavoro. Strategist, designer, video-maker e copy che vivono nel food perché ci credono davvero.',
     canonical: '/studio',
@@ -85,22 +85,25 @@ export const PAGES = {
 
 export function buildMetadata(page: keyof typeof PAGES) {
   const p = PAGES[page]
+  // Il template del layout aggiunge " · Fooody" al <title>.
+  // Per OG/Twitter il brand va esplicitato perché non passano dal template.
+  const ogTitle = p.title.includes(SITE.name) ? p.title : `${p.title} — ${SITE.name}`
   return {
     title: p.title,
     description: p.description,
     alternates: { canonical: p.canonical },
     openGraph: {
-      title: p.title,
+      title: ogTitle,
       description: p.description,
       url: p.canonical,
       type: 'website' as const,
       locale: SITE.locale,
       siteName: SITE.name,
-      images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: p.title }],
+      images: [{ url: SITE.ogImage, width: 1200, height: 630, alt: ogTitle }],
     },
     twitter: {
       card: 'summary_large_image' as const,
-      title: p.title,
+      title: ogTitle,
       description: p.description,
       images: [SITE.ogImage],
     },
