@@ -110,6 +110,25 @@ function DevicePreview() {
         </div>
       </div>
 
+      {/* stats dentro il frame, come da progetto */}
+      <div className="anteprima-stats">
+        <div className="a-stat">
+          <span className="a-stat-num">0.9s</span>
+          <span className="a-stat-lbl">caricamento medio</span>
+        </div>
+        <div className="a-stat">
+          <span className="a-stat-num">98/100</span>
+          <span className="a-stat-lbl">performance score</span>
+        </div>
+        <div className="a-stat">
+          <span className="a-stat-num">2 step</span>
+          <span className="a-stat-lbl">al checkout</span>
+        </div>
+        <div className="a-stat">
+          <span className="a-stat-num">100%</span>
+          <span className="a-stat-lbl">responsive &amp; accessibile</span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -249,26 +268,6 @@ export default function WebClient() {
           </div>
 
           <DevicePreview />
-
-          {/* stats incollate sotto il preview-wrap — bordi connessi */}
-          <div className="anteprima-stats">
-            <div className="a-stat">
-              <span className="a-stat-num">0.9s</span>
-              <span className="a-stat-lbl">caricamento medio</span>
-            </div>
-            <div className="a-stat">
-              <span className="a-stat-num">98/100</span>
-              <span className="a-stat-lbl">performance score</span>
-            </div>
-            <div className="a-stat">
-              <span className="a-stat-num">2 step</span>
-              <span className="a-stat-lbl">al checkout</span>
-            </div>
-            <div className="a-stat">
-              <span className="a-stat-num">100%</span>
-              <span className="a-stat-lbl">responsive &amp; accessibile</span>
-            </div>
-          </div>
         </div>
       </section>
 
