@@ -1357,7 +1357,8 @@ body.sig-off #feed .feed-marquee { display: none; }
 
 /* anteprima dal vivo */
 .preview-wrap {
-  margin-top: clamp(28px,4vw,48px); border: 1px solid var(--line); border-radius: var(--radius);
+  margin-top: clamp(28px,4vw,48px); border: 1px solid var(--line);
+  border-radius: var(--radius) var(--radius) 0 0;
   background: var(--paper); overflow: hidden;
 }
 .preview-toolbar {
@@ -1479,10 +1480,12 @@ body.sig-off #feed .feed-marquee { display: none; }
 .preview-stage.is-tablet .mock-cards { grid-template-columns: repeat(3,1fr); }
 .preview-stage.is-tablet .mock-cards .mock-card:nth-child(4) { display: none; }
 
-/* stats strip incollata al fondo del preview-wrap */
+/* stats strip — sibling di preview-wrap, si connette visivamente */
 .anteprima-stats {
   display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
-  border-top: 1px solid var(--line);
+  border: 1px solid var(--line); border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--paper);
 }
 .a-stat {
   display: flex; align-items: baseline; gap: 10px;
