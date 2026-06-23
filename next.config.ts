@@ -20,6 +20,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // script pubblici senza hash nel nome → cache 1 settimana + rinnovo silenzioso
+        source: '/:file(motion|hero-cine|hero-effects)\\.js',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
+        ],
+      },
+      {
         source: '/(.*)',
         headers: securityHeaders,
       },
