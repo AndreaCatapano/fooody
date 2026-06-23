@@ -10,7 +10,7 @@
   /* ---- core palette ---- */
   --ink:        #17130f;
   --ink-2:      #4a443c;
-  --ink-3:      #8c857a;
+  --ink-3:      #666058;
   --paper:      #f7f4ee;
   --paper-2:    #efeae1;
   --paper-3:    #e6e0d4;
@@ -353,7 +353,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   background-color: #211c17;
   background-image: repeating-linear-gradient(135deg, rgba(247,244,238,0.08) 0 1px, transparent 1px 9px);
   border-color: var(--line-ink);
-  color: var(--ink-3);
+  color: rgba(247,244,238,0.55);
 }
 
 /* ============ inverse (ink) regions ============ */
@@ -367,6 +367,8 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 .ink-region .divider     { background: var(--line-ink); }
 .ink-region .card        { background: #1f1a15; border-color: var(--line-ink); }
 .ink-region .card:hover  { border-color: rgba(247,244,238,0.45); }
+.ink-region .mono-xs,
+.ink-region .idx         { color: rgba(247,244,238,0.55); }
 
 /* ============ navbar — liquid glass ============ */
 .nav {
@@ -495,6 +497,8 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   gap: var(--s7);
 }
 .footer .foot-cols { display: flex; flex-direction: column; gap: 12px; }
+.footer .mono-xs,
+.footer .idx { color: rgba(247,244,238,0.55); }
 .footer .foot-mega {
   font-family: var(--exp);
   font-weight: 700;
@@ -697,7 +701,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 }
 .scrolly-step .step-body {
   font-size: var(--t-lead); line-height: 1.55;
-  color: rgba(247,244,238,0.66); max-width: 46ch;
+  color: rgba(247,244,238,0.70); max-width: 46ch;
 }
 .scrolly-step .step-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 
@@ -722,7 +726,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 .chapter-steps { display: flex; gap: 6px; }
 .chapter-dot {
   font-family: var(--mono); font-size: 0.66rem;
-  color: rgba(247,244,238,0.4);
+  color: rgba(247,244,238,0.5);
   border: 1px solid var(--line-ink); border-radius: 999px; padding: 4px 9px;
   transition: color 0.4s var(--ease), background 0.4s var(--ease), border-color 0.4s var(--ease);
   white-space: nowrap;
@@ -801,7 +805,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
   position: absolute; left: 50%; bottom: 26px;
   transform: translateX(-50%);
   z-index: 3; display: flex; flex-direction: column;
-  align-items: center; gap: 6px; color: var(--ink-3);
+  align-items: center; gap: 6px; color: rgba(247,244,238,0.55);
 }
 .hero-scroll-arrow { font-size: 1rem; animation: heroBounce 1.8s var(--ease) infinite; }
 @keyframes heroBounce {
