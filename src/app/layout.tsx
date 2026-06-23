@@ -11,9 +11,9 @@ import { SITE, buildOrganizationSchema } from '@/lib/seo'
 
 const mont = localFont({
   src: [
-    { path: './fonts/Mont-Regular.otf',  weight: '400', style: 'normal' },
-    { path: './fonts/Mont-SemiBold.otf', weight: '600', style: 'normal' },
-    { path: './fonts/Mont-Bold.otf',     weight: '700', style: 'normal' },
+    { path: './fonts/Mont-Regular.woff2',  weight: '400', style: 'normal' },
+    { path: './fonts/Mont-SemiBold.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/Mont-Bold.woff2',     weight: '700', style: 'normal' },
   ],
   variable: '--font-mont',
   display: 'swap',
