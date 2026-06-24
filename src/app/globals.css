@@ -1358,12 +1358,13 @@ body.sig-off #feed .feed-marquee { display: none; }
 /* anteprima dal vivo */
 .preview-wrap {
   margin-top: clamp(28px,4vw,48px); border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--paper); overflow: hidden;
+  background: var(--paper);
   display: flex; flex-direction: column;
 }
 .preview-toolbar {
   display: flex; align-items: center; gap: 12px; padding: 12px 14px;
   border-bottom: 1px solid var(--line);
+  border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
 }
 .vp-seg {
   display: flex; align-items: center;
@@ -1484,6 +1485,8 @@ body.sig-off #feed .feed-marquee { display: none; }
 .anteprima-stats {
   display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
   border-top: 1px solid var(--line);
+  border-radius: 0 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px);
+  overflow: hidden;
 }
 .a-stat {
   display: flex; align-items: baseline; gap: 10px;
