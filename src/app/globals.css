@@ -1397,7 +1397,7 @@ body.sig-off #feed .feed-marquee { display: none; }
   display: flex; justify-content: center; padding: clamp(20px,4vw,52px);
   background: var(--paper-2);
   background-image: repeating-linear-gradient(135deg, rgba(0,0,0,.03) 0 1px, transparent 1px 12px);
-  height: clamp(420px,52vw,620px); align-items: flex-start;
+  min-height: clamp(420px,52vw,620px); align-items: flex-start;
 }
 .browser {
   width: 100%; max-width: 980px; background: var(--paper); border: 1px solid var(--line);
