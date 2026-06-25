@@ -1394,14 +1394,15 @@ body.sig-off #feed .feed-marquee { display: none; }
 .vp-btn:hover .vp-icon { opacity: 1; }
 .vp-size { margin-left: auto; }
 .preview-stage {
-  display: flex; flex-direction: column; align-items: center;
+  display: flex; flex-direction: column; align-items: stretch;
   padding: clamp(20px,4vw,52px) clamp(20px,4vw,52px) 0;
   background: var(--paper-2);
   background-image: repeating-linear-gradient(135deg, rgba(0,0,0,.03) 0 1px, transparent 1px 12px);
   min-height: clamp(420px,52vw,620px);
 }
 .browser {
-  width: 100%; max-width: 980px; background: var(--paper); border: 1px solid var(--line);
+  width: 100%; max-width: 980px; margin-inline: auto;
+  background: var(--paper); border: 1px solid var(--line);
   border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-lift);
   transition: max-width .65s var(--ease);
 }
@@ -1490,7 +1491,7 @@ body.sig-off #feed .feed-marquee { display: none; }
   padding: clamp(20px,2.5vw,32px) clamp(20px,2.5vw,36px);
   gap: clamp(16px,2vw,24px);
 }
-.anteprima-stats .a-stat { width: calc(25% - clamp(12px,1.5vw,18px)); }
+.anteprima-stats .a-stat { flex: 1; }
 .a-stat {
   display: flex; flex-direction: column; gap: 6px;
 }
