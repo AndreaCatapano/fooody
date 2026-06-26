@@ -1,18 +1,15 @@
+import SectionHeader from '@/components/blocks/SectionHeader'
+
 export default function StuValori() {
   return (
     <section className="section" data-bg="paper-2" style={{ background: 'var(--paper-2)' }} id="valori">
       <div className="wrap">
-        <div className="sec-head">
-          <div>
-            <div className="eyebrow stu-eyebrow">come lavoriamo</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-              Tre principi.<br />Nessuna scusa.
-            </h2>
-          </div>
-          <p className="small" style={{ maxWidth: '32ch' }}>
-            Non sono valori appesi al muro. Sono il modo in cui prendiamo le decisioni ogni giorno.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="come lavoriamo"
+          eyebrowClass="stu-eyebrow"
+          heading={<>Tre principi.<br />Nessuna scusa.</>}
+          lead="Non sono valori appesi al muro. Sono il modo in cui prendiamo le decisioni ogni giorno."
+        />
 
         <div className="stu-vals-grid">
           <div className="stu-val" data-reveal="">

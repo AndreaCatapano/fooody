@@ -1,18 +1,15 @@
+import SectionHeader from '@/components/blocks/SectionHeader'
+
 export default function StuTeam() {
   return (
     <section className="section" data-bg="paper" id="team">
       <div className="wrap">
-        <div className="sec-head">
-          <div>
-            <div className="eyebrow stu-eyebrow">il team</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-              Le persone<br />dietro i progetti.
-            </h2>
-          </div>
-          <p className="small" style={{ maxWidth: '32ch' }}>
-            Otto persone, un obiettivo. Ognuno con la propria specialità — tutti con lo stesso obiettivo.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="il team"
+          eyebrowClass="stu-eyebrow"
+          heading={<>Le persone<br />dietro i progetti.</>}
+          lead="Otto persone, un obiettivo. Ognuno con la propria specialità — tutti con lo stesso obiettivo."
+        />
 
         <div className="stu-team">
           <div className="stu-member" data-reveal="">

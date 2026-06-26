@@ -1,18 +1,16 @@
+import SectionHeader from '@/components/blocks/SectionHeader'
+
 export default function BrandCaps() {
   return (
     <section className="section" data-bg="paper-2" style={{ background: 'var(--paper-2)' }} id="cosa">
       <div className="wrap">
-        <div className="sec-head">
-          <div>
-            <div className="eyebrow brand-eyebrow">cosa facciamo</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-              Dalla strategia<br />al lancio.
-            </h2>
-          </div>
-          <p className="small" style={{ maxWidth: '34ch' }}>
-            Quattro tappe per costruire un marchio coerente — dentro e fuori dal piatto.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="cosa facciamo"
+          eyebrowClass="brand-eyebrow"
+          heading={<>Dalla strategia<br />al lancio.</>}
+          lead="Quattro tappe per costruire un marchio coerente — dentro e fuori dal piatto."
+          leadMaxWidth="34ch"
+        />
 
         <div className="brd-caps">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px,1.6vw,20px)' }}>

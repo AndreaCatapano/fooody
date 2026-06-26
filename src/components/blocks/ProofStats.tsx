@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import StatsGrid from '@/components/blocks/StatsGrid'
 
 interface StatEntry {
   count: number | string
@@ -41,21 +42,12 @@ export default function ProofStats({
         >
           {heading}
         </h2>
-        <div className={gridClass} data-reveal="" data-reveal-d="2">
-          {items.map((item, i) => (
-            <div key={i} className={itemClass}>
-              <span
-                className={['numeral', numeralClass].filter(Boolean).join(' ')}
-                data-count={String(item.count)}
-                {...(item.prefix ? { 'data-pre': item.prefix } : {})}
-                {...(item.suffix ? { 'data-suf': item.suffix } : {})}
-              >
-                0
-              </span>
-              <span className="mono-xs">{item.label}</span>
-            </div>
-          ))}
-        </div>
+        <StatsGrid
+          gridClass={gridClass}
+          itemClass={itemClass}
+          defaultNumeralClass={numeralClass}
+          items={items}
+        />
       </div>
     </section>
   )

@@ -1,19 +1,15 @@
+import SectionHeader from '@/components/blocks/SectionHeader'
+
 export default function MetodoPanoramica() {
   return (
     <section className="section" data-bg="paper" id="panoramica" data-sig="">
       <div className="wrap">
-        <div className="sec-head">
-          <div>
-            <div className="eyebrow met-eyebrow">il sistema in un colpo d&apos;occhio</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-              Cinque pilastri.<br />Un percorso solo.
-            </h2>
-          </div>
-          <p className="small" style={{ maxWidth: '32ch' }}>
-            Funzionano separati, ma danno il meglio insieme.
-            Sotto, ogni pilastro si compone mentre scorri.
-          </p>
-        </div>
+        <SectionHeader
+          eyebrow="il sistema in un colpo d'occhio"
+          eyebrowClass="met-eyebrow"
+          heading={<>Cinque pilastri.<br />Un percorso solo.</>}
+          lead="Funzionano separati, ma danno il meglio insieme. Sotto, ogni pilastro si compone mentre scorri."
+        />
 
         <div className="pillars-map">
           <a className="pmap pmap-1" href="#pilastri" data-reveal="">
