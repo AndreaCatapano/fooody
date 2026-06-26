@@ -69,6 +69,29 @@
   const FPS_MS  = 1000 / 45; /* cap at 45fps — smooth assembly + lower GPU load */
   let lastFrame = 0;
 
+  /* ---- fps counter (debug) ---- */
+  let fpsEl = null, fpsFrames = 0, fpsSince = 0;
+  (function initFps() {
+    fpsEl = document.createElement('div');
+    fpsEl.id = 'hero-fps';
+    Object.assign(fpsEl.style, {
+      position: 'fixed', bottom: '12px', right: '12px', zIndex: '9999',
+      fontFamily: 'monospace', fontSize: '11px', lineHeight: '1',
+      background: 'rgba(0,0,0,0.55)', color: '#0f0', padding: '4px 7px',
+      borderRadius: '4px', pointerEvents: 'none', userSelect: 'none',
+    });
+    document.body.appendChild(fpsEl);
+  })();
+  function tickFps(now) {
+    fpsFrames++;
+    if (now - fpsSince >= 1000) {
+      const fps = Math.round(fpsFrames * 1000 / (now - fpsSince));
+      if (fpsEl) fpsEl.textContent = fps + ' fps';
+      fpsFrames = 0;
+      fpsSince = now;
+    }
+  }
+
   /* ---- mouse parallax ---- */
   if (!REDUCE && CAN_HOVER) {
     window.addEventListener('mousemove', e => {
@@ -260,6 +283,7 @@
     if (now - lastFrame >= FPS_MS) {
       lastFrame = now;
       draw(now);
+      tickFps(now);
     }
     requestAnimationFrame(loop);
   }
