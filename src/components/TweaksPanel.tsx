@@ -43,6 +43,7 @@ function applyTweaks(t: Tweaks) {
 export default function TweaksPanel() {
   const [open,   setOpen]   = useState(false)
   const [tweaks, setTweaks] = useState<Tweaks>(DEFAULTS)
+  const [fps,    setFps]    = useState<number | null>(null)
 
   useEffect(() => {
     try {
@@ -53,6 +54,10 @@ export default function TweaksPanel() {
     } catch {
       applyTweaks(DEFAULTS)
     }
+
+    const onFps = (e: Event) => setFps((e as CustomEvent<number>).detail)
+    window.addEventListener('herofps', onFps)
+    return () => window.removeEventListener('herofps', onFps)
   }, [])
 
   function update<K extends keyof Tweaks>(key: K, value: Tweaks[K]) {
@@ -73,7 +78,18 @@ export default function TweaksPanel() {
         <div style={panelStyle}>
           <div style={headerStyle}>
             <span>// Hero · particelle</span>
-            <button onClick={() => setOpen(false)} aria-label="Chiudi" style={closeStyle}>✕</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              {fps !== null && (
+                <span style={{
+                  fontSize: '0.56rem', letterSpacing: '0.1em',
+                  color: fps >= 40 ? '#4ade80' : fps >= 25 ? '#facc15' : '#f87171',
+                  fontVariantNumeric: 'tabular-nums',
+                }}>
+                  {fps} fps
+                </span>
+              )}
+              <button onClick={() => setOpen(false)} aria-label="Chiudi" style={closeStyle}>✕</button>
+            </div>
           </div>
 
           {/* ─── Colore ─── */}
