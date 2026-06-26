@@ -62,6 +62,7 @@ export default function DevicePreview() {
         </div>
         <span className="vp-size mono-xs" id="vp-size">1280 × 800</span>
       </div>
+
       <div className="preview-stage" id="preview-stage">
         <div className="browser" id="browser">
           <div className="browser-bar">
@@ -109,6 +110,25 @@ export default function DevicePreview() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="web-stats" data-reveal="">
+        <div className="web-stat">
+          <span className="numeral" data-count="0.9" data-suf="s">0</span>
+          <span className="mono-xs">caricamento medio</span>
+        </div>
+        <div className="web-stat">
+          <span className="numeral" data-count="98" data-suf="/100">0</span>
+          <span className="mono-xs">performance score</span>
+        </div>
+        <div className="web-stat">
+          <span className="numeral" data-count="2" data-suf=" step">0</span>
+          <span className="mono-xs">al checkout</span>
+        </div>
+        <div className="web-stat">
+          <span className="numeral" data-count="100" data-suf="%">0</span>
+          <span className="mono-xs">responsive &amp; accessibile</span>
         </div>
       </div>
     </div>
