@@ -31,7 +31,8 @@ export default function HomeHero() {
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#000"
-                fontWeight="800"
+                fontWeight="700"
+                style={{ fontFamily: 'var(--font-mont), Helvetica, Arial, sans-serif' }}
               >
                 Fooody
               </text>

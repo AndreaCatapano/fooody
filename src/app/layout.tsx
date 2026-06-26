@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           document.documentElement.dataset.page=(location.pathname.replace(/^\//,'').split('/')[0]||'home');
         `}</Script>
 
-        <Script id="tweaks-init" strategy="beforeInteractive">{`
+        <Script id="tweaks-init" strategy="afterInteractive">{`
           var _def = { particleCount:80, particleSize:100, particleDir:'sparpaglia', particleColor:'ink', glow:false, scrollSensitivity:'normale', particleShape:'quadrato' };
           try {
             var s = localStorage.getItem('fooody_tweaks');
