@@ -1,9 +1,17 @@
 import type { Metadata } from 'next'
-import ContattiClient from './ContattiClient'
 import { buildMetadata } from '@/lib/seo'
+import ContattiHero from '@/components/contatti/ContattiHero'
+import ContattiComeFunziona from '@/components/contatti/ContattiComeFunziona'
+import ContattiFormSection from '@/components/contatti/ContattiFormSection'
 
 export const metadata: Metadata = buildMetadata('contatti')
 
 export default function ContattiPage() {
-  return <ContattiClient />
+  return (
+    <>
+      <ContattiHero />
+      <ContattiComeFunziona />
+      <ContattiFormSection />
+    </>
+  )
 }
