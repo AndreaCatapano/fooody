@@ -1,21 +1,14 @@
+import HeroLcpAnchor from './HeroLcpAnchor'
+
 export default function HomeHero() {
   return (
     <header className="hero100 mode-particelle" id="hero" data-bg="paper">
       <div className="hero-stage">
 
-        {/* LCP anchor: img fills viewport at z-index 0, behind hero-paper (z-index 1).
-            Never visible to the user but gives Chrome a fast LCP candidate (~200ms)
-            instead of waiting for the canvas assembly animation (~5s). */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/hero-lcp.svg"
-          alt=""
-          aria-hidden="true"
-          width={1440}
-          height={900}
-          fetchPriority="high"
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
-        />
+        {/* LCP anchor: carica un img leggero per dare a Chrome un LCP candidate rapido
+            (~200ms) invece del canvas che si assembla in ~5s. Si auto-rimuove dal DOM
+            dopo il caricamento così non pesa sull'animazione. */}
+        <HeroLcpAnchor />
 
         <div
           className="hero-vid ph on-ink video"
