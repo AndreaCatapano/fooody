@@ -1,14 +1,7 @@
-import HeroLcpAnchor from './HeroLcpAnchor'
-
 export default function HomeHero() {
   return (
     <header className="hero100 mode-particelle" id="hero" data-bg="paper">
       <div className="hero-stage">
-
-        {/* LCP anchor: carica un img leggero per dare a Chrome un LCP candidate rapido
-            (~200ms) invece del canvas che si assembla in ~5s. Si auto-rimuove dal DOM
-            dopo il caricamento così non pesa sull'animazione. */}
-        <HeroLcpAnchor />
 
         <div
           className="hero-vid ph on-ink video"

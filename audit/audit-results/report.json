@@ -1,0 +1,506 @@
+[
+  {
+    "route": "/",
+    "label": "Homepage",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/",
+    "httpStatus": 200,
+    "loadTimeMs": 4310,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 4884,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Fooody — Agenzia creativa food",
+    "metaDescription": "Strategia, social, branding e web per chi ha qualcosa di buono da dire. Agenzia creativa specializzata nel food.",
+    "canonicalUrl": "https://fooody.it/",
+    "ogTitle": "Fooody — Agenzia creativa food",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Fooody — agenzia creativa food"
+    ],
+    "imgMissingAlt": 1,
+    "screenshots": [
+      "home__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 15
+      }
+    ]
+  },
+  {
+    "route": "/",
+    "label": "Homepage",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/",
+    "httpStatus": 200,
+    "loadTimeMs": 3630,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 4204,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Fooody — Agenzia creativa food",
+    "metaDescription": "Strategia, social, branding e web per chi ha qualcosa di buono da dire. Agenzia creativa specializzata nel food.",
+    "canonicalUrl": "https://fooody.it/",
+    "ogTitle": "Fooody — Agenzia creativa food",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Fooody — agenzia creativa food"
+    ],
+    "imgMissingAlt": 1,
+    "screenshots": [
+      "home__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 15
+      }
+    ]
+  },
+  {
+    "route": "/studio",
+    "label": "Studio",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/studio",
+    "httpStatus": 200,
+    "loadTimeMs": 4082,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 584,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Chi siamo · Fooody",
+    "metaDescription": "Un gruppo di golosi con il vizio del buon lavoro. Strategist, designer, video-maker e copy che vivono nel food perché ci credono davvero.",
+    "canonicalUrl": "https://fooody.it/studio",
+    "ogTitle": "Chi siamo — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Testa,cuoree metodo."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "studio__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 40
+      }
+    ]
+  },
+  {
+    "route": "/studio",
+    "label": "Studio",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/studio",
+    "httpStatus": 200,
+    "loadTimeMs": 3311,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 3824,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Chi siamo · Fooody",
+    "metaDescription": "Un gruppo di golosi con il vizio del buon lavoro. Strategist, designer, video-maker e copy che vivono nel food perché ci credono davvero.",
+    "canonicalUrl": "https://fooody.it/studio",
+    "ogTitle": "Chi siamo — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Testa,cuoree metodo."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "studio__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 57
+      }
+    ]
+  },
+  {
+    "route": "/metodo",
+    "label": "Metodo",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/metodo",
+    "httpStatus": 200,
+    "loadTimeMs": 3694,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 672,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Il Metodo Fooody — Cinque pilastri per riempire i tavoli · Fooody",
+    "metaDescription": "Il sistema Fooody per la ristorazione: identità, social, menu engineering, esperienza digitale e crescita misurata. Cinque pilastri, zero fronzoli.",
+    "canonicalUrl": "https://fooody.it/metodo",
+    "ogTitle": "Il Metodo Fooody — Cinque pilastri per riempire i tavoli",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Cinque mosseper riempirei tavoli."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "metodo__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 31
+      }
+    ]
+  },
+  {
+    "route": "/metodo",
+    "label": "Metodo",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/metodo",
+    "httpStatus": 200,
+    "loadTimeMs": 3602,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 1720,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Il Metodo Fooody — Cinque pilastri per riempire i tavoli · Fooody",
+    "metaDescription": "Il sistema Fooody per la ristorazione: identità, social, menu engineering, esperienza digitale e crescita misurata. Cinque pilastri, zero fronzoli.",
+    "canonicalUrl": "https://fooody.it/metodo",
+    "ogTitle": "Il Metodo Fooody — Cinque pilastri per riempire i tavoli",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Cinque mosseper riempirei tavoli."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "metodo__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 27
+      }
+    ]
+  },
+  {
+    "route": "/branding",
+    "label": "Branding",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/branding",
+    "httpStatus": 200,
+    "loadTimeMs": 4207,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 1132,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Branding per il food · Fooody",
+    "metaDescription": "Strategia, naming, identità visiva e packaging per ristoranti e brand food. Diamo al tuo brand una faccia che non si scorda — dal logo al packaging.",
+    "canonicalUrl": "https://fooody.it/branding",
+    "ogTitle": "Branding per il food — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Riconoscibilia prima vista."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "branding__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 33
+      }
+    ]
+  },
+  {
+    "route": "/branding",
+    "label": "Branding",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/branding",
+    "httpStatus": 200,
+    "loadTimeMs": 3506,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 4008,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Branding per il food · Fooody",
+    "metaDescription": "Strategia, naming, identità visiva e packaging per ristoranti e brand food. Diamo al tuo brand una faccia che non si scorda — dal logo al packaging.",
+    "canonicalUrl": "https://fooody.it/branding",
+    "ogTitle": "Branding per il food — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Riconoscibilia prima vista."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "branding__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 35
+      }
+    ]
+  },
+  {
+    "route": "/social",
+    "label": "Social",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/social",
+    "httpStatus": 200,
+    "loadTimeMs": 3757,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 748,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Social Media per ristoranti e food brand · Fooody",
+    "metaDescription": "Strategia, contenuti e community per chi lavora nel food. Dal reel virale alla campagna che converte: pensiamo, giriamo, pubblichiamo, misuriamo.",
+    "canonicalUrl": "https://fooody.it/social",
+    "ogTitle": "Social Media per ristoranti e food brand — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Contenuti chefermanoil pollice."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "social__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 8
+      }
+    ]
+  },
+  {
+    "route": "/social",
+    "label": "Social",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/social",
+    "httpStatus": 200,
+    "loadTimeMs": 3357,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 324,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Social Media per ristoranti e food brand · Fooody",
+    "metaDescription": "Strategia, contenuti e community per chi lavora nel food. Dal reel virale alla campagna che converte: pensiamo, giriamo, pubblichiamo, misuriamo.",
+    "canonicalUrl": "https://fooody.it/social",
+    "ogTitle": "Social Media per ristoranti e food brand — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Contenuti chefermanoil pollice."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "social__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 14
+      }
+    ]
+  },
+  {
+    "route": "/web",
+    "label": "Web",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/web",
+    "httpStatus": 200,
+    "loadTimeMs": 3679,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 632,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Web Design per ristoranti e food brand · Fooody",
+    "metaDescription": "Siti veloci, belli e onesti per il food. UX, UI, sviluppo e SEO sotto lo stesso tetto — dove il bottone giusto è sempre a portata di pollice.",
+    "canonicalUrl": "https://fooody.it/web",
+    "ogTitle": "Web Design per ristoranti e food brand — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Siti checonvertono.Non solo che si guardano."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "web__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 42
+      }
+    ]
+  },
+  {
+    "route": "/web",
+    "label": "Web",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/web",
+    "httpStatus": 200,
+    "loadTimeMs": 3299,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 3748,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Web Design per ristoranti e food brand · Fooody",
+    "metaDescription": "Siti veloci, belli e onesti per il food. UX, UI, sviluppo e SEO sotto lo stesso tetto — dove il bottone giusto è sempre a portata di pollice.",
+    "canonicalUrl": "https://fooody.it/web",
+    "ogTitle": "Web Design per ristoranti e food brand — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Siti checonvertono.Non solo che si guardano."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "web__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 27
+      }
+    ]
+  },
+  {
+    "route": "/contatti",
+    "label": "Contatti",
+    "viewport": "desktop",
+    "url": "https://fooody-red.vercel.app/contatti",
+    "httpStatus": 200,
+    "loadTimeMs": 3748,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 640,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Lavoriamo insieme · Fooody",
+    "metaDescription": "Raccontaci il tuo progetto food. Prima call gratuita: guardiamo i numeri di oggi e costruiamo insieme la strategia per far crescere il tuo brand.",
+    "canonicalUrl": "https://fooody.it/contatti",
+    "ogTitle": "Lavoriamo insieme — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Parliamodi cibo."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "contatti__desktop.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 29
+      }
+    ]
+  },
+  {
+    "route": "/contatti",
+    "label": "Contatti",
+    "viewport": "mobile",
+    "url": "https://fooody-red.vercel.app/contatti",
+    "httpStatus": 200,
+    "loadTimeMs": 3334,
+    "consoleErrors": [],
+    "consoleWarnings": [],
+    "networkFailures": [],
+    "network404s": [],
+    "lcp": 1368,
+    "cls": 0,
+    "hasHorizontalScroll": false,
+    "metaTitle": "Lavoriamo insieme · Fooody",
+    "metaDescription": "Raccontaci il tuo progetto food. Prima call gratuita: guardiamo i numeri di oggi e costruiamo insieme la strategia per far crescere il tuo brand.",
+    "canonicalUrl": "https://fooody.it/contatti",
+    "ogTitle": "Lavoriamo insieme — Fooody",
+    "ogImage": "https://fooody.it/og-image.png",
+    "h1Count": 1,
+    "h1Text": [
+      "Parliamodi cibo."
+    ],
+    "imgMissingAlt": 0,
+    "screenshots": [
+      "contatti__mobile.png"
+    ],
+    "axeViolations": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+        "nodes": 29
+      }
+    ]
+  }
+]
