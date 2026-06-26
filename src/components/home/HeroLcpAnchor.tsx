@@ -8,7 +8,7 @@ export default function HeroLcpAnchor() {
       width={1440}
       height={900}
       fetchPriority="high"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
     />
   )
 }
