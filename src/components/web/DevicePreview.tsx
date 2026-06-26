@@ -113,22 +113,22 @@ export default function DevicePreview() {
         </div>
       </div>
 
-      <div className="web-stats" data-reveal="">
-        <div className="web-stat">
-          <span className="numeral" data-count="0.9" data-suf="s">0</span>
-          <span className="mono-xs">caricamento medio</span>
+      <div className="anteprima-stats" data-reveal="">
+        <div className="a-stat">
+          <span className="a-stat-num" data-count="0.9" data-suf="s">0.9s</span>
+          <span className="a-stat-lbl">caricamento medio</span>
         </div>
-        <div className="web-stat">
-          <span className="numeral" data-count="98" data-suf="/100">0</span>
-          <span className="mono-xs">performance score</span>
+        <div className="a-stat">
+          <span className="a-stat-num" data-count="98" data-suf="/100">98/100</span>
+          <span className="a-stat-lbl">performance score</span>
         </div>
-        <div className="web-stat">
-          <span className="numeral" data-count="2" data-suf=" step">0</span>
-          <span className="mono-xs">al checkout</span>
+        <div className="a-stat">
+          <span className="a-stat-num" data-count="2" data-suf=" step">2 step</span>
+          <span className="a-stat-lbl">al checkout</span>
         </div>
-        <div className="web-stat">
-          <span className="numeral" data-count="100" data-suf="%">0</span>
-          <span className="mono-xs">responsive &amp; accessibile</span>
+        <div className="a-stat">
+          <span className="a-stat-num" data-count="100" data-suf="%">100%</span>
+          <span className="a-stat-lbl">responsive &amp; accessibile</span>
         </div>
       </div>
     </div>
