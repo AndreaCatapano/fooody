@@ -1398,7 +1398,8 @@ body.sig-off #feed .feed-marquee { display: none; }
   padding: clamp(20px,4vw,52px) clamp(20px,4vw,52px) 0;
   background: var(--paper-2);
   background-image: repeating-linear-gradient(135deg, rgba(0,0,0,.03) 0 1px, transparent 1px 12px);
-  min-height: clamp(420px,52vw,620px);
+  height: clamp(420px,52vw,620px);
+  overflow: hidden;
 }
 .browser {
   width: 100%; max-width: 980px; margin-inline: auto;
@@ -1528,7 +1529,7 @@ body.sig-off #feed .feed-marquee { display: none; }
 @media (max-width: 640px) {
   .web-cap-grid { grid-template-columns: 1fr; }
   .anteprima-stats .a-stat { width: calc(50% - clamp(4px,0.75vw,8px)); }
-  .preview-stage { padding: clamp(10px,2vw,20px); min-height: 360px; }
+  .preview-stage { padding: clamp(10px,2vw,20px); height: 360px; }
   .vp-seg { gap: 0; }
   .vp-btn[data-vp="desktop"], .vp-btn[data-vp="tablet"] { display: none; }
   .browser { max-width: 100% !important; }
