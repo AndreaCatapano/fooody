@@ -170,7 +170,7 @@
       ctx.moveTo(x + h + h * 0.52, y + h);
       ctx.arc(x + h, y + h, h * 0.52, 0, PI2, true);
     }
-    ctx.fill();
+    ctx.fill('evenodd');
 
     ctx.globalAlpha = 1;
 

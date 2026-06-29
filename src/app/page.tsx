@@ -38,7 +38,7 @@ export default function Home() {
           </a>
         }
       />
-      <Script src="/hero-cine.js" strategy="afterInteractive" />
+      <Script src="/hero-cine.js?v=2" strategy="afterInteractive" />
     </>
   )
 }
