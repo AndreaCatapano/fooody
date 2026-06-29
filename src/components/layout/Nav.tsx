@@ -5,7 +5,7 @@ export default function Nav() {
     <nav className="nav" id="nav">
       {/* Plain <a> for home — same-page or full reload, no transition animation needed */}
       <a className="brand" href="/" data-cursor="home">
-        Fooody<span className="dot">.</span>
+        fooody<span className="dot">.</span>
       </a>
 
       {/* NavLinks is 'use client' for usePathname() active state */}

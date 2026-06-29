@@ -32,7 +32,7 @@ export default function Footer() {
         </div>
 
         <div className="foot-mega">
-          Fooody<span className="dot">.</span>
+          fooody<span className="dot">.</span>
         </div>
 
         <div className="foot-bottom">

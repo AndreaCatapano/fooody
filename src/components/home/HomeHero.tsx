@@ -34,7 +34,7 @@ export default function HomeHero() {
                 fontWeight="700"
                 style={{ fontFamily: 'var(--font-mont), Helvetica, Arial, sans-serif' }}
               >
-                Fooody
+                fooody
               </text>
             </mask>
           </defs>
