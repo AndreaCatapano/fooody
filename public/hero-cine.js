@@ -156,8 +156,7 @@
     ctx.fillStyle   = PCOLOR;
     ctx.shadowBlur  = 0;
 
-    /* forma O: ring outer CW + inner CCW (nonzero winding) */
-    ctx.beginPath();
+    /* forma O: ogni anello ha il suo path → evenodd senza interferenze */
     for (let i = 0; i < parts.length; i++) {
       const o  = parts[i];
       const pE = easeIO(clamp(effectiveE * o.sp, 0, 1));
@@ -165,12 +164,11 @@
       const y  = o.hy + pmy + o.dy * pE + (jitter ? Math.cos(t * 1.1 + o.ph) * jitter : 0);
       const sz = o.sz;
       const h  = sz * 0.5;
-      ctx.moveTo(x + sz, y + h);
-      ctx.arc(x + h, y + h, h, 0, PI2, false);
-      ctx.moveTo(x + h + h * 0.52, y + h);
+      ctx.beginPath();
+      ctx.arc(x + h, y + h, h,        0, PI2, false);
       ctx.arc(x + h, y + h, h * 0.52, 0, PI2, true);
+      ctx.fill('evenodd');
     }
-    ctx.fill('evenodd');
 
     ctx.globalAlpha = 1;
 
