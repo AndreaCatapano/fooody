@@ -70,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Footer />
 
-        <TweaksPanel />
+        {process.env.NODE_ENV === 'development' && <TweaksPanel />}
 
         <Script id="page-theme" strategy="beforeInteractive">{`
           document.documentElement.dataset.page=(location.pathname.replace(/^\//,'').split('/')[0]||'home');

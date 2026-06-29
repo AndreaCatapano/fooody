@@ -13,9 +13,22 @@ import StuLavora from '@/components/studio/StuLavora'
 
 export const metadata: Metadata = buildMetadata('studio')
 
+const aboutPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'Chi siamo — Fooody Studio',
+  description:
+    'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Milano.',
+  url: 'https://fooody.it/studio',
+}
+
 export default function StudioPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
       <PageHero
         innerClass="stu-hero"
         textClass="stu-hero-text"

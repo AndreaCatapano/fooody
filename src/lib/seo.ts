@@ -74,10 +74,22 @@ export const PAGES = {
     canonical: '/contatti',
   },
   studio: {
-    title: 'Chi siamo',
+    title: "Studio — Il team dell'agenzia food marketing | Fooody",
     description:
-      'Un gruppo di golosi con il vizio del buon lavoro. Strategist, designer, video-maker e copy che vivono nel food perché ci credono davvero.',
+      'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Milano, Fooody affianca ristoranti e brand food con metodo e creatività.',
     canonical: '/studio',
+  },
+  privacy: {
+    title: 'Privacy Policy — Fooody',
+    description:
+      'Informativa sul trattamento dei dati personali ai sensi del GDPR (Regolamento UE 2016/679) per il sito fooody.it.',
+    canonical: '/privacy',
+  },
+  lavori: {
+    title: 'I nostri lavori — Case study food & beverage | Fooody',
+    description:
+      'Casi studio di branding, social media e web design per ristoranti e brand food. I progetti Fooody: strategie reali, risultati misurabili.',
+    canonical: '/lavori',
   },
 } as const
 

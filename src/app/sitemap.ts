@@ -37,14 +37,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${BASE_URL}/contatti`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.7,
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${BASE_URL}/studio`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.6,
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
   ]
 }

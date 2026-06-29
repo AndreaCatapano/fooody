@@ -24,9 +24,10 @@ export default function Footer() {
           <div className="foot-cols">
             <span className="mono-xs">resta in contatto</span>
             <a href="mailto:ciao@fooody.it">ciao@fooody.it</a>
-            <a href="#" aria-label="Instagram Fooody">Instagram</a>
-            <a href="#" aria-label="LinkedIn Fooody">LinkedIn</a>
-            <a href="#" aria-label="Newsletter Fooody">Newsletter</a>
+            {/* placeholder: sostituire con URL reali quando disponibili */}
+            <span aria-label="Instagram Fooody" style={{ opacity: 0.4, cursor: 'default' }}>Instagram</span>
+            <span aria-label="LinkedIn Fooody" style={{ opacity: 0.4, cursor: 'default' }}>LinkedIn</span>
+            <span aria-label="Newsletter Fooody" style={{ opacity: 0.4, cursor: 'default' }}>Newsletter</span>
           </div>
         </div>
 
