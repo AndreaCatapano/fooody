@@ -1,27 +1,27 @@
 /* ============================================================
    FOOODY — Hero engine · particelle
-   Entrata: assembly da scatter → FOOODY al caricamento.
-   Scroll: dispersione progressiva.
-   BCR (Lenis-safe) · per-particle speed · lerp smooth · forme.
+   Entrata: assembly da scatter → fooody al caricamento.
+   Scroll: dispersione verso l'alto · forma O · ink.
+   BCR (Lenis-safe) · per-particle speed · lerp smooth.
    ============================================================ */
 (function () {
   'use strict';
 
-  /* ---- utils ---- */
   const REDUCE    = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const CAN_HOVER = matchMedia('(hover: hover) and (pointer: fine)').matches;
   const lerp   = (a, b, t) => a + (b - a) * t;
   const clamp  = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const easeIO = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-  const easeIn = p => p * p * p;   /* for assembly: fast rush → slow settle */
+  const easeIn = p => p * p * p;
+  const PI2    = Math.PI * 2;
 
-  /* ---- lookup tables ---- */
-  const COLOR_HEX = { ink: '#17130f', tomato: '#e8442a', paper: '#f7f4ee', cream: '#d2b48c', gradient: 'gradient' };
-  const GRAD_STOPS = [{ p: 0, c: '#DD5049' }, { p: 0.48, c: '#c88a1a' }, { p: 1, c: '#6352F0' }];
-  const SENS_MAP  = { dolce: 0.6, normale: 1.0, forte: 1.55 };
-  const PI2       = Math.PI * 2;
+  /* ---- impostazioni finali ---- */
+  const DENSITY = 80;
+  const SIZE    = 170;
+  const PCOLOR  = '#17130f';  /* ink */
+  const SENS    = 1.55;       /* forte */
 
-  /* ---- mutable element refs (re-bound by heroReinit on SPA nav) ---- */
+  /* ---- element refs (re-bind on SPA nav via heroReinit) ---- */
   let hero, stage, canvas, paper, vid, scrollCue, eyebrow, cap;
 
   function bindElements() {
@@ -37,49 +37,20 @@
     return !!(stage && canvas);
   }
 
-  /* ---- tweaks state (mutable — updated by tweakchange) ---- */
-  const tw   = window.FOOODY_TWEAKS || {};
-  /* Default density 55 (step≈9): ~40% fewer particles than the previous 80 (step≈7).
-     Mobile (touch) gets 35 (step≈11): ~60% fewer particles. */
-  const IS_MOBILE = !CAN_HOVER;
-  let DENSITY = clamp(tw.particleCount    || (IS_MOBILE ? 35 : 55), 20,  120);
-  let SIZE    = clamp(tw.particleSize     || 100,  40,  520);
-  let DIR     = tw.particleDir            || 'sparpaglia';
-  let PCOLOR  = COLOR_HEX[tw.particleColor] || '#17130f';
-  let GLOW    = !!tw.glow;
-  let SENS    = tw.scrollSensitivity      || 'normale';
-  let SHAPE   = tw.particleShape          || 'quadrato';
-
   /* ---- animation state ---- */
   let mx = 0, my = 0;
   let ctx, parts = [], W = 0, H = 0, cx = 0, cy = 0;
   let built = false;
   let pmx = 0, pmy = 0;
-  let eSmooth    = 0;      /* lerped scroll scatter */
-  let previewE   = 0;      /* temporary burst for direction preview */
-  let previewTimer = null;
-  let cachedGrad = null;   /* CanvasLinearGradient — recreated on resize */
-  let cachedGradW = 0;
-  const ASSEMBLE_DUR = 1800; /* ms — entry assembly duration */
+  let eSmooth = 0;
+  const ASSEMBLE_DUR = 1800;
   let assembleStart  = 0;
 
   /* ---- rAF loop control ---- */
-  let looping   = false;  /* true only when hero is in viewport */
-  let rafActive = false;  /* prevent duplicate rAF chains */
-  const FPS_MS  = 1000 / 45; /* cap at 45fps — smooth assembly + lower GPU load */
+  let looping   = false;
+  let rafActive = false;
+  const FPS_MS  = 1000 / 45;
   let lastFrame = 0;
-
-  /* ---- fps counter (debug) ---- */
-  let fpsFrames = 0, fpsSince = 0;
-  function tickFps(now) {
-    fpsFrames++;
-    if (now - fpsSince >= 1000) {
-      const fps = Math.round(fpsFrames * 1000 / (now - fpsSince));
-      window.dispatchEvent(new CustomEvent('herofps', { detail: fps }));
-      fpsFrames = 0;
-      fpsSince = now;
-    }
-  }
 
   /* ---- mouse parallax ---- */
   if (!REDUCE && CAN_HOVER) {
@@ -96,7 +67,7 @@
     return clamp(range > 0 ? -hero.getBoundingClientRect().top / range : 0, 0, 1);
   }
 
-  /* ---- build particles from FOOODY text bitmap ---- */
+  /* ---- build particles from fooody text bitmap ---- */
   function buildParticles() {
     if (!stage || !canvas) return;
     const r = stage.getBoundingClientRect();
@@ -109,8 +80,6 @@
     cx = W / 2; cy = H / 2;
     ctx = canvas.getContext('2d');
 
-    /* Sample offscreen canvas at max 960×600 to cap getImageData cost.
-       Scale factor maps sample coords back to screen coords. */
     const SW  = Math.min(W, 960);
     const SH  = Math.min(H, 600);
     const scX = W / SW;
@@ -139,28 +108,15 @@
     for (let y = 0; y < SH; y += step) {
       for (let x = 0; x < SW; x += step) {
         if (px[(y * SW + x) * 4 + 3] > 128) {
-          const sx  = x * scX;   /* screen position */
+          const sx  = x * scX;
           const sy  = y * scY;
-          const ang = Math.random() * PI2;
-          let dx, dy;
-          if (DIR === 'su') {
-            dx = (sx - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
-            dy = -(0.5 + Math.random() * 0.7) * H;
-          } else if (DIR === 'giu') {
-            dx = (sx - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
-            dy =  (0.5 + Math.random() * 0.7) * H;
-          } else if (DIR === 'sparpaglia') {
-            const d = (0.4 + Math.random()) * W * 0.4;
-            dx = Math.cos(ang) * d;
-            dy = Math.sin(ang) * d * 0.65;
-          } else { /* esplode */
-            dx = (sx - cx) * 0.85 + Math.cos(ang) * W * 0.12;
-            dy = (sy - cy) * 0.85 + Math.sin(ang) * H * 0.12;
-          }
+          /* direzione: su */
+          const dx  = (sx - cx) * 0.15 + (Math.random() - 0.5) * W * 0.10;
+          const dy  = -(0.5 + Math.random() * 0.7) * H;
           parts.push({
             hx: sx, hy: sy, dx, dy, sz,
             ph: Math.random() * PI2,
-            sp: 0.65 + Math.random() * 0.7, /* per-particle speed → organic stagger */
+            sp: 0.65 + Math.random() * 0.7,
           });
         }
       }
@@ -172,21 +128,15 @@
   function draw(now) {
     if (!ctx || !built) return;
 
-    /* scroll + assembly effective scatter */
-    const p     = scrollProg();
-    const sens  = SENS_MAP[SENS] || 1.0;
-    const eBase = easeIO(clamp(p * sens, 0, 1));
-    const eDisp = Math.max(eBase, previewE);
-    eSmooth = REDUCE ? eDisp : lerp(eSmooth, eDisp, 0.09);
+    const p      = scrollProg();
+    const eBase  = easeIO(clamp(p * SENS, 0, 1));
+    eSmooth = REDUCE ? eBase : lerp(eSmooth, eBase, 0.09);
 
-    /* entry assembly: 1→0 over ASSEMBLE_DUR ms (fast rush, slow settle) */
-    const elapsed    = REDUCE ? ASSEMBLE_DUR : (now - assembleStart);
-    const rawAsm     = clamp(1 - elapsed / ASSEMBLE_DUR, 0, 1);
-    const assembleE  = easeIn(rawAsm); /* easeIn: fast start → slow landing */
+    const elapsed   = REDUCE ? ASSEMBLE_DUR : (now - assembleStart);
+    const assembleE = easeIn(clamp(1 - elapsed / ASSEMBLE_DUR, 0, 1));
 
     const effectiveE = Math.max(eSmooth, assembleE);
 
-    /* skip draw when fully invisible — canvas alpha 0 + assembly done */
     const alpha = clamp(1 - p * 1.5, 0, 1);
     if (alpha <= 0 && assembleE <= 0) {
       if (paper) paper.style.opacity = '0';
@@ -203,27 +153,10 @@
 
     ctx.clearRect(0, 0, W, H);
     ctx.globalAlpha = alpha;
+    ctx.fillStyle   = PCOLOR;
+    ctx.shadowBlur  = 0;
 
-    /* gradient fillStyle — cached per canvas width */
-    if (PCOLOR === 'gradient') {
-      if (!cachedGrad || cachedGradW !== W) {
-        cachedGrad = ctx.createLinearGradient(0, 0, W, 0);
-        GRAD_STOPS.forEach(s => cachedGrad.addColorStop(s.p, s.c));
-        cachedGradW = W;
-      }
-      ctx.fillStyle = cachedGrad;
-    } else {
-      ctx.fillStyle = PCOLOR;
-    }
-
-    if (GLOW && !REDUCE) {
-      ctx.shadowBlur  = 7 * (SIZE / 100);
-      ctx.shadowColor = PCOLOR === 'gradient' ? '#c88a1a' : PCOLOR;
-    } else {
-      ctx.shadowBlur = 0;
-    }
-
-    /* batched single-path draw for all shapes */
+    /* forma O: ring outer CW + inner CCW (nonzero winding) */
     ctx.beginPath();
     for (let i = 0; i < parts.length; i++) {
       const o  = parts[i];
@@ -232,32 +165,14 @@
       const y  = o.hy + pmy + o.dy * pE + (jitter ? Math.cos(t * 1.1 + o.ph) * jitter : 0);
       const sz = o.sz;
       const h  = sz * 0.5;
-
-      if (SHAPE === 'cerchio') {
-        ctx.moveTo(x + sz, y + h);
-        ctx.arc(x + h, y + h, h, 0, PI2);
-      } else if (SHAPE === 'rombo') {
-        ctx.moveTo(x + h, y);
-        ctx.lineTo(x + sz, y + h);
-        ctx.lineTo(x + h, y + sz);
-        ctx.lineTo(x, y + h);
-        ctx.closePath();
-      } else if (SHAPE === 'linea') {
-        ctx.rect(x, y + h - 0.7, sz * 1.5, Math.max(sz * 0.14, 1));
-      } else if (SHAPE === 'o') {
-        /* ring: outer CW + inner CCW → nonzero winding creates hole */
-        ctx.moveTo(x + sz, y + h);
-        ctx.arc(x + h, y + h, h, 0, PI2, false);
-        ctx.moveTo(x + h + h * 0.52, y + h);
-        ctx.arc(x + h, y + h, h * 0.52, 0, PI2, true);
-      } else { /* quadrato */
-        ctx.rect(x, y, sz, sz);
-      }
+      ctx.moveTo(x + sz, y + h);
+      ctx.arc(x + h, y + h, h, 0, PI2, false);
+      ctx.moveTo(x + h + h * 0.52, y + h);
+      ctx.arc(x + h, y + h, h * 0.52, 0, PI2, true);
     }
     ctx.fill();
 
     ctx.globalAlpha = 1;
-    ctx.shadowBlur  = 0;
 
     if (paper) paper.style.opacity = clamp(1 - p * 1.25, 0, 1).toFixed(3);
     if (vid)   vid.style.transform = `scale(${(1.06 + eSmooth * 0.18).toFixed(3)})`;
@@ -272,7 +187,6 @@
     if (now - lastFrame >= FPS_MS) {
       lastFrame = now;
       draw(now);
-      tickFps(now);
     }
     requestAnimationFrame(loop);
   }
@@ -298,25 +212,6 @@
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(buildParticles, 180);
-  });
-
-  /* ---- tweakchange ---- */
-  window.addEventListener('tweakchange', e => {
-    const d = e.detail || {};
-    let rebuild = false, preview = false;
-    if ('particleCount'     in d) { DENSITY = clamp(d.particleCount, 20, 120);     rebuild = true; }
-    if ('particleSize'      in d) { SIZE    = clamp(d.particleSize,  40, 520);     rebuild = true; }
-    if ('particleColor'     in d) { PCOLOR  = COLOR_HEX[d.particleColor] || PCOLOR; cachedGrad = null; }
-    if ('glow'              in d) { GLOW    = !!d.glow; }
-    if ('scrollSensitivity' in d) { SENS    = d.scrollSensitivity; }
-    if ('particleShape'     in d) { SHAPE   = d.particleShape; }
-    if ('particleDir'       in d) { DIR     = d.particleDir; rebuild = true; preview = true; }
-    if (rebuild) buildParticles();
-    if (preview) {
-      previewE = 0.48;
-      clearTimeout(previewTimer);
-      previewTimer = setTimeout(() => { previewE = 0; }, 1600);
-    }
   });
 
   /* ---- heroReinit: re-bind DOM + restart assembly (called by motionReinit on nav) ---- */

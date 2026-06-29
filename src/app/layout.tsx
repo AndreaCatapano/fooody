@@ -4,7 +4,6 @@ import Script from 'next/script'
 import './globals.css'
 import Nav from '@/components/layout/Nav'
 import Footer from '@/components/layout/Footer'
-import TweaksPanel from '@/components/TweaksPanel'
 import { PageTransition } from '@/components/PageTransition'
 import SmoothScroll from '@/components/SmoothScroll'
 import { SITE, buildOrganizationSchema } from '@/lib/seo'
@@ -70,20 +69,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Footer />
 
-        {process.env.NODE_ENV === 'development' && <TweaksPanel />}
-
         <Script id="page-theme" strategy="beforeInteractive">{`
           document.documentElement.dataset.page=(location.pathname.replace(/^\//,'').split('/')[0]||'home');
-        `}</Script>
-
-        <Script id="tweaks-init" strategy="afterInteractive">{`
-          var _def = { particleCount:80, particleSize:100, particleDir:'sparpaglia', particleColor:'ink', glow:false, scrollSensitivity:'normale', particleShape:'quadrato' };
-          try {
-            var s = localStorage.getItem('fooody_tweaks');
-            window.FOOODY_TWEAKS = s ? Object.assign({}, _def, JSON.parse(s)) : _def;
-          } catch(e) {
-            window.FOOODY_TWEAKS = _def;
-          }
         `}</Script>
 
         <Script src="/motion.js" strategy="afterInteractive" />

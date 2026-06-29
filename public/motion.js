@@ -357,12 +357,10 @@
      WORK hover (home)
   ============================================================ */
   function initWork(root) {
-    const mode = () => (window.FOOODY_TWEAKS || {}).workHover || 'tilt';
-    if (!root) document.body.classList.add('wh-' + mode()); // only set body class on first boot
+    if (!root) document.body.classList.add('wh-tilt');
     if (!CAN_HOVER || REDUCE) return;
     $$('.work', root).forEach(card => {
       card.addEventListener('mousemove', e => {
-        if (mode() !== 'tilt') return;
         const r  = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width  - 0.5;
         const py = (e.clientY - r.top)  / r.height - 0.5;
