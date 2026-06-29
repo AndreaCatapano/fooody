@@ -10,7 +10,7 @@ export default function ContattiFormSection() {
           <aside className="lav-info" data-reveal="" data-reveal-d="2">
             <div className="lav-info-block">
               <span className="mono-xs lav-info-label">// email diretta</span>
-              <a className="lav-info-link" href="mailto:ciao@fooody.it">ciao@fooody.it</a>
+              <a className="lav-info-link" href="mailto:ciao@fooody.it" data-cid="CC1">ciao@fooody.it</a>
             </div>
 
             <div className="lav-info-block">
@@ -30,7 +30,7 @@ export default function ContattiFormSection() {
 
             <div className="lav-info-block">
               <span className="mono-xs lav-info-label">// dove siamo</span>
-              <p className="body" style={{ color: 'var(--ink-2)', marginTop: 6 }}>
+              <p className="body" data-cid="CC2" style={{ color: 'var(--ink-2)', marginTop: 6 }}>
                 Milano<br />
                 <span style={{ color: 'var(--ink-3)' }}>Lavoriamo su tutto il territorio italiano.</span>
               </p>
@@ -38,7 +38,7 @@ export default function ContattiFormSection() {
 
             <div className="lav-info-block lav-info-callout">
               <div className="lav-callout-n">0€</div>
-              <p className="body" style={{ color: 'var(--ink-2)', marginTop: 8, maxWidth: '26ch' }}>
+              <p className="body" data-cid="CC3" style={{ color: 'var(--ink-2)', marginTop: 8, maxWidth: '26ch' }}>
                 La prima call è sempre gratuita. Nessun obbligo, nessun preventivo automatico.
               </p>
             </div>

@@ -27,6 +27,7 @@ export default function SocialPage() {
       <PageHero
         innerClass="soc-hero"
         textClass="soc-hero-text"
+        cidPrefix="SA"
         eyebrow={<div className="eyebrow no-slash soc-accent-fg">— social media · food &amp; oltre</div>}
         heading={<>Contenuti che<br />fermano<br /><span className="soc-accent-fg">il pollice.</span></>}
         headingStyle={{ marginTop: 20 }}
@@ -65,6 +66,7 @@ export default function SocialPage() {
       <SocCosaSection />
 
       <ProofStats
+        cidPrefix="SD"
         eyebrow="— numeri, non sensazioni"
         eyebrowClass="soc-accent-fg"
         heading="Quello che pubblichiamo, lo misuriamo."
@@ -81,6 +83,7 @@ export default function SocialPage() {
       />
 
       <CaseStudyBlock
+        cidPrefix="SE"
         eyebrow="caso · food brand"
         eyebrowClass="soc-eyebrow"
         coverLabel="case · reel + feed"
@@ -97,6 +100,7 @@ export default function SocialPage() {
       />
 
       <CtaSection
+        cidPrefix="SF"
         eyebrow="— pronti a postare?"
         eyebrowClass="soc-accent-fg"
         heading={<>Facciamo girare<br />il tuo feed.</>}

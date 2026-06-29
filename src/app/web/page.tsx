@@ -25,6 +25,7 @@ export default function WebPage() {
       />
 
       <PageHero
+        cidPrefix="WA"
         eyebrow={<div className="eyebrow no-slash web-accent-fg">— web design · ux · sviluppo</div>}
         heading={<>Siti che<br /><span className="web-accent-fg">convertono.</span><br />Non solo che si guardano.</>}
         headingStyle={{ marginTop: 20, maxWidth: '16ch' }}
@@ -51,6 +52,7 @@ export default function WebPage() {
       <WebCapabilitiesSection />
 
       <CaseStudyBlock
+        cidPrefix="WE"
         eyebrow="caso · e-commerce"
         eyebrowClass="web-eyebrow"
         coverLabel="case · sito + checkout"
@@ -68,6 +70,7 @@ export default function WebPage() {
       />
 
       <CtaSection
+        cidPrefix="WF"
         eyebrow="— pronti a costruire?"
         eyebrowClass="web-accent-fg"
         heading={<>Mettiamo online<br />qualcosa di buono.</>}

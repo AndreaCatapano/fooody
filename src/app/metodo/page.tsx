@@ -33,7 +33,7 @@ export default function MetodoPage() {
 
       <PageHero
         paddingBottom="clamp(60px,8vh,110px)"
-        eyebrow={<div className="eyebrow no-slash met-accent-fg">— il metodo · per chi vive di coperti</div>}
+        eyebrow={<div className="eyebrow no-slash met-accent-fg" data-cid="MA1">— il metodo · per chi vive di coperti</div>}
         heading={<>Cinque mosse<br />per riempire<br /><span className="met-accent-fg">i tavoli.</span></>}
         headingStyle={{ marginTop: 22, maxWidth: '15ch' }}
         lead="Il Metodo Fooody è il nostro sistema completo per la ristorazione. Non una lista di servizi sciolti: un percorso unico che parte dall'identità e arriva ai numeri. Lo stesso che usiamo ogni giorno per chi cucina sul serio."
@@ -51,6 +51,7 @@ export default function MetodoPage() {
             tempo di lettura · 4 min di scroll
           </span>
         }
+        cidPrefix="MA"
       />
 
       <MetodoIntro />
@@ -73,6 +74,7 @@ export default function MetodoPage() {
         caseHref="/lavori/trattoria-tale"
         dataBg="paper-2"
         sectionStyle={{ background: 'var(--paper-2)' }}
+        cidPrefix="MF"
       />
 
       <CtaSection
@@ -92,6 +94,7 @@ export default function MetodoPage() {
             <span className="btn-label">Torna alla home</span>
           </a>
         }
+        cidPrefix="MG"
       />
     </>
   )

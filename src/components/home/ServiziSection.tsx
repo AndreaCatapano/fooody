@@ -4,12 +4,12 @@ export default function ServiziSection() {
       <div className="wrap">
         <div className="sec-head">
           <div>
-            <div className="eyebrow">quattro modi di lavorare con noi</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
+            <div className="eyebrow" data-cid="HC1">quattro modi di lavorare con noi</div>
+            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }} data-cid="HC2">
               Scegli la portata.<br />Al resto pensiamo noi.
             </h2>
           </div>
-          <p className="small" style={{ maxWidth: '34ch' }}>
+          <p className="small" style={{ maxWidth: '34ch' }} data-cid="HC3">
             Stesso studio, quattro appetiti diversi. Entra dalla porta che ti somiglia — o chiamaci
             e te lo diciamo noi.
           </p>
@@ -27,9 +27,9 @@ export default function ServiziSection() {
           >
             <div className="service-idx idx">01 / 04</div>
             <div className="service-main">
-              <h3 className="h2 service-title">Metodo Fooody</h3>
-              <p className="service-sub mono">per ristoranti, catene &amp; chi vive di coperti</p>
-              <p className="body text-pretty service-desc">
+              <h3 className="h2 service-title" data-cid="HC4">Metodo Fooody</h3>
+              <p className="service-sub mono" data-cid="HC5">per ristoranti, catene &amp; chi vive di coperti</p>
+              <p className="body text-pretty service-desc" data-cid="HC6">
                 Il nostro sistema completo per la ristorazione: social che riempiono i tavoli,
                 menù che vendono, identità che si ricordano. Cinque pilastri, zero fronzoli.
               </p>
@@ -41,7 +41,7 @@ export default function ServiziSection() {
                 <span className="chip">Sito</span>
               </div>
               {/* TODO: sostituire con nome cliente reale */}
-              <p className="mono-xs service-kpi">
+              <p className="mono-xs service-kpi" data-cid="HC7">
                 es. Trattoria Tale · +340% engagement, +180% prenotazioni in 6 mesi
               </p>
             </div>
@@ -62,9 +62,9 @@ export default function ServiziSection() {
           >
             <div className="service-idx idx">02 / 04</div>
             <div className="service-main">
-              <h3 className="h2 service-title">Social Media</h3>
-              <p className="service-sub mono">per brand, retailer e aziende — anche oltre il food</p>
-              <p className="body text-pretty service-desc">
+              <h3 className="h2 service-title" data-cid="HC8">Social Media</h3>
+              <p className="service-sub mono" data-cid="HC9">per brand, retailer e aziende — anche oltre il food</p>
+              <p className="body text-pretty service-desc" data-cid="HC10">
                 Strategia, contenuti e community che non fanno scrollare oltre. Dal reel virale
                 alla campagna che converte: pensiamo, giriamo, pubblichiamo, misuriamo.
               </p>
@@ -75,7 +75,7 @@ export default function ServiziSection() {
                 <span className="chip">ADV</span>
                 <span className="chip">Community</span>
               </div>
-              <p className="mono-xs service-kpi">
+              <p className="mono-xs service-kpi" data-cid="HC11">
                 es. Brand Tale · 5M views virali · community +28k in 4 mesi
               </p>
             </div>
@@ -96,9 +96,9 @@ export default function ServiziSection() {
           >
             <div className="service-idx idx">03 / 04</div>
             <div className="service-main">
-              <h3 className="h2 service-title">Web Design</h3>
-              <p className="service-sub mono">siti che convertono, non solo che si guardano</p>
-              <p className="body text-pretty service-desc">
+              <h3 className="h2 service-title" data-cid="HC12">Web Design</h3>
+              <p className="service-sub mono" data-cid="HC13">siti che convertono, non solo che si guardano</p>
+              <p className="body text-pretty service-desc" data-cid="HC14">
                 UX, UI, sviluppo e SEO sotto lo stesso tetto. Costruiamo siti veloci, belli e
                 onesti — dove il bottone giusto è sempre a portata di pollice.
               </p>
@@ -109,7 +109,7 @@ export default function ServiziSection() {
                 <span className="chip">E-commerce</span>
                 <span className="chip">SEO</span>
               </div>
-              <p className="mono-xs service-kpi">
+              <p className="mono-xs service-kpi" data-cid="HC15">
                 es. E-shop Tale · da 0 a 18k visite/mese · checkout in 2 step
               </p>
             </div>
@@ -130,9 +130,9 @@ export default function ServiziSection() {
           >
             <div className="service-idx idx">04 / 04</div>
             <div className="service-main">
-              <h3 className="h2 service-title">Branding</h3>
-              <p className="service-sub mono">identità che si riconoscono al primo morso</p>
-              <p className="body text-pretty service-desc">
+              <h3 className="h2 service-title" data-cid="HC16">Branding</h3>
+              <p className="service-sub mono" data-cid="HC17">identità che si riconoscono al primo morso</p>
+              <p className="body text-pretty service-desc" data-cid="HC18">
                 Strategia, naming, identità visiva e packaging. Diamo al tuo brand una faccia,
                 una voce e un carattere — di quelli che non si scordano facilmente.
               </p>
@@ -143,7 +143,7 @@ export default function ServiziSection() {
                 <span className="chip">Packaging</span>
                 <span className="chip">Stampa</span>
               </div>
-              <p className="mono-xs service-kpi">
+              <p className="mono-xs service-kpi" data-cid="HC19">
                 es. Brand Tale · rebranding completo · a scaffale in 8 settimane
               </p>
             </div>

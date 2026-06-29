@@ -13,6 +13,7 @@ interface StatsGridProps {
   itemClass: string
   defaultNumeralClass?: string
   staggerItems?: boolean
+  cids?: string[]
 }
 
 export default function StatsGrid({
@@ -21,6 +22,7 @@ export default function StatsGrid({
   itemClass,
   defaultNumeralClass,
   staggerItems = false,
+  cids,
 }: StatsGridProps) {
   return (
     <div
@@ -32,6 +34,7 @@ export default function StatsGrid({
           key={i}
           className={itemClass}
           {...(staggerItems ? { 'data-reveal': '', ...(i > 0 ? { 'data-reveal-d': String(i) } : {}) } : {})}
+          {...(cids && cids[i] ? { 'data-cid': cids[i] } : {})}
         >
           <span
             className={['numeral', item.numeralClass ?? defaultNumeralClass].filter(Boolean).join(' ')}

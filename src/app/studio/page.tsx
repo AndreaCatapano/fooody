@@ -19,6 +19,7 @@ export default function StudioPage() {
       <PageHero
         innerClass="stu-hero"
         textClass="stu-hero-text"
+        cidPrefix="TA"
         eyebrow={<div className="eyebrow no-slash stu-accent-fg">— chi siamo · studio</div>}
         heading={<>Testa,<br />cuore<br />e <span className="stu-accent-fg">metodo.</span></>}
         headingStyle={{ marginTop: 20 }}
@@ -59,6 +60,7 @@ export default function StudioPage() {
       <StuLavora />
 
       <CtaSection
+        cidPrefix="TJ"
         eyebrow="— prima call"
         eyebrowClass="stu-accent-fg"
         heading={<>30 minuti.<br />Gratis.</>}
@@ -78,9 +80,9 @@ export default function StudioPage() {
         }
         extra={
           <div className="stu-call-punti" data-reveal="" data-reveal-d="1">
-            <span>✓ Audit gratuito del tuo canale</span>
-            <span>✓ Stima budget e tempi</span>
-            <span>✓ Piano d&apos;azione su misura</span>
+            <span data-cid="TJ3">✓ Audit gratuito del tuo canale</span>
+            <span data-cid="TJ4">✓ Stima budget e tempi</span>
+            <span data-cid="TJ5">✓ Piano d'azione su misura</span>
           </div>
         }
       />

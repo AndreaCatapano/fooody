@@ -25,6 +25,7 @@ export default function BrandingPage() {
       />
 
       <PageHero
+        cidPrefix="BA"
         eyebrow={
           <div className="eyebrow no-slash" style={{ color: 'rgba(247,244,238,.6)' }}>
             — branding · identità &amp; packaging
@@ -56,6 +57,7 @@ export default function BrandingPage() {
       <BrandElementi />
 
       <CaseStudyBlock
+        cidPrefix="BE"
         eyebrow="caso · rebranding"
         eyebrowClass="brand-eyebrow"
         coverLabel="case · identità + packaging"
@@ -73,6 +75,7 @@ export default function BrandingPage() {
       />
 
       <CtaSection
+        cidPrefix="BF"
         eyebrow="— pronti a farvi riconoscere?"
         eyebrowStyle={{ color: 'rgba(247,244,238,.6)' }}
         heading={<>Diamo una faccia<br />al tuo <span className="brand-spectrum-text">brand.</span></>}

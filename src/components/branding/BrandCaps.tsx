@@ -5,6 +5,7 @@ export default function BrandCaps() {
     <section className="section" data-bg="paper-2" style={{ background: 'var(--paper-2)' }} id="cosa">
       <div className="wrap">
         <SectionHeader
+          cidPrefix="BC"
           eyebrow="cosa facciamo"
           eyebrowClass="brand-eyebrow"
           heading={<>Dalla strategia<br />al lancio.</>}
@@ -16,9 +17,9 @@ export default function BrandCaps() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px,1.6vw,20px)' }}>
             <article className="brd-cap brd-cap-sm brd-c1" data-reveal="">
               <div className="brd-cap-idx">01</div>
-              <h3 className="brd-cap-title">Strategia di marca</h3>
-              <p className="brd-cap-sub mono">cosa sei, per chi, e perché ti scelgono</p>
-              <p className="brd-cap-desc text-pretty">Posizionamento, valori, pubblico, archetipo. Le fondamenta su cui poggia ogni scelta visiva successiva.</p>
+              <h3 className="brd-cap-title" data-cid="BC4">Strategia di marca</h3>
+              <p className="brd-cap-sub mono" data-cid="BC5">cosa sei, per chi, e perché ti scelgono</p>
+              <p className="brd-cap-desc text-pretty" data-cid="BC6">Posizionamento, valori, pubblico, archetipo. Le fondamenta su cui poggia ogni scelta visiva successiva.</p>
               <div className="brd-cap-chips">
                 <span className="chip">Positioning</span>
                 <span className="chip">Brand platform</span>
@@ -28,9 +29,9 @@ export default function BrandCaps() {
 
             <article className="brd-cap brd-cap-sm brd-c2" data-reveal="" data-reveal-d="2">
               <div className="brd-cap-idx">02</div>
-              <h3 className="brd-cap-title">Naming &amp; voce</h3>
-              <p className="brd-cap-sub mono">il nome giusto e come lo dici</p>
-              <p className="brd-cap-desc text-pretty">Naming, tagline, tono di voce, verifica di disponibilità. Un nome che si pronuncia, si ricorda e si trova.</p>
+              <h3 className="brd-cap-title" data-cid="BC7">Naming &amp; voce</h3>
+              <p className="brd-cap-sub mono" data-cid="BC8">il nome giusto e come lo dici</p>
+              <p className="brd-cap-desc text-pretty" data-cid="BC9">Naming, tagline, tono di voce, verifica di disponibilità. Un nome che si pronuncia, si ricorda e si trova.</p>
               <div className="brd-cap-chips">
                 <span className="chip">Naming</span>
                 <span className="chip">Tagline</span>
@@ -43,9 +44,9 @@ export default function BrandCaps() {
             <article className="brd-cap brd-cap-lg brd-c3" data-reveal="" data-reveal-d="1">
               <div className="brd-cap-inner">
                 <div className="brd-cap-idx">03</div>
-                <h3 className="brd-cap-title">Identità visiva</h3>
-                <p className="brd-cap-sub mono">logo, colori, tipografia, sistema</p>
-                <p className="brd-cap-desc text-pretty">Marchio, palette, font, griglie e linee guida. Un sistema che resta coerente dal biglietto da visita all&apos;insegna — e che il sito eredita di default.</p>
+                <h3 className="brd-cap-title" data-cid="BC10">Identità visiva</h3>
+                <p className="brd-cap-sub mono" data-cid="BC11">logo, colori, tipografia, sistema</p>
+                <p className="brd-cap-desc text-pretty" data-cid="BC12">Marchio, palette, font, griglie e linee guida. Un sistema che resta coerente dal biglietto da visita all&apos;insegna — e che il sito eredita di default.</p>
                 <div className="brd-cap-chips">
                   <span className="chip">Logo</span>
                   <span className="chip">Design system</span>
@@ -61,9 +62,9 @@ export default function BrandCaps() {
             <article className="brd-cap brd-cap-lg brd-c4" data-reveal="" data-reveal-d="3">
               <div className="brd-cap-inner">
                 <div className="brd-cap-idx">04</div>
-                <h3 className="brd-cap-title">Packaging &amp; stampa</h3>
-                <p className="brd-cap-sub mono">il brand che prendi in mano</p>
-                <p className="brd-cap-desc text-pretty">Etichette, confezioni, menù, materiali stampati. L&apos;identità che diventa oggetto — pronta per lo scaffale e per la foto che gira sui social.</p>
+                <h3 className="brd-cap-title" data-cid="BC13">Packaging &amp; stampa</h3>
+                <p className="brd-cap-sub mono" data-cid="BC14">il brand che prendi in mano</p>
+                <p className="brd-cap-desc text-pretty" data-cid="BC15">Etichette, confezioni, menù, materiali stampati. L&apos;identità che diventa oggetto — pronta per lo scaffale e per la foto che gira sui social.</p>
                 <div className="brd-cap-chips">
                   <span className="chip">Packaging</span>
                   <span className="chip">Etichette</span>

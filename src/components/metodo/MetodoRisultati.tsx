@@ -10,6 +10,7 @@ export default function MetodoRisultati() {
           eyebrowClass="met-eyebrow"
           heading={<>I conti tornano.<br />Anche quelli belli.</>}
           lead="Medie sui ristoranti seguiti con il Metodo completo nei primi sei mesi. Niente magie, solo metodo."
+          cidPrefix="ME"
         />
 
         {/* TODO: sostituire con dati reali */}
@@ -17,6 +18,7 @@ export default function MetodoRisultati() {
           gridClass="results-grid"
           itemClass="result"
           staggerItems
+          cids={['ME4', 'ME5', 'ME6', 'ME7']}
           items={[
             { count: 340, prefix: '+', suffix: '%', label: 'engagement medio', numeralClass: 'result-num met-result-num', placeholder: 'KPI engagement' },
             { count: 180, prefix: '+', suffix: '%', label: 'prenotazioni online', numeralClass: 'result-num met-result-num-ink', placeholder: 'KPI prenotazioni' },

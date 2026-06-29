@@ -26,6 +26,7 @@ interface PageHeroProps {
   textClass?: string
   strip?: ReactNode
   belowWrap?: ReactNode
+  cidPrefix?: string
 }
 
 function PrimaryBtn({ btn }: { btn: CtaButton }) {
@@ -57,6 +58,7 @@ export default function PageHero({
   textClass,
   strip,
   belowWrap,
+  cidPrefix,
 }: PageHeroProps) {
   if (innerClass) {
     const ctaWrap = (
@@ -97,17 +99,33 @@ export default function PageHero({
   }
 
   // footer layout
-  const ctaBlock = (
+  const ctaBlockWithCid = (
     <>
-      <p className="lead text-pretty" data-reveal="" data-reveal-d="2" style={leadStyle}>{lead}</p>
+      <p className="lead text-pretty" data-reveal="" data-reveal-d="2" style={leadStyle} {...(cidPrefix ? { 'data-cid': cidPrefix + '3' } : {})}>{lead}</p>
       {ctaClass ? (
         <div className={ctaClass} data-reveal="" data-reveal-d="3">
-          <PrimaryBtn btn={ctaPrimary} />
+          <a
+            className={ctaPrimary.className}
+            href={ctaPrimary.href}
+            {...(ctaPrimary.dataTransitionWord ? { 'data-transition': '', 'data-transition-word': ctaPrimary.dataTransitionWord } : {})}
+            {...(ctaPrimary.dataMagnetic ? { 'data-magnetic': ctaPrimary.dataMagnetic } : {})}
+            {...(cidPrefix ? { 'data-cid': cidPrefix + '4' } : {})}
+          >
+            <span className="btn-label">{ctaPrimary.label}</span>
+          </a>
           {ctaSecondary}
         </div>
       ) : (
         <div data-reveal="" data-reveal-d="3" style={{ marginTop: 32, display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-          <PrimaryBtn btn={ctaPrimary} />
+          <a
+            className={ctaPrimary.className}
+            href={ctaPrimary.href}
+            {...(ctaPrimary.dataTransitionWord ? { 'data-transition': '', 'data-transition-word': ctaPrimary.dataTransitionWord } : {})}
+            {...(ctaPrimary.dataMagnetic ? { 'data-magnetic': ctaPrimary.dataMagnetic } : {})}
+            {...(cidPrefix ? { 'data-cid': cidPrefix + '4' } : {})}
+          >
+            <span className="btn-label">{ctaPrimary.label}</span>
+          </a>
           {ctaSecondary}
         </div>
       )}
@@ -122,11 +140,11 @@ export default function PageHero({
     >
       <div className="wrap">
         {eyebrow}
-        <h1 className="mega" data-kinetic="lines" style={headingStyle}>{heading}</h1>
+        <h1 className="mega" data-kinetic="lines" style={headingStyle} {...(cidPrefix ? { 'data-cid': cidPrefix + '2' } : {})}>{heading}</h1>
         {extra}
         {footerClass ? (
-          <div className={footerClass}>{ctaBlock}</div>
-        ) : ctaBlock}
+          <div className={footerClass}>{ctaBlockWithCid}</div>
+        ) : ctaBlockWithCid}
       </div>
     </header>
   )

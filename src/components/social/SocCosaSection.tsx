@@ -58,8 +58,8 @@ export default function SocCosaSection() {
       <div className="soc-cosa-inner">
         <div className="soc-cosa-left">
           <div className="soc-cosa-head">
-            <div className="eyebrow no-slash soc-accent-fg">— cosa facciamo</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 14, color: 'var(--ink)' }}>
+            <div className="eyebrow no-slash soc-accent-fg" data-cid="SC1">— cosa facciamo</div>
+            <h2 className="hero-type" data-kinetic="lines" data-cid="SC2" style={{ marginTop: 14, color: 'var(--ink)' }}>
               Cinque mosse.<br />Un solo feed.
             </h2>
           </div>

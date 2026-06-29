@@ -1,0 +1,32 @@
+/* ============================================================
+   CONTENT MAP BADGES — branch content-mapping only
+   Rimuovere questo file e l'import in layout.tsx prima del merge
+   ============================================================ */
+
+[data-cid] {
+  position: relative !important;
+}
+[data-cid]::before {
+  content: attr(data-cid);
+  position: absolute;
+  top: -12px;
+  left: 0;
+  background: #0057FF;
+  color: #fff;
+  font: 700 9px/1 'Courier New', monospace;
+  padding: 2px 5px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 9999;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+[data-cid][data-ctype="img"]::before {
+  background: #FF6B00;
+}
+/* per elementi inline (span, button) sposta a destra per non sovrapporre */
+span[data-cid]::before,
+button[data-cid]::before,
+a[data-cid]::before {
+  top: -10px;
+}

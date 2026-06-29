@@ -18,6 +18,7 @@ interface CtaSectionProps {
   ctaPrimary: CtaButton
   ctaSecondary?: ReactNode
   extra?: ReactNode
+  cidPrefix?: string
 }
 
 export default function CtaSection({
@@ -30,6 +31,7 @@ export default function CtaSection({
   ctaPrimary,
   ctaSecondary,
   extra,
+  cidPrefix,
 }: CtaSectionProps) {
   const eyebrowCls = ['eyebrow no-slash', eyebrowClass].filter(Boolean).join(' ')
   const eyebrowSt: CSSProperties = { justifyContent: 'center', ...eyebrowStyle }
@@ -37,11 +39,12 @@ export default function CtaSection({
   return (
     <section className="section ink-region" data-bg="ink" id="contatti">
       <div className="wrap" style={{ textAlign: 'center' }}>
-        <div className={eyebrowCls} style={eyebrowSt}>{eyebrow}</div>
+        <div className={eyebrowCls} style={eyebrowSt} {...(cidPrefix ? { 'data-cid': cidPrefix + '1' } : {})}>{eyebrow}</div>
         <h2
           className="mega"
           data-kinetic="lines"
           style={{ margin: '22px auto 0', maxWidth: '15ch' }}
+          {...(cidPrefix ? { 'data-cid': cidPrefix + '2' } : {})}
         >
           {heading}
         </h2>
@@ -49,6 +52,7 @@ export default function CtaSection({
           className="lead text-pretty"
           data-reveal=""
           style={{ margin: '26px auto 0', maxWidth: '42ch', ...leadStyle }}
+          {...(cidPrefix ? { 'data-cid': cidPrefix + '3' } : {})}
         >
           {lead}
         </p>
@@ -63,6 +67,7 @@ export default function CtaSection({
             href={ctaPrimary.href}
             {...(ctaPrimary.dataTransitionWord ? { 'data-transition': '', 'data-transition-word': ctaPrimary.dataTransitionWord } : {})}
             {...(ctaPrimary.dataMagnetic ? { 'data-magnetic': ctaPrimary.dataMagnetic } : {})}
+            {...(cidPrefix ? { 'data-cid': cidPrefix + '4' } : {})}
           >
             <span className="btn-label">{ctaPrimary.label}</span>
           </a>

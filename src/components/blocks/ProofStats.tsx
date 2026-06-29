@@ -17,6 +17,7 @@ interface ProofStatsProps {
   itemClass: string
   numeralClass: string
   id?: string
+  cidPrefix?: string
 }
 
 export default function ProofStats({
@@ -28,16 +29,18 @@ export default function ProofStats({
   itemClass,
   numeralClass,
   id,
-}: ProofStatsProps) {
+  cidPrefix,
+}: ProofStatsProps & { cidPrefix?: string }) {
   const eyebrowCls = ['eyebrow no-slash', eyebrowClass].filter(Boolean).join(' ')
 
   return (
     <section className="section ink-region" data-bg="ink" id={id}>
       <div className="wrap">
-        <div className={eyebrowCls} data-reveal="">{eyebrow}</div>
+        <div className={eyebrowCls} data-reveal="" {...(cidPrefix ? { 'data-cid': cidPrefix+'1' } : {})}>{eyebrow}</div>
         <h2
           className="h1 text-balance"
           data-kinetic="words"
+          {...(cidPrefix ? { 'data-cid': cidPrefix+'2' } : {})}
           style={{ marginTop: 16, maxWidth: '18ch', color: 'var(--paper)' }}
         >
           {heading}

@@ -33,12 +33,12 @@ export default function WebStepsSection() {
       <div className="wrap">
         <div className="sec-head">
           <div>
-            <div className="eyebrow web-eyebrow">come lavoriamo</div>
-            <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
+            <div className="eyebrow web-eyebrow" data-cid="WC1">come lavoriamo</div>
+            <h2 className="hero-type" data-kinetic="lines" data-cid="WC2" style={{ marginTop: 16 }}>
               Dal brief<br />al deploy.
             </h2>
           </div>
-          <p className="small" style={{ maxWidth: '34ch' }}>
+          <p className="small" data-cid="WC3" style={{ maxWidth: '34ch' }}>
             Un processo in quattro tappe. Niente sorprese in fattura, niente &ldquo;ci pensiamo dopo&rdquo;.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function WebStepsSection() {
           <div className="web-hero-card" style={{ opacity: fading ? 0 : 1 }}>
             <div className="web-hero-wm" aria-hidden="true">{'0' + heroStep}</div>
             <div className="web-hero-badge">{d.badge}</div>
-            <h3 className="web-hero-title">{d.title}</h3>
+            <h3 className="web-hero-title" data-cid={`WC${heroStep + 3}`}>{d.title}</h3>
             <p className="web-hero-sub mono">{d.sub}</p>
             <p className="web-hero-desc">{d.desc}</p>
             <div className="web-hero-chips">

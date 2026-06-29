@@ -4,8 +4,8 @@ export default function ContattiComeFunziona() {
   return (
     <section className="section ink-region" data-bg="ink" id="come">
       <div className="wrap">
-        <div className="eyebrow no-slash" style={{ color: 'var(--tomato)' }} data-reveal="">— come funziona</div>
-        <h2 className="h1 text-balance" data-kinetic="words"
+        <div className="eyebrow no-slash" data-cid="CB1e" style={{ color: 'var(--tomato)' }} data-reveal="">— come funziona</div>
+        <h2 className="h1 text-balance" data-kinetic="words" data-cid="CB1"
           style={{ marginTop: 16, maxWidth: '16ch', color: 'var(--paper)' }}>
           Tre passi. Nessun impegno.
         </h2>

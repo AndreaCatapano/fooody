@@ -13,6 +13,7 @@ export default function BrandBoardSection() {
       />
       <div className="wrap">
         <SectionHeader
+          cidPrefix="BB"
           eyebrow="il sistema, assemblato"
           eyebrowClass="brand-eyebrow"
           heading={<>Un&apos;identità non è<br />un logo. È un sistema.</>}

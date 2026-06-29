@@ -5,6 +5,7 @@ export default function StuClienti() {
     <section className="section" data-bg="paper-2" style={{ background: 'var(--paper-2)' }} id="clienti">
       <div className="wrap">
         <SectionHeader
+          cidPrefix="THh"
           eyebrow="con chi lavoriamo"
           eyebrowClass="stu-eyebrow"
           heading={<>Hanno mangiato<br />con noi.</>}
@@ -12,7 +13,7 @@ export default function StuClienti() {
         />
         <div className="stu-clients">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="stu-client-logo ph" data-reveal="" data-reveal-d={String(i)}>
+            <div key={i} className="stu-client-logo ph" data-reveal="" data-reveal-d={String(i)} data-cid={`TH${i+1}`} data-ctype="img">
               <span className="ph-label">logo cliente</span>
             </div>
           ))}

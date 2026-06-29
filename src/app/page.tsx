@@ -37,6 +37,7 @@ export default function Home() {
             <span className="btn-label">ciao@fooody.it</span>
           </a>
         }
+        cidPrefix="HG"
       />
       <Script src="/hero-cine.js" strategy="afterInteractive" />
     </>

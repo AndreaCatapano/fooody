@@ -17,6 +17,7 @@ interface CaseStudyBlockProps {
   caseHref?: string
   dataBg?: string
   sectionStyle?: CSSProperties
+  cidPrefix?: string
 }
 
 export default function CaseStudyBlock({
@@ -30,6 +31,7 @@ export default function CaseStudyBlock({
   caseHref = '/lavori',
   dataBg = 'paper',
   sectionStyle,
+  cidPrefix,
 }: CaseStudyBlockProps) {
   const eyebrowCls = ['eyebrow', eyebrowClass].filter(Boolean).join(' ')
 
@@ -44,19 +46,20 @@ export default function CaseStudyBlock({
             data-tilt="4"
             data-cursor="guarda"
             {...(coverPlaceholder ? { 'data-placeholder': coverPlaceholder } : {})}
+            {...(cidPrefix ? { 'data-cid': cidPrefix + '1', 'data-ctype': 'img' } : {})}
           >
             <span className="ph-label">{coverLabel}</span>
           </figure>
           <div>
-            <h2 className="h1 text-balance" data-kinetic="words" style={{ maxWidth: '16ch' }}>
+            <h2 className="h1 text-balance" data-kinetic="words" style={{ maxWidth: '16ch' }} {...(cidPrefix ? { 'data-cid': cidPrefix + '2' } : {})}>
               {heading}
             </h2>
-            <p className="lead text-pretty" data-reveal="" style={{ marginTop: 20, maxWidth: '46ch' }}>
+            <p className="lead text-pretty" data-reveal="" style={{ marginTop: 20, maxWidth: '46ch' }} {...(cidPrefix ? { 'data-cid': cidPrefix + '3' } : {})}>
               {lead}
             </p>
             <div className="case-kpis" data-reveal="" data-reveal-d="2">
               {kpis.map((kpi, i) => (
-                <div key={i} className="case-kpi">
+                <div key={i} className="case-kpi" {...(cidPrefix ? { 'data-cid': cidPrefix + (i + 4) } : {})}>
                   <span className="numeral" style={kpi.color ? { color: kpi.color } : undefined}>
                     {kpi.value}
                   </span>
