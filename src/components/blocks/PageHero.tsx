@@ -12,6 +12,10 @@ interface PageHeroProps {
   paddingBottom?: string
   eyebrow: ReactNode
   heading: ReactNode
+  /** Set to false when heading contains a live React component (e.g. a word-cycling
+   * effect): motion.js's kinetic="lines" rewrites the h1's innerHTML from a string on
+   * mount, which detaches any mounted component inside it. */
+  headingKinetic?: boolean
   headingStyle?: CSSProperties
   extra?: ReactNode
   lead: ReactNode
@@ -45,6 +49,7 @@ export default function PageHero({
   paddingBottom = 'clamp(48px,7vw,96px)',
   eyebrow,
   heading,
+  headingKinetic = true,
   headingStyle,
   extra,
   lead,
@@ -73,7 +78,13 @@ export default function PageHero({
     const text = (
       <>
         {eyebrow}
-        <h1 className="mega" data-kinetic="lines" style={headingStyle}>{heading}</h1>
+        <h1
+          className="mega"
+          style={headingStyle}
+          {...(headingKinetic ? { 'data-kinetic': 'lines' } : { 'data-reveal': '' })}
+        >
+          {heading}
+        </h1>
         <p className="lead text-pretty" data-reveal="" data-reveal-d="2" style={leadStyle}>{lead}</p>
         {ctaWrap}
       </>
@@ -122,7 +133,13 @@ export default function PageHero({
     >
       <div className="wrap">
         {eyebrow}
-        <h1 className="mega" data-kinetic="lines" style={headingStyle}>{heading}</h1>
+        <h1
+          className="mega"
+          style={headingStyle}
+          {...(headingKinetic ? { 'data-kinetic': 'lines' } : { 'data-reveal': '' })}
+        >
+          {heading}
+        </h1>
         {extra}
         {footerClass ? (
           <div className={footerClass}>{ctaBlock}</div>

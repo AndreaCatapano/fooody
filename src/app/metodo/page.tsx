@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { buildMetadata, buildServiceSchema } from '@/lib/seo'
 import PageHero from '@/components/blocks/PageHero'
+import WordScramble from '@/components/blocks/WordScramble'
 import CtaSection from '@/components/blocks/CtaSection'
 import CaseStudyBlock from '@/components/blocks/CaseStudyBlock'
 import MetodoIntro from '@/components/metodo/MetodoIntro'
@@ -34,8 +35,29 @@ export default function MetodoPage() {
       <PageHero
         paddingBottom="clamp(60px,8vh,110px)"
         eyebrow={<div className="eyebrow no-slash met-accent-fg">— il metodo · per chi vive di coperti</div>}
-        heading={<>Cinque mosse<br />per riempire<br /><span className="met-accent-fg">i tavoli.</span></>}
-        headingStyle={{ marginTop: 22, maxWidth: '15ch' }}
+        heading={
+          <>
+            <WordScramble
+              className="met-accent-fg"
+              words={[
+                'Pizzerie',
+                'Fine dining',
+                'Fast casual',
+                'Pasticcerie',
+                'Bakery',
+                'Pub',
+                'Bistrot',
+                'Take away',
+                'Boulangerie',
+              ]}
+            />
+            <br />
+            format diversi,<br />
+            stessa sfida farsi scegliere.
+          </>
+        }
+        headingKinetic={false}
+        headingStyle={{ marginTop: 22, maxWidth: '18ch' }}
         lead="Il Metodo Fooody è il nostro sistema completo per la ristorazione. Non una lista di servizi sciolti: un percorso unico che parte dall'identità e arriva ai numeri. Lo stesso che usiamo ogni giorno per chi cucina sul serio."
         leadStyle={{ maxWidth: '48ch' }}
         footerClass="metodo-hero-foot"
