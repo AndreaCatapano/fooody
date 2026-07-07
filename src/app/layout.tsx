@@ -7,6 +7,9 @@ import Footer from '@/components/layout/Footer'
 import { PageTransition } from '@/components/PageTransition'
 import SmoothScroll from '@/components/SmoothScroll'
 import { SITE, buildOrganizationSchema } from '@/lib/seo'
+import ConsentDefault from '@/components/analytics/ConsentDefault'
+import IubendaCookieSolution from '@/components/analytics/IubendaCookieSolution'
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 
 const mont = localFont({
   src: [
@@ -52,6 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="it" className={mont.variable}>
       <body>
+        <ConsentDefault />
+        <IubendaCookieSolution />
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: orgSchema }}
@@ -75,6 +81,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Script src="/motion.js" strategy="afterInteractive" />
         <SmoothScroll />
+
+        <GoogleAnalytics />
       </body>
     </html>
   )

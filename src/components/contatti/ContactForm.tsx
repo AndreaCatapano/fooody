@@ -1,9 +1,11 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null)
   const confirmRef = useRef<HTMLDivElement>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   useEffect(() => {
     const form = formRef.current
@@ -30,8 +32,9 @@ export default function ContactForm() {
       })
     })
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault()
+      setSubmitError('')
       const hp = (form.elements as HTMLFormControlsCollection & { website?: HTMLInputElement })['website']
       if (hp?.value) return
 
@@ -59,6 +62,26 @@ export default function ContactForm() {
         firstErr?.focus()
         return
       }
+
+      const data = Object.fromEntries(new FormData(form).entries())
+
+      setSubmitting(true)
+      try {
+        const res = await fetch('/api/contatti', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        })
+        if (!res.ok) {
+          const body = await res.json().catch(() => null)
+          throw new Error(body?.error || 'Invio non riuscito. Riprova più tardi.')
+        }
+      } catch (err) {
+        setSubmitting(false)
+        setSubmitError(err instanceof Error ? err.message : 'Invio non riuscito. Riprova più tardi.')
+        return
+      }
+      setSubmitting(false)
 
       form.style.transition = 'opacity .4s ease'
       form.style.opacity = '0'
@@ -166,11 +189,14 @@ export default function ContactForm() {
         </div>
 
         <div className="lav-row lav-row-submit">
-          <button className="btn accent lg lav-submit" type="submit" data-magnetic="0.3">
-            <span className="btn-label">Invia il messaggio <span className="arrow">↗</span></span>
+          <button className="btn accent lg lav-submit" type="submit" data-magnetic="0.3" disabled={submitting}>
+            <span className="btn-label">{submitting ? 'Invio in corso…' : 'Invia il messaggio'} {!submitting && <span className="arrow">↗</span>}</span>
           </button>
           <p className="mono-xs lav-note">Nessuna newsletter, nessun dato ceduto a terzi.
             Ti rispondo personalmente entro 24 ore.</p>
+          {submitError && (
+            <p className="lav-err" role="alert" style={{ marginTop: 12 }}>{submitError}</p>
+          )}
         </div>
       </form>
 
@@ -179,11 +205,11 @@ export default function ContactForm() {
           <div className="lav-confirm-check">✓</div>
           <h2 className="h2" style={{ marginTop: 16 }}>Messaggio ricevuto.</h2>
           <p className="lead text-pretty" style={{ marginTop: 12, color: 'var(--ink-2)', maxWidth: '38ch' }}>
-            Ti rispondo entro 24 ore. Nel frattempo puoi dare un&apos;occhiata ai nostri lavori.
+            Ti rispondo entro 24 ore. Nel frattempo puoi dare un&apos;occhiata al nostro metodo.
           </p>
-          <a className="btn accent" href="/lavori" data-transition=""
+          <a className="btn accent" href="/metodo" data-transition="" data-transition-word="Metodo"
             style={{ marginTop: 28, display: 'inline-flex' }}>
-            <span className="btn-label">Guarda i lavori <span className="arrow">↗</span></span>
+            <span className="btn-label">Scopri il Metodo <span className="arrow">↗</span></span>
           </a>
         </div>
       </div>
