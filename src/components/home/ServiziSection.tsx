@@ -4,14 +4,14 @@ export default function ServiziSection() {
       <div className="wrap">
         <div className="sec-head">
           <div>
-            <div className="eyebrow">quattro modi di lavorare con noi</div>
+            <div className="eyebrow">I QUATTRO PILASTRI DI FOOODY</div>
             <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-              Scegli la portata.<br />Al resto pensiamo noi.
+              Scegli cosa vuoi ottenere.<br />Al come ci pensiamo noi.
             </h2>
           </div>
           <p className="small" style={{ maxWidth: '34ch' }}>
-            Stesso studio, quattro appetiti diversi. Entra dalla porta che ti somiglia — o chiamaci
-            e te lo diciamo noi.
+            Abbiamo scelto quattro aree di specializzazione, perché preferiamo fare poche cose, ma
+            farle davvero bene.
           </p>
         </div>
 
@@ -28,21 +28,21 @@ export default function ServiziSection() {
             <div className="service-idx idx">01 / 04</div>
             <div className="service-main">
               <h3 className="h2 service-title">Metodo Fooody</h3>
-              <p className="service-sub mono">per ristoranti, catene &amp; chi vive di coperti</p>
+              <p className="service-sub mono">Per ristoranti, aziende food &amp; beverage e realtà Ho.Re.Ca.</p>
               <p className="body text-pretty service-desc">
-                Il nostro sistema completo per la ristorazione: social che riempiono i tavoli,
-                menù che vendono, identità che si ricordano. Cinque pilastri, zero fronzoli.
+                Un metodo testato su decine di clienti, personalizzato sulla tua realtà e
+                progettato per trasformare la comunicazione in risultati concreti: non solo
+                visualizzazioni, ma percezione, desiderio, clienti e fatturato.
               </p>
               <div className="service-chips">
-                <span className="chip">Social</span>
-                <span className="chip">Menu engineering</span>
+                <span className="chip">Social Media</span>
+                <span className="chip">Menu Engineering</span>
                 <span className="chip">Branding</span>
                 <span className="chip">Packaging</span>
                 <span className="chip">Sito</span>
               </div>
-              {/* TODO: sostituire con nome cliente reale */}
               <p className="mono-xs service-kpi">
-                es. Trattoria Tale · +340% engagement, +180% prenotazioni in 6 mesi
+                ADDÒ MASTON: +735% ENGAGEMENT E +23% FATTURATO IN 6 MESI
               </p>
             </div>
             <div className="service-go">
@@ -63,10 +63,11 @@ export default function ServiziSection() {
             <div className="service-idx idx">02 / 04</div>
             <div className="service-main">
               <h3 className="h2 service-title">Social Media</h3>
-              <p className="service-sub mono">per brand, retailer e aziende — anche oltre il food</p>
+              <p className="service-sub mono">Per brand, aziende, professionisti e attività che vogliono crescere online</p>
               <p className="body text-pretty service-desc">
-                Strategia, contenuti e community che non fanno scrollare oltre. Dal reel virale
-                alla campagna che converte: pensiamo, giriamo, pubblichiamo, misuriamo.
+                Dalla strategia organica alle campagne ads, costruiamo un sistema di comunicazione
+                su misura. Pensiamo i contenuti, li produciamo, li pubblichiamo e analizziamo ogni
+                risultato per trasformare attenzione in fiducia, e fiducia in clienti.
               </p>
               <div className="service-chips">
                 <span className="chip">Strategia</span>
@@ -76,7 +77,7 @@ export default function ServiziSection() {
                 <span className="chip">Community</span>
               </div>
               <p className="mono-xs service-kpi">
-                es. Brand Tale · 5M views virali · community +28k in 4 mesi
+                FITXGAME: 4,5M DI VISUALIZZAZIONI E COST PER LEAD -67% IN 4 MESI
               </p>
             </div>
             <div className="service-go">
@@ -97,10 +98,11 @@ export default function ServiziSection() {
             <div className="service-idx idx">03 / 04</div>
             <div className="service-main">
               <h3 className="h2 service-title">Web Design</h3>
-              <p className="service-sub mono">siti che convertono, non solo che si guardano</p>
+              <p className="service-sub mono">Il tuo sito è la tua vetrina e la tua non può farti sembrare un discount</p>
               <p className="body text-pretty service-desc">
-                UX, UI, sviluppo e SEO sotto lo stesso tetto. Costruiamo siti veloci, belli e
-                onesti — dove il bottone giusto è sempre a portata di pollice.
+                Realizziamo siti veloci, dall’identità visiva forte e pensati per convertire.
+                Dalla struttura delle pagine alle call to action, ogni dettaglio è pensato per
+                guidare l’utente verso l’azione giusta.
               </p>
               <div className="service-chips">
                 <span className="chip">UX</span>
@@ -110,7 +112,7 @@ export default function ServiziSection() {
                 <span className="chip">SEO</span>
               </div>
               <p className="mono-xs service-kpi">
-                es. E-shop Tale · da 0 a 18k visite/mese · checkout in 2 step
+                CYBERTECHNO: +9K VISITE AL MESE E CHECKOUT IN 2 STEP.
               </p>
             </div>
             <div className="service-go">
@@ -131,10 +133,12 @@ export default function ServiziSection() {
             <div className="service-idx idx">04 / 04</div>
             <div className="service-main">
               <h3 className="h2 service-title">Branding</h3>
-              <p className="service-sub mono">identità che si riconoscono al primo morso</p>
+              <p className="service-sub mono">L’identità non è solo estetica, è il motivo per cui le persone ti riconoscono, ti ricordano e ti scelgono.</p>
               <p className="body text-pretty service-desc">
-                Strategia, naming, identità visiva e packaging. Diamo al tuo brand una faccia,
-                una voce e un carattere — di quelli che non si scordano facilmente.
+                Un logo fatto con GPT può darti un’immagine. Una strategia di branding può darti
+                una posizione nella mente delle persone. Strategia, naming, identità visiva, tono
+                di voce e packaging. Costruiamo un’identità coerente, riconoscibile e difficile da
+                dimenticare.
               </p>
               <div className="service-chips">
                 <span className="chip">Strategia</span>
@@ -144,7 +148,7 @@ export default function ServiziSection() {
                 <span className="chip">Stampa</span>
               </div>
               <p className="mono-xs service-kpi">
-                es. Brand Tale · rebranding completo · a scaffale in 8 settimane
+                LA FIAMMANTE: ETICHETTATURA E PACKAGING A SCAFFALE IN 4 SETTIMANE.
               </p>
             </div>
             <div className="service-go">

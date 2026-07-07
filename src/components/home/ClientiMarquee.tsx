@@ -12,7 +12,7 @@ export default function ClientiMarquee() {
           flexWrap: 'wrap',
         }}
       >
-        <span className="eyebrow">hanno mangiato con noi</span>
+        <span className="eyebrow">Le realtà che hanno creduto nel nostro metodo</span>
         {/* TODO: sostituire con SVG monocromo dei loghi reali */}
         <span className="mono-xs">loghi clienti · versione monocromatica</span>
       </div>

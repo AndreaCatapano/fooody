@@ -41,17 +41,17 @@ export default function HomeHero() {
           <rect className="kn-bg" x="0" y="0" width="100%" height="100%" mask="url(#foody-mask)" />
         </svg>
 
-        <h1 className="visually-hidden">Fooody — agenzia creativa food</h1>
+        <h1 className="visually-hidden">Fooody - Società specializzata in Consulenza e Comunicazione</h1>
 
         <div className="hero-paper" id="hero-paper" aria-hidden="true" />
         <canvas className="hero-particles" id="hero-particles" aria-hidden="true" />
 
         <div className="hero-cap" data-reveal="fade">
-          <span className="mono-xs">agenzia creativa · food &amp; dintorni</span>
+          <span className="mono-xs">Consulenza Marketing &amp; Comunicazione</span>
         </div>
 
         <div className="hero-eyebrow" data-reveal="fade">
-          <span className="eyebrow">agenzia creativa · food &amp; dintorni</span>
+          <span className="eyebrow">Consulenza Marketing &amp; Comunicazione</span>
         </div>
 
         <a className="hero-scroll" href="#manifesto" data-reveal="" data-reveal-d="3">

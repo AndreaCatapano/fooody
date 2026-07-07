@@ -56,8 +56,9 @@ export default function MetodoScrollTelling() {
             <div className="step-pillar"><span>Pilastro 01</span> — identità</div>
             <h3 className="step-title">Chi sei, prima ancora del menù.</h3>
             <p className="step-body">
-              Nome, logo, palette, packaging, font del menù. Diamo al locale una faccia
-              riconoscibile — quella che resta in testa mentre si decide dove cenare stasera.
+              Nome, logo, palette, packaging, font e menù devono parlare la stessa lingua.
+              Costruiamo un’identità visiva chiara, coerente e riconoscibile, capace di far
+              percepire subito il valore del tuo locale.
             </p>
             <div className="step-list">
               <span className="chip">Naming</span>
@@ -71,8 +72,9 @@ export default function MetodoScrollTelling() {
             <div className="step-pillar"><span>Pilastro 02</span> — social</div>
             <h3 className="step-title" style={{ color: 'var(--ink)' }}>Riempire i tavoli, non solo il feed.</h3>
             <p className="step-body" style={{ color: 'rgba(23,19,15,.72)' }}>
-              Contenuti che fanno venire fame e community che prenota davvero. Reel, food
-              photography, calendario editoriale: ogni post ha un coperto come obiettivo.
+              Facciamo venire fame prima ancora di arrivare al tavolo. Reel, shooting, food
+              photography, piano editoriale e campagne diventano un sistema unico per far parlare
+              del tuo locale, far crescere la community e trasformare l’attenzione in vendite.
             </p>
             <div className="step-list">
               <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Content plan</span>
@@ -96,8 +98,9 @@ export default function MetodoScrollTelling() {
               Il menù è il tuo miglior cameriere.
             </h3>
             <p className="step-body" style={{ color: 'rgba(23,19,15,.72)' }}>
-              Studiamo posizione, prezzi e descrizioni per spingere i piatti giusti. Un menù
-              progettato bene vende di più senza alzare la voce — e nemmeno i prezzi.
+              Studiamo prezzi, marginalità, food cost e comportamento d’acquisto per spingere i
+              piatti giusti nel modo giusto. Un menù progettato bene vende di più, migliora i
+              margini e aumenta il valore percepito.
             </p>
             <div className="step-list">
               <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Pricing</span>
@@ -111,8 +114,9 @@ export default function MetodoScrollTelling() {
             <div className="step-pillar"><span>Pilastro 04</span> — esperienza</div>
             <h3 className="step-title" style={{ color: 'var(--ink)' }}>Dal primo scroll all&apos;ultimo boccone.</h3>
             <p className="step-body" style={{ color: 'rgba(23,19,15,.72)' }}>
-              Sito veloce, prenotazione in due tap, recensioni gestite, QR del menù che funziona
-              davvero. Tutto quello che succede tra &ldquo;ho fame&rdquo; e &ldquo;torno di sicuro&rdquo;.
+              Realizziamo siti web, sistemi di prenotazione e menù digitali pensati per la tua
+              attività. Tutto deve funzionare in modo semplice, veloce e coerente, dal primo click
+              alla prenotazione.
             </p>
             <div className="step-list">
               <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Sito &amp; prenotazioni</span>
@@ -132,8 +136,9 @@ export default function MetodoScrollTelling() {
             <div className="step-pillar"><span>Pilastro 05</span> — crescita</div>
             <h3 className="step-title">Numeri che si possono mangiare.</h3>
             <p className="step-body">
-              ADV mirata, analisi dei dati, fidelizzazione. Misuriamo coperti, scontrino medio e
-              ritorno — perché &ldquo;andare bene&rdquo; deve voler dire qualcosa di preciso.
+              ADS mirate, analisi dei dati, fidelizzazione e controllo delle performance.
+              Misuriamo coperti, ordini, scontrino medio, ritorni e risultati reali, perché
+              crescere non può essere una sensazione: devi leggerlo nei numeri.
             </p>
             <div className="step-list">
               <span className="chip">ADV</span>

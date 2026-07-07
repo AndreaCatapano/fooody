@@ -5,39 +5,38 @@ export default function ManifestoSection() {
         <div className="manifesto-grid">
           <div>
             <div className="eyebrow no-slash" style={{ color: 'var(--tomato)' }}>
-              — manifesto
+              MANIFESTO
             </div>
             <h2
               className="h1 text-balance"
               data-kinetic="words"
               style={{ marginTop: 18, maxWidth: '18ch' }}
             >
-              Il food non si vende. Si fa desiderare.
+              Come puoi vendere, se nessuno sa chi sei?
             </h2>
             <p
               className="lead text-pretty"
               data-reveal=""
               style={{ marginTop: 24, maxWidth: '52ch' }}
             >
-              Crediamo che dietro ogni piatto, ogni brand e ogni scroll ci sia una persona affamata
-              di qualcosa di buono. Il nostro lavoro è apparecchiare la tavola giusta — con metodo,
-              gusto e un pizzico di sfacciataggine.
+              Noi costruiamo identità digitali che fanno emergere il valore del tuo brand,
+              trasformano la percezione del pubblico e ti rendono desiderabile agli occhi delle
+              persone giuste.
             </p>
           </div>
 
           <div className="stats">
             <div className="stat" data-reveal="" data-reveal-d="1">
-              {/* TODO: sostituire con dati reali approvati dal cliente */}
-              <span className="numeral stat-num" data-count="40" data-suf="+" data-placeholder="KPI clienti">0</span>
-              <span className="mono-xs">clienti serviti</span>
+              <span className="numeral stat-num" data-count="30" data-suf="+" data-placeholder="KPI clienti">0</span>
+              <span className="mono-xs">Clienti gestiti mensilmente</span>
             </div>
             <div className="stat" data-reveal="" data-reveal-d="2">
-              <span className="numeral stat-num" data-count="340" data-pre="+" data-suf="%" data-placeholder="KPI engagement">0</span>
-              <span className="mono-xs">engagement medio</span>
+              <span className="numeral stat-num" data-count="2" data-suf="+" data-placeholder="KPI engagement">0</span>
+              <span className="mono-xs">Anni di strategia e contenuti</span>
             </div>
             <div className="stat" data-reveal="" data-reveal-d="3">
-              <span className="numeral stat-num" data-count="5" data-placeholder="KPI anni">0</span>
-              <span className="mono-xs">anni a tavola</span>
+              <span className="numeral stat-num" data-count="1" data-placeholder="KPI anni">0</span>
+              <span className="mono-xs">Obiettivo: renderti riconoscibile</span>
             </div>
           </div>
         </div>

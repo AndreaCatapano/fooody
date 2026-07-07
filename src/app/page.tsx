@@ -21,12 +21,12 @@ export default function Home() {
       <LavoriSection />
       <StudioTeaser />
       <CtaSection
-        eyebrow="— a tavola"
+        eyebrow="- E ADESSO?"
         eyebrowStyle={{ color: 'var(--tomato)' }}
-        heading={<>Hai fame di<br />crescere?</>}
-        lead="Raccontaci il tuo progetto. Primo confronto offerto dalla casa — caffè incluso, conto mai."
+        heading={<>Facciamo crescere<br />il tuo progetto?</>}
+        lead="Raccontaci dove vuoi arrivare. Il primo confronto lo offriamo noi, caffè incluso."
         ctaPrimary={{
-          label: <>Prenota una call <span className="arrow">↗</span></>,
+          label: <>Inizia da qui <span className="arrow">↗</span></>,
           href: '/contatti',
           className: 'btn accent lg',
           dataTransitionWord: 'Contatti',

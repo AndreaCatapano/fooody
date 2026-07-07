@@ -68,7 +68,8 @@
      COUNTER — count up on enter
   ============================================================ */
   function countUp(el) {
-    const to  = parseFloat(el.getAttribute('data-count'));
+    const to   = parseFloat(el.getAttribute('data-count'));
+    const from = el.hasAttribute('data-from') ? parseFloat(el.getAttribute('data-from')) : 0;
     const dec = (el.getAttribute('data-count') || '').includes('.') ? 1 : 0;
     const pre = el.getAttribute('data-pre') || '';
     const suf = el.getAttribute('data-suf') || '';
@@ -77,7 +78,7 @@
     (function frame(now) {
       const p = clamp((now - t0) / dur, 0, 1);
       const e = 1 - Math.pow(1 - p, 3);
-      el.textContent = pre + (to * e).toFixed(dec) + suf;
+      el.textContent = pre + (from + (to - from) * e).toFixed(dec) + suf;
       if (p < 1) requestAnimationFrame(frame);
     })(t0);
   }

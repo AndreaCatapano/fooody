@@ -1,5 +1,6 @@
 interface StatItem {
   count: number | string
+  from?: number
   prefix?: string
   suffix?: string
   label: string
@@ -36,6 +37,7 @@ export default function StatsGrid({
           <span
             className={['numeral', item.numeralClass ?? defaultNumeralClass].filter(Boolean).join(' ')}
             data-count={String(item.count)}
+            {...(item.from !== undefined ? { 'data-from': String(item.from) } : {})}
             {...(item.prefix ? { 'data-pre': item.prefix } : {})}
             {...(item.suffix ? { 'data-suf': item.suffix } : {})}
             {...(item.placeholder ? { 'data-placeholder': item.placeholder } : {})}

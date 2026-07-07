@@ -4,56 +4,66 @@ export default function LavoriSection() {
       <div className="wrap">
         <div className="sec-head">
           <div>
-            <div className="eyebrow">già fatto venire l&apos;acquolina a</div>
+            <div className="eyebrow">Sì, ma nella pratica?</div>
             <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
-              Lavori scelti.
+              Ecco alcuni lavori scelti
             </h2>
           </div>
-          <a className="tlink" href="/lavori">
-            vedi tutti i casi <span className="arrow">↗</span>
-          </a>
         </div>
 
         <div className="work-grid">
-          {/* TODO: sostituire con case study reali + immagini di copertina 4:5 */}
-          <a className="work" href="/lavori/trattoria-tale" data-cursor="apri">
+          {/* TODO: sostituire con immagini di copertina 4:5 reali. Non linkare finché non esiste una pagina /lavori reale. */}
+          <div className="work">
             <div className="ph tall work-cover" data-placeholder="case · cover 4:5">
               <span className="ph-label">case · cover</span>
             </div>
             <div className="work-meta">
               <div>
-                <span className="h3">Nome Cliente</span>
-                <p className="mono-xs">ristorazione · social + branding</p>
+                <span className="h3">Mister Kebab ®</span>
+                <p className="mono-xs">Social Media · Content Creation · Menu Engineering</p>
               </div>
-              <span className="numeral work-kpi">+340%</span>
+              <span className="numeral work-kpi">+60K follower</span>
             </div>
-          </a>
+          </div>
 
-          <a className="work" href="/lavori/brand-tale" data-cursor="apri">
+          <div className="work">
             <div className="ph tall work-cover" data-placeholder="case · cover 4:5">
               <span className="ph-label">case · cover</span>
             </div>
             <div className="work-meta">
               <div>
-                <span className="h3">Nome Cliente</span>
-                <p className="mono-xs">food brand · social + adv</p>
+                <span className="h3">N’Artigiana</span>
+                <p className="mono-xs">Advertising · Social Media · Event Planning</p>
               </div>
-              <span className="numeral work-kpi">5M</span>
+              <span className="numeral work-kpi">-80% cost per lead</span>
             </div>
-          </a>
+          </div>
 
-          <a className="work" href="/lavori/eshop-tale" data-cursor="apri">
+          <div className="work">
             <div className="ph tall work-cover" data-placeholder="case · cover 4:5">
               <span className="ph-label">case · cover</span>
             </div>
             <div className="work-meta">
               <div>
-                <span className="h3">Nome Cliente</span>
-                <p className="mono-xs">e-commerce · web + seo</p>
+                <span className="h3">La Fiammante</span>
+                <p className="mono-xs">Branding · Packaging · Etichettatura</p>
               </div>
-              <span className="numeral work-kpi">18k</span>
+              <span className="numeral work-kpi">15 giorni per progetto</span>
             </div>
-          </a>
+          </div>
+
+          <div className="work">
+            <div className="ph tall work-cover" data-placeholder="case · cover 4:5">
+              <span className="ph-label">case · cover</span>
+            </div>
+            <div className="work-meta">
+              <div>
+                <span className="h3">Mastone</span>
+                <p className="mono-xs">Food Cost · Social Media · Advertising</p>
+              </div>
+              <span className="numeral work-kpi">+700% community</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -889,7 +889,7 @@ html[data-page="branding"] .chip { border-color: var(--tomato); color: var(--tom
 .marquee:hover .client-logo { opacity: 0.5; }
 
 /* selected work */
-.work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.5vw, 32px); }
+.work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 2.5vw, 32px); }
 .work      { display: block; }
 .work-cover { aspect-ratio: 4/5; transition: transform .6s var(--ease); }
 .work-meta {

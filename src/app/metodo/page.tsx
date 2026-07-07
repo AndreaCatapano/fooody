@@ -34,7 +34,7 @@ export default function MetodoPage() {
 
       <PageHero
         paddingBottom="clamp(60px,8vh,110px)"
-        eyebrow={<div className="eyebrow no-slash met-accent-fg">— il metodo · per chi vive di coperti</div>}
+        eyebrow={<div className="eyebrow no-slash met-accent-fg">— IL METODO · PER CHI AMA E VIVE DI RISTORAZIONE</div>}
         heading={
           <>
             <WordScramble
@@ -58,7 +58,7 @@ export default function MetodoPage() {
         }
         headingKinetic={false}
         headingStyle={{ marginTop: 22, maxWidth: '18ch' }}
-        lead="Il Metodo Fooody è il nostro sistema completo per la ristorazione. Non una lista di servizi sciolti: un percorso unico che parte dall'identità e arriva ai numeri. Lo stesso che usiamo ogni giorno per chi cucina sul serio."
+        lead="Il Metodo Fooody è per chi non vuole essere un locale come tanti. Valorizziamo ciò che ti rende forte, sistemiamo ciò che ti frena e costruiamo una strategia verticale per riempire tavoli, aumentare ordini, far tornare clienti e incidere sulle performance del tuo locale."
         leadStyle={{ maxWidth: '48ch' }}
         footerClass="metodo-hero-foot"
         ctaClass="metodo-hero-cta"
@@ -92,7 +92,6 @@ export default function MetodoPage() {
           { value: '+180%', label: 'prenotazioni', color: 'var(--gold-deep)' },
           { value: '6', label: 'mesi' },
         ]}
-        caseHref="/lavori/trattoria-tale"
         dataBg="paper-2"
         sectionStyle={{ background: 'var(--paper-2)' }}
       />

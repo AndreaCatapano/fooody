@@ -14,36 +14,37 @@ export default function StudioTeaser() {
           </figure>
 
           <div>
-            <div className="eyebrow">chi siamo</div>
+            <div className="eyebrow">CHI SIAMO?</div>
             <h2
               className="h1 text-balance"
               data-kinetic="words"
               style={{ marginTop: 18, maxWidth: '18ch' }}
             >
-              Un gruppo di golosi con il vizio del buon lavoro.
+              Siamo un team giovane, ma non improvvisato.
             </h2>
             <p
               className="lead text-pretty"
               data-reveal=""
               style={{ marginTop: 22, maxWidth: '48ch' }}
             >
-              Strategist, designer, video-maker e copy che si prendono sul serio solo quando
-              serve. Lavoriamo nel food perché ci piace — e perché nessuno racconta una storia
-              meglio di un piatto fatto bene.
+              Passiamo le giornate tra idee, shooting, montaggi, grafiche, strategie e dati.
+              Dentro Fooody ci sono designer, videomaker, video editor, copywriter e business
+              analyst che lavorano insieme per dare forma ai progetti, non solo per “pubblicare
+              contenuti”. Ci piace far diventare riconoscibile ciò che prima passava inosservato.
             </p>
 
             <div className="studio-vals" data-reveal="" data-reveal-d="2">
               <div className="val">
                 <span className="numeral">01</span>
-                <span className="mono">Gusto prima di tutto</span>
+                <span className="mono">Pronti a sporcarci le mani</span>
               </div>
               <div className="val">
                 <span className="numeral">02</span>
-                <span className="mono">Dati senza fuffa</span>
+                <span className="mono">Numeri senza fuffa</span>
               </div>
               <div className="val">
                 <span className="numeral">03</span>
-                <span className="mono">Mani in pasta</span>
+                <span className="mono">Gusto, ma con criterio</span>
               </div>
             </div>
 
@@ -56,7 +57,7 @@ export default function StudioTeaser() {
               data-transition-word="Studio"
             >
               <span className="btn-label">
-                Conosci lo studio <span className="arrow">↗</span>
+                Scopri chi c’è dietro Fooody <span className="arrow">↗</span>
               </span>
             </a>
           </div>
