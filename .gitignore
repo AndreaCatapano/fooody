@@ -45,3 +45,6 @@ next-env.d.ts
 *.jpg
 *.jpeg
 prompt/
+
+# Claude Code local-only settings (machine-specific permissions)
+.claude/settings.local.json
