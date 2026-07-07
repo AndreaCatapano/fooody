@@ -10,7 +10,6 @@ const PAGE_BG: Record<string, string> = {
   branding: 'linear-gradient(110deg, #DD5049 0%, #c88a1a 48%, #6352F0 100%)',
   studio:   '#17130f',
   contatti: '#17130f',
-  lavori:   '#17130f',
 }
 
 /* solid colours that need dark text */

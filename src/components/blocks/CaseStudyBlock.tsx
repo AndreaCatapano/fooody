@@ -14,7 +14,6 @@ interface CaseStudyBlockProps {
   heading: ReactNode
   lead: ReactNode
   kpis: KpiItem[]
-  caseHref?: string
   dataBg?: string
   sectionStyle?: CSSProperties
 }
@@ -27,7 +26,6 @@ export default function CaseStudyBlock({
   heading,
   lead,
   kpis,
-  caseHref = '/lavori',
   dataBg = 'paper',
   sectionStyle,
 }: CaseStudyBlockProps) {
@@ -64,9 +62,6 @@ export default function CaseStudyBlock({
                 </div>
               ))}
             </div>
-            <a className="tlink" href={caseHref} style={{ marginTop: 28, display: 'inline-flex' }}>
-              leggi il caso completo <span className="arrow">↗</span>
-            </a>
           </div>
         </div>
       </div>

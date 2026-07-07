@@ -62,7 +62,6 @@ export default function WebPage() {
           { value: '+64%', label: 'conversione', color: 'var(--violet-deep)' },
           { value: '0.9s', label: 'caricamento' },
         ]}
-        caseHref="/lavori"
         dataBg="paper-2"
         sectionStyle={{ background: 'var(--paper-2)' }}
       />

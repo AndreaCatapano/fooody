@@ -85,12 +85,6 @@ export const PAGES = {
       'Informativa sul trattamento dei dati personali ai sensi del GDPR (Regolamento UE 2016/679) per il sito fooody.it.',
     canonical: '/privacy',
   },
-  lavori: {
-    title: 'I nostri lavori — Case study food & beverage | Fooody',
-    description:
-      'Casi studio di branding, social media e web design per ristoranti e brand food. I progetti Fooody: strategie reali, risultati misurabili.',
-    canonical: '/lavori',
-  },
 } as const
 
 // ─── Helper: costruisce metadata Next.js da una entry PAGES ─────────────────

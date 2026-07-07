@@ -67,7 +67,6 @@ export default function BrandingPage() {
           { value: '12', label: 'referenze', color: 'var(--gold-deep)' },
           { value: '+45%', label: 'a scaffale', color: 'var(--violet-deep)' },
         ]}
-        caseHref="/lavori"
         dataBg="paper-2"
         sectionStyle={{ background: 'var(--paper-2)' }}
       />

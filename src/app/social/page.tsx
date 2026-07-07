@@ -92,7 +92,6 @@ export default function SocialPage() {
           { value: '+28k', label: 'community', color: 'var(--tomato-deep)' },
           { value: '4', label: 'mesi' },
         ]}
-        caseHref="/lavori"
         dataBg="paper"
       />
 
