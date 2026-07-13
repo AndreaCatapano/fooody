@@ -1521,6 +1521,45 @@ body.sig-off #feed .feed-marquee { display: none; }
 /* Web caps idx override */
 .web-cap-idx { color: var(--violet-deep) !important; }
 
+/* metodo (Web) — accordion nativo details/summary, uno step alla volta a vista */
+.web-metodo-list { display: flex; flex-direction: column; }
+.web-metodo-step { border-top: 1px solid var(--line); padding-block: clamp(22px,3vw,32px); }
+.web-metodo-step:last-child { border-bottom: 1px solid var(--line); }
+.web-metodo-q {
+  display: flex; align-items: center; gap: clamp(16px,2.4vw,28px);
+  cursor: pointer; list-style: none;
+}
+.web-metodo-q::-webkit-details-marker { display: none; }
+.web-metodo-idx { flex: none; font-size: clamp(1.8rem,3vw,2.6rem); color: var(--violet-deep); }
+.web-metodo-title { flex: 1; color: var(--ink); }
+.web-metodo-icon {
+  flex: none; font-family: var(--mono); font-size: 1.2rem; color: var(--violet-deep);
+  transition: transform .35s var(--ease);
+}
+.web-metodo-step[open] .web-metodo-icon { transform: rotate(45deg); }
+.web-metodo-body {
+  display: flex; flex-direction: column; gap: 14px; max-width: 68ch;
+  margin-top: 18px; padding-left: calc(clamp(1.8rem,3vw,2.6rem) + clamp(16px,2.4vw,28px));
+}
+
+/* FAQ (Web) — accordion nativo details/summary */
+.web-faq-list { display: flex; flex-direction: column; margin-top: clamp(28px,4vw,48px); }
+.web-faq-item { border-top: 1px solid var(--line); padding-block: clamp(18px,2.4vw,26px); }
+.web-faq-item:last-child { border-bottom: 1px solid var(--line); }
+.web-faq-q {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  cursor: pointer; list-style: none;
+  font-family: var(--sans); font-weight: 600; font-size: var(--t-h3);
+  color: var(--ink);
+}
+.web-faq-q::-webkit-details-marker { display: none; }
+.web-faq-icon {
+  flex: none; font-family: var(--mono); font-size: 1.2rem; color: var(--violet-deep);
+  transition: transform .35s var(--ease);
+}
+.web-faq-item[open] .web-faq-icon { transform: rotate(45deg); }
+.web-faq-a { margin-top: 14px; max-width: 62ch; }
+
 @media (max-width: 980px) {
   .web-hero-foot { grid-template-columns: 1fr; }
   .web-cap-grid { grid-template-columns: 1fr 1fr; }
@@ -1528,6 +1567,7 @@ body.sig-off #feed .feed-marquee { display: none; }
 }
 @media (max-width: 640px) {
   .web-cap-grid { grid-template-columns: 1fr; }
+  .web-metodo-body { padding-left: 0; }
   .anteprima-stats .a-stat { width: calc(50% - clamp(4px,0.75vw,8px)); }
   .preview-stage { padding: clamp(10px,2vw,20px); height: 360px; }
   .vp-seg { gap: 0; }

@@ -56,9 +56,9 @@ export const PAGES = {
     canonical: '/social',
   },
   web: {
-    title: 'Web Design per ristoranti e food brand',
+    title: 'Realizzazione siti web e e-commerce su misura | Fooody',
     description:
-      'Siti veloci, belli e onesti per il food. UX, UI, sviluppo e SEO sotto lo stesso tetto — dove il bottone giusto è sempre a portata di pollice.',
+      'Progettiamo siti web, e-commerce e web app partendo da un audit, non da un template. WordPress o Next.js in base al progetto. SEO e GEO integrate, assistenza continua dopo il lancio.',
     canonical: '/web',
   },
   branding: {
@@ -151,6 +151,20 @@ export function buildOrganizationSchema() {
 }
 
 // ─── JSON-LD Service (usato nelle pagine servizio) ───────────────────────────
+
+// ─── JSON-LD FAQPage (usato nelle pagine con sezione FAQ) ────────────────────
+
+export function buildFAQSchema(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  }
+}
 
 export function buildServiceSchema(opts: {
   name: string
