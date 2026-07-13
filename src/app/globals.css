@@ -1503,44 +1503,77 @@ body.sig-off #feed .feed-marquee { display: none; }
 .a-stat:nth-child(even) .a-stat-num { color: var(--ink); }
 .a-stat-lbl { font-family: var(--mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
 
-.web-cap-grid {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(14px,2vw,24px);
-  margin-top: clamp(28px,4vw,48px);
+/* cosa costruiamo (Web) — showcase interattivo a tab */
+@keyframes webPanelIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+.web-cap-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: clamp(28px,4vw,44px);
 }
-.web-cap-card {
-  border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(20px,2.4vw,28px);
-  display: flex; flex-direction: column; gap: 14px; background: var(--paper);
-  transition: border-color .4s var(--ease), transform .4s var(--ease);
+.web-cap-tab {
+  font-family: var(--sans); font-weight: 600; font-size: .9rem; letter-spacing: -.01em;
+  padding: 10px 20px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink-3);
+  transition: color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
 }
-.web-cap-card:hover { border-color: var(--ink); transform: translateY(-4px); }
-.web-cap-tag {
+.web-cap-tab:hover { color: var(--ink); border-color: var(--ink-3); }
+.web-cap-tab.active { background: var(--violet); border-color: var(--violet); color: #fff; }
+.web-cap-panel {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(20px,3vw,44px);
+  align-items: stretch; margin-top: clamp(18px,2.4vw,28px);
+  animation: webPanelIn .4s var(--ease);
+}
+.web-cap-visual { aspect-ratio: auto; min-height: clamp(240px,32vw,340px); }
+.web-cap-info { display: flex; flex-direction: column; gap: 16px; padding: clamp(6px,1.2vw,16px) 0; }
+.web-cap-info-tag {
   color: var(--violet-deep); border: 1px solid var(--violet); border-radius: 999px;
-  padding: 4px 10px; align-self: flex-start;
+  padding: 4px 12px; align-self: flex-start;
+}
+.web-cap-info-desc { max-width: 44ch; }
+.web-cap-stack {
+  margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3);
 }
 
-/* Web caps idx override */
-.web-cap-idx { color: var(--violet-deep) !important; }
-
-/* metodo (Web) — accordion nativo details/summary, uno step alla volta a vista */
-.web-metodo-list { display: flex; flex-direction: column; }
-.web-metodo-step { border-top: 1px solid var(--line); padding-block: clamp(22px,3vw,32px); }
-.web-metodo-step:last-child { border-bottom: 1px solid var(--line); }
-.web-metodo-q {
-  display: flex; align-items: center; gap: clamp(16px,2.4vw,28px);
-  cursor: pointer; list-style: none;
+/* metodo (Web) — timeline interattiva, un nodo cliccabile alla volta */
+.web-tl { margin-top: clamp(28px,4vw,48px); }
+.web-tl-rail {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; position: relative;
 }
-.web-metodo-q::-webkit-details-marker { display: none; }
-.web-metodo-idx { flex: none; font-size: clamp(1.8rem,3vw,2.6rem); color: var(--violet-deep); }
-.web-metodo-title { flex: 1; color: var(--ink); }
-.web-metodo-icon {
-  flex: none; font-family: var(--mono); font-size: 1.2rem; color: var(--violet-deep);
-  transition: transform .35s var(--ease);
+.web-tl-rail::before {
+  content: ""; position: absolute; top: 22px; left: 22px; right: 22px; height: 1px;
+  background: var(--line);
 }
-.web-metodo-step[open] .web-metodo-icon { transform: rotate(45deg); }
-.web-metodo-body {
-  display: flex; flex-direction: column; gap: 14px; max-width: 68ch;
-  margin-top: 18px; padding-left: calc(clamp(1.8rem,3vw,2.6rem) + clamp(16px,2.4vw,28px));
+.web-tl-node {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+  background: none; border: none; padding: 0; cursor: pointer; text-align: left;
 }
+.web-tl-dot {
+  width: 44px; height: 44px; border-radius: 50%; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: .9rem; font-weight: 500;
+  background: var(--paper); color: var(--ink-3); border: 1px solid var(--line);
+  transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.web-tl-node:hover .web-tl-dot { border-color: var(--ink-3); }
+.web-tl-node.active .web-tl-dot { background: var(--violet); color: #fff; border-color: var(--violet); }
+.web-tl-lbl {
+  font-family: var(--sans); font-weight: 600; font-size: .92rem; color: var(--ink-3);
+  transition: color .3s var(--ease);
+}
+.web-tl-node:hover .web-tl-lbl,
+.web-tl-node.active .web-tl-lbl { color: var(--ink); }
+.web-tl-panel {
+  margin-top: clamp(24px,3vw,40px); padding: clamp(24px,3vw,40px);
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper);
+  display: grid; grid-template-columns: auto 1fr; gap: clamp(18px,3vw,44px); align-items: start;
+  animation: webPanelIn .4s var(--ease);
+}
+.web-tl-panel-idx {
+  font-family: var(--exp); font-weight: 600; font-size: clamp(3rem,7vw,6rem); line-height: .8;
+  color: var(--violet-deep);
+}
+.web-tl-panel-body { display: flex; flex-direction: column; gap: 14px; max-width: 64ch; }
+.web-tl-panel-title { color: var(--ink); margin-bottom: 4px; }
 
 /* FAQ (Web) — accordion nativo details/summary */
 .web-faq-list { display: flex; flex-direction: column; margin-top: clamp(28px,4vw,48px); }
@@ -1562,12 +1595,16 @@ body.sig-off #feed .feed-marquee { display: none; }
 
 @media (max-width: 980px) {
   .web-hero-foot { grid-template-columns: 1fr; }
-  .web-cap-grid { grid-template-columns: 1fr 1fr; }
-  body.cosa-griglia .web-page .caps { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 860px) {
+  .web-cap-panel { grid-template-columns: 1fr; }
+  .web-tl-rail { grid-template-columns: 1fr; gap: 0; }
+  .web-tl-rail::before { top: 22px; bottom: 22px; left: 22px; right: auto; width: 1px; height: auto; }
+  .web-tl-node { flex-direction: row; align-items: center; padding: 10px 0; }
+  .web-tl-panel { grid-template-columns: 1fr; }
+  .web-tl-panel-idx { font-size: clamp(2.4rem,9vw,3.2rem); }
 }
 @media (max-width: 640px) {
-  .web-cap-grid { grid-template-columns: 1fr; }
-  .web-metodo-body { padding-left: 0; }
   .anteprima-stats .a-stat { width: calc(50% - clamp(4px,0.75vw,8px)); }
   .preview-stage { padding: clamp(10px,2vw,20px); height: 360px; }
   .vp-seg { gap: 0; }

@@ -33,10 +33,10 @@ export default function WebPage() {
 
       <PageHero
         eyebrow={<div className="eyebrow no-slash web-accent-fg">— web design · ux · sviluppo</div>}
-        heading={<>Realizzazione siti web<br />su misura. Si parte da<br />un audit, non da un template.</>}
-        headingStyle={{ marginTop: 20, maxWidth: '20ch' }}
-        lead="Landing page, siti corporate, e-commerce e web app. Prima capiamo cosa serve al tuo business, poi scegliamo la tecnologia giusta per costruirlo. E dopo il lancio non spariamo: restiamo."
-        leadStyle={{ maxWidth: '52ch' }}
+        heading={<>Non un template.<br />Un sito su misura,<br />dall&apos;audit al lancio.</>}
+        headingStyle={{ marginTop: 20, maxWidth: '16ch' }}
+        lead="Landing, corporate, e-commerce o web app: prima l'audit, poi la tecnologia giusta. E dopo il lancio restiamo."
+        leadStyle={{ maxWidth: '46ch' }}
         footerClass="web-hero-foot"
         ctaClass="web-hero-cta"
         ctaPrimary={{
