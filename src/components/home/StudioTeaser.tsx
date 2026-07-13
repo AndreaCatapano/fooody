@@ -50,11 +50,11 @@ export default function StudioTeaser() {
 
             <a
               className="btn ghost"
-              href="/studio"
+              href="/chi-siamo"
               style={{ marginTop: 30 }}
               data-magnetic="0.3"
               data-transition=""
-              data-transition-word="Studio"
+              data-transition-word="Chi siamo"
             >
               <span className="btn-label">
                 Scopri chi c’è dietro Fooody <span className="arrow">↗</span>

@@ -73,11 +73,11 @@ export const PAGES = {
       'Raccontaci il tuo progetto food. Prima call gratuita: guardiamo i numeri di oggi e costruiamo insieme la strategia per far crescere il tuo brand.',
     canonical: '/contatti',
   },
-  studio: {
-    title: "Studio — Il team dell'agenzia food marketing | Fooody",
+  chiSiamo: {
+    title: "Chi siamo — Il team dell'agenzia food marketing | Fooody",
     description:
       'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Milano, Fooody affianca ristoranti e brand food con metodo e creatività.',
-    canonical: '/studio',
+    canonical: '/chi-siamo',
   },
   privacy: {
     title: 'Privacy Policy — Fooody',

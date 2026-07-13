@@ -25,7 +25,7 @@ interface PageHeroProps {
   // footer layout (web, branding, metodo)
   footerClass?: string
   ctaClass?: string
-  // 2-column layout (social, studio)
+  // 2-column layout (social, chi-siamo)
   innerClass?: string
   textClass?: string
   strip?: ReactNode

@@ -11,18 +11,18 @@ import StuTestimonianza from '@/components/studio/StuTestimonianza'
 import StuClienti from '@/components/studio/StuClienti'
 import StuLavora from '@/components/studio/StuLavora'
 
-export const metadata: Metadata = buildMetadata('studio')
+export const metadata: Metadata = buildMetadata('chiSiamo')
 
 const aboutPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
-  name: 'Chi siamo — Fooody Studio',
+  name: 'Chi siamo — Fooody',
   description:
     'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Milano.',
-  url: 'https://fooody.it/studio',
+  url: 'https://fooody.it/chi-siamo',
 }
 
-export default function StudioPage() {
+export default function ChiSiamoPage() {
   return (
     <>
       <script
@@ -32,7 +32,7 @@ export default function StudioPage() {
       <PageHero
         innerClass="stu-hero"
         textClass="stu-hero-text"
-        eyebrow={<div className="eyebrow no-slash stu-accent-fg">— chi siamo · studio</div>}
+        eyebrow={<div className="eyebrow no-slash stu-accent-fg">— chi siamo</div>}
         heading={<>Testa,<br />cuore<br />e <span className="stu-accent-fg">metodo.</span></>}
         headingStyle={{ marginTop: 20 }}
         lead="Strategist, designer, video-maker e copy che si prendono sul serio solo quando serve. Siamo nel food perché ci piace — e lavoriamo con qualsiasi brand abbia qualcosa di vero da dire."

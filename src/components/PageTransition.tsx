@@ -8,7 +8,7 @@ const PAGE_BG: Record<string, string> = {
   social:   '#DD5049',
   web:      '#6352F0',
   branding: 'linear-gradient(110deg, #DD5049 0%, #c88a1a 48%, #6352F0 100%)',
-  studio:   '#17130f',
+  'chi-siamo': '#17130f',
   contatti: '#17130f',
 }
 

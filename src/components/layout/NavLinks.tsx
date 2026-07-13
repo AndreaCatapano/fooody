@@ -6,7 +6,7 @@ const NAV_ITEMS = [
   { label: 'Social',   href: '/social',   word: 'Social' },
   { label: 'Web',      href: '/web',      word: 'Web' },
   { label: 'Branding', href: '/branding', word: 'Branding' },
-  { label: 'Studio',   href: '/studio',   word: 'Studio' },
+  { label: 'Chi siamo', href: '/chi-siamo', word: 'Chi siamo' },
 ]
 
 export function NavLinks() {

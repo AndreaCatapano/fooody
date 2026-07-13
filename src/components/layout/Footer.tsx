@@ -18,7 +18,7 @@ export default function Footer() {
             <a href="/social"   data-transition="" data-transition-word="Social">Social</a>
             <a href="/web"      data-transition="" data-transition-word="Web">Web Design</a>
             <a href="/branding" data-transition="" data-transition-word="Branding">Branding</a>
-            <a href="/studio"   data-transition="" data-transition-word="Studio">Studio</a>
+            <a href="/chi-siamo" data-transition="" data-transition-word="Chi siamo">Chi siamo</a>
           </div>
 
           <div className="foot-cols">
