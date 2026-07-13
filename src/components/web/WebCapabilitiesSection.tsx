@@ -61,7 +61,7 @@ export default function WebCapabilitiesSection() {
         <div className="web-cap-panel" key={card.tag}>
           {/* TODO: sostituire con screenshot/mockup reale della tipologia */}
           <figure
-            className="ph wide web-cap-visual"
+            className="ph web-cap-visual"
             data-placeholder={card.visual}
           >
             <span className="ph-label">{card.visual}</span>

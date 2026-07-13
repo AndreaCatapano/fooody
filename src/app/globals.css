@@ -1523,7 +1523,7 @@ body.sig-off #feed .feed-marquee { display: none; }
   align-items: stretch; margin-top: clamp(18px,2.4vw,28px);
   animation: webPanelIn .4s var(--ease);
 }
-.web-cap-visual { aspect-ratio: auto; min-height: clamp(240px,32vw,340px); }
+.web-cap-visual { min-height: clamp(240px,32vw,340px); }
 .web-cap-info { display: flex; flex-direction: column; gap: 16px; padding: clamp(6px,1.2vw,16px) 0; }
 .web-cap-info-tag {
   color: var(--violet-deep); border: 1px solid var(--violet); border-radius: 999px;
