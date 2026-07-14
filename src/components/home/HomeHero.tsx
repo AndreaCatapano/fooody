@@ -3,14 +3,8 @@ export default function HomeHero() {
     <header className="hero100 mode-particelle" id="hero" data-bg="paper">
       <div className="hero-stage">
 
-        <div
-          className="hero-vid ph on-ink video"
-          id="hero-vid"
-          data-placeholder="video · presentazione · 20&quot;"
-        >
-          <span className="ph-label" style={{ position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)' }}>
-            video · presentazione · 20&quot;
-          </span>
+        <div className="hero-vid" id="hero-vid">
+          {/* video di test autohostato — vedi CONTENUTI-DA-CLIENTE.md §7 per lo spec del video reale */}
           <video
             id="hero-vid-el"
             muted
