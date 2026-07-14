@@ -22,7 +22,7 @@
   const SENS    = 1.55;       /* forte */
 
   /* ---- element refs (re-bind on SPA nav via heroReinit) ---- */
-  let hero, stage, canvas, paper, vid, scrollCue, eyebrow, cap;
+  let hero, stage, canvas, paper, vid, vidEl, scrollCue, eyebrow, cap;
 
   function bindElements() {
     hero      = document.getElementById('hero');
@@ -31,6 +31,7 @@
     canvas    = hero.querySelector('.hero-particles, #hero-particles');
     paper     = hero.querySelector('.hero-paper, #hero-paper');
     vid       = document.getElementById('hero-vid') || hero.querySelector('.hero-vid');
+    vidEl     = document.getElementById('hero-vid-el') || (vid && vid.querySelector('video'));
     scrollCue = hero.querySelector('.hero-scroll');
     eyebrow   = hero.querySelector('.hero-eyebrow');
     cap       = hero.querySelector('.hero-cap');
@@ -195,14 +196,29 @@
     requestAnimationFrame(loop);
   }
 
-  /* ---- IntersectionObserver: pause loop when hero is off-screen ---- */
+  /* ---- IntersectionObserver: pause loop + video when hero is off-screen ---- */
   function attachObserver() {
     if (!hero) return;
     const io = new IntersectionObserver(entries => {
       looping = entries[0].isIntersecting;
-      if (looping) startLoop();
+      if (looping) {
+        startLoop();
+        if (vidEl && vidEl.currentSrc) vidEl.play().catch(() => {});
+      } else if (vidEl) {
+        vidEl.pause();
+      }
     }, { threshold: 0 });
     io.observe(hero);
+  }
+
+  /* ---- starts the hero background video muted+looping, right as the
+     entrance assembly settles — no play button, no click required.
+     Skipped for prefers-reduced-motion (decorative autoplay video). ---- */
+  const VIDEO_SRC = '/hero-video-test.mp4';
+  function startVideo() {
+    if (!vidEl || REDUCE || vidEl.currentSrc) return;
+    vidEl.src = VIDEO_SRC;
+    vidEl.play().catch(() => {});
   }
 
   /* ---- resize ---- */
@@ -212,11 +228,8 @@
     resizeTimer = setTimeout(buildParticles, 180);
   });
 
-  /* ---- fires once the entrance assembly settles, so listeners (e.g. the
-     hero background video) can defer their own start past the intro ---- */
-  function notifyAssembled() {
-    window.dispatchEvent(new CustomEvent('hero:assembled'));
-  }
+  /* video starts slightly before the assembly visually settles */
+  const VIDEO_LEAD_MS = 300;
 
   /* ---- heroReinit: re-bind DOM + restart assembly (called by motionReinit on nav) ---- */
   window.heroReinit = function () {
@@ -227,7 +240,7 @@
     buildParticles();
     startLoop();
     attachObserver();
-    REDUCE ? notifyAssembled() : setTimeout(notifyAssembled, ASSEMBLE_DUR);
+    REDUCE ? startVideo() : setTimeout(startVideo, ASSEMBLE_DUR - VIDEO_LEAD_MS);
   };
 
   /* ---- boot ---- */
@@ -238,5 +251,5 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildParticles);
   startLoop();
   attachObserver();
-  REDUCE ? notifyAssembled() : setTimeout(notifyAssembled, ASSEMBLE_DUR);
+  REDUCE ? startVideo() : setTimeout(startVideo, ASSEMBLE_DUR - VIDEO_LEAD_MS);
 })();

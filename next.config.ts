@@ -16,7 +16,7 @@ const cspDirectives = [
   "img-src 'self' data: blob: https://www.google-analytics.com",
   "font-src 'self'",
   "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.iubenda.com",
-  "frame-src https://*.iubenda.com https://player.vimeo.com",
+  "frame-src https://*.iubenda.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -48,6 +48,13 @@ const nextConfig: NextConfig = {
       {
         // script pubblici senza hash nel nome → cache 1 settimana + rinnovo silenzioso
         source: '/:file(motion|hero-cine|hero-effects)\\.js',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
+        ],
+      },
+      {
+        // video hero autohostato — stesso trattamento di cache degli script pubblici
+        source: '/hero-video-test.mp4',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
         ],

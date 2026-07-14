@@ -1,5 +1,3 @@
-import HeroVideoTest from './HeroVideoTest'
-
 export default function HomeHero() {
   return (
     <header className="hero100 mode-particelle" id="hero" data-bg="paper">
@@ -8,13 +6,20 @@ export default function HomeHero() {
         <div
           className="hero-vid ph on-ink video"
           id="hero-vid"
-          data-cursor="play"
-          data-placeholder="video · presentazione · 40&quot;"
+          data-placeholder="video · presentazione · 20&quot;"
         >
           <span className="ph-label" style={{ position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)' }}>
-            video · presentazione · 40&quot;
+            video · presentazione · 20&quot;
           </span>
-          <HeroVideoTest />
+          <video
+            id="hero-vid-el"
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden="true"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          />
         </div>
 
         <svg
