@@ -1,4 +1,8 @@
-@AGENTS.md
+# CLAUDE.md — fooody
+
+Principi generali, accessibilità, performance, SEO/GEO e design vivono in [../CLAUDE.md](../CLAUDE.md) e nelle skill trasversali di root (`../.claude/skills/`, in particolare `nextjs-landing` e `seo-geo`). Questo file contiene solo fatti e regole specifiche di questo progetto.
+
+Vedi anche `@AGENTS.md` in questa cartella: avviso tecnico attivo sulla versione Next.js in uso in questo progetto — leggerlo prima di scrivere codice, ha priorità sulle convenzioni Next.js "standard" quando in conflitto.
 
 ## SEO — regole di aggiornamento
 
@@ -54,3 +58,7 @@ export default function NuovaPagina() {
 Quando il cliente fornisce il file:
 1. Salvare come `public/og-image.png` (dimensioni: 1200×630px)
 2. Nessun'altra modifica necessaria — `SITE.ogImage` punta già a quel path
+
+## Content mapping
+
+Per l'handoff contenuti al cliente/copywriter, usare il workflow documentato in `../.claude/skills/nextjs-landing/references/content-mapping.md` (schema ricostruito da `content-map.csv` e `build-content-map.py` di questo stesso progetto). Il comando `.claude/commands/mappa-contenuti.md` originale di questo progetto referenziva un prompt esterno non più presente nel repo: usare la procedura in `content-mapping.md` come riferimento aggiornato.
