@@ -212,6 +212,12 @@
     resizeTimer = setTimeout(buildParticles, 180);
   });
 
+  /* ---- fires once the entrance assembly settles, so listeners (e.g. the
+     hero background video) can defer their own start past the intro ---- */
+  function notifyAssembled() {
+    window.dispatchEvent(new CustomEvent('hero:assembled'));
+  }
+
   /* ---- heroReinit: re-bind DOM + restart assembly (called by motionReinit on nav) ---- */
   window.heroReinit = function () {
     if (!bindElements()) return;
@@ -221,6 +227,7 @@
     buildParticles();
     startLoop();
     attachObserver();
+    REDUCE ? notifyAssembled() : setTimeout(notifyAssembled, ASSEMBLE_DUR);
   };
 
   /* ---- boot ---- */
@@ -231,4 +238,5 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildParticles);
   startLoop();
   attachObserver();
+  REDUCE ? notifyAssembled() : setTimeout(notifyAssembled, ASSEMBLE_DUR);
 })();

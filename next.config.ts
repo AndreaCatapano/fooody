@@ -16,7 +16,7 @@ const cspDirectives = [
   "img-src 'self' data: blob: https://www.google-analytics.com",
   "font-src 'self'",
   "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.iubenda.com",
-  "frame-src https://*.iubenda.com",
+  "frame-src https://*.iubenda.com https://player.vimeo.com",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
