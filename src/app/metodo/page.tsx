@@ -81,28 +81,28 @@ export default function MetodoPage() {
       <MetodoRisultati />
 
       <CaseStudyBlock
-        eyebrow="caso · ristorazione"
+        eyebrow="caso · food retail"
         eyebrowClass="met-eyebrow"
         coverLabel="case · cover / reel"
         coverPlaceholder="case study · cover + reel · 4:5"
-        heading={<>Trattoria Tale, da insegna a indirizzo.</>}
-        lead="Identità rifatta, social ripensato, menù ridisegnato e sito con prenotazioni. In sei mesi la trattoria è passata dal passaparola al tutto-esaurito del sabato."
+        heading={<>Tutto Senza Glutine, da profilo fermo a canale di vendita.</>}
+        lead="Rebranding, strategia social, content creation e TikTok Shop. Abbiamo costruito l'identità digitale del brand e portato traffico organico sui prodotti, trasformando i social da semplice vetrina a leva commerciale."
         kpis={[
-          { value: '+340%', label: 'engagement', color: 'var(--gold-deep)' },
-          { value: '+180%', label: 'prenotazioni', color: 'var(--gold-deep)' },
-          { value: '6', label: 'mesi' },
+          { value: '+120%', label: 'Follower', color: 'var(--gold-deep)' },
+          { value: '190K', label: 'Account raggiunti in organico', color: 'var(--gold-deep)' },
+          { value: '3', label: 'Mesi di lavoro' },
         ]}
         dataBg="paper-2"
         sectionStyle={{ background: 'var(--paper-2)' }}
       />
 
       <CtaSection
-        eyebrow="— pronti a ordinare?"
+        eyebrow="— E TU COSA ASPETTI?"
         eyebrowClass="met-accent-fg"
-        heading={<>Mettiamo il<br />Metodo a tavola.</>}
-        lead="Raccontaci il tuo locale. Prima call gratuita: capiamo se c'è feeling — e da dove partire."
+        heading={<>È il momento di applicare<br />il Metodo Fooody al tuo locale.</>}
+        lead="Raccontaci il tuo progetto. Con una prima call capiamo dove sei oggi, cosa ti sta frenando e da dove possiamo iniziare."
         ctaPrimary={{
-          label: <>Prenota una call <span className="arrow">↗</span></>,
+          label: <>Inizia da qui <span className="arrow">↗</span></>,
           href: '/contatti',
           className: 'btn accent lg',
           dataTransitionWord: 'Contatti',

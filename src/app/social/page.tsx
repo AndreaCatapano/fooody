@@ -28,9 +28,9 @@ export default function SocialPage() {
         innerClass="soc-hero"
         textClass="soc-hero-text"
         eyebrow={<div className="eyebrow no-slash soc-accent-fg">— social media · food &amp; oltre</div>}
-        heading={<>Contenuti che<br />fermano<br /><span className="soc-accent-fg">il pollice.</span></>}
+        heading={<>Prima ti vedono.<br />Poi decidono<br /><span className="soc-accent-fg">se sceglierti.</span></>}
         headingStyle={{ marginTop: 20 }}
-        lead="Strategia, contenuti e community che non fanno scrollare oltre. Dal reel che gira alla campagna che converte: pensiamo, giriamo, pubblichiamo, misuriamo."
+        lead="I social non servono solo a pubblicare. Servono a farti riconoscere, ricordare e scegliere. Costruiamo contenuti con una direzione precisa: trasformare l'attenzione in risultati misurabili."
         leadStyle={{ marginTop: 26, maxWidth: '46ch' }}
         ctaPrimary={{
           label: <>Prenota una call <span className="arrow">↗</span></>,
@@ -41,7 +41,7 @@ export default function SocialPage() {
         }}
         ctaSecondary={
           <a className="btn on-ink ghost lg" href="#feed">
-            <span className="btn-label">Guarda il feed <span className="arrow">↓</span></span>
+            <span className="btn-label">Vedi come <span className="arrow">↓</span></span>
           </a>
         }
         strip={
@@ -65,9 +65,10 @@ export default function SocialPage() {
       <SocCosaSection />
 
       <ProofStats
-        eyebrow="— numeri, non sensazioni"
+        eyebrow="— quello che pubblichiamo, lo misuriamo"
         eyebrowClass="soc-accent-fg"
-        heading="Quello che pubblichiamo, lo misuriamo."
+        heading="La creatività attira. I dati decidono."
+        lead="Ogni contenuto deve lasciare una traccia. Se funziona, lo spingiamo. Se non funziona, lo correggiamo."
         items={[
           { count: 340, prefix: '+', suffix: '%', label: 'engagement medio · 6 mesi' },
           { count: 5, suffix: 'M', label: 'views sul reel più virale' },
@@ -85,10 +86,10 @@ export default function SocialPage() {
         eyebrowClass="soc-eyebrow"
         coverLabel="case · reel + feed"
         coverPlaceholder="case · reel + feed · 4:5"
-        heading={<>Da feed spento a 5 milioni di views.</>}
-        lead="Strategia rifatta, format nuovi, un reel al giorno per 90 giorni. In quattro mesi il brand è passato dal post di cortesia alla coda fuori dal punto vendita."
+        heading={<>Da contenuti ignorati a 1 milione di views.</>}
+        lead="Abbiamo ricostruito strategia, format e contenuti. Un reel al giorno per 90 giorni, contenuti pensati per farsi riconoscere e un lavoro costante sui dati per capire cosa spingere, cosa correggere e cosa replicare."
         kpis={[
-          { value: '5M', label: 'views', color: 'var(--tomato-deep)' },
+          { value: '1M', label: 'views', color: 'var(--tomato-deep)' },
           { value: '+28k', label: 'community', color: 'var(--tomato-deep)' },
           { value: '4', label: 'mesi' },
         ]}
@@ -96,10 +97,10 @@ export default function SocialPage() {
       />
 
       <CtaSection
-        eyebrow="— pronti a postare?"
+        eyebrow="— sei pronto a farti notare?"
         eyebrowClass="soc-accent-fg"
-        heading={<>Facciamo girare<br />il tuo feed.</>}
-        lead="Raccontaci il brand. Prima call gratuita: guardiamo i numeri di oggi e da dove far partire la crescita."
+        heading={<>Il tuo feed può<br />fare molto più rumore.</>}
+        lead="Raccontaci il tuo brand. Nella prima call gratuita guardiamo da dove parti, cosa oggi non sta funzionando e quali contenuti possono iniziare a muovere la crescita."
         ctaPrimary={{
           label: <>Prenota una call <span className="arrow">↗</span></>,
           href: '/contatti',
@@ -109,7 +110,7 @@ export default function SocialPage() {
         }}
         ctaSecondary={
           <a className="btn on-ink ghost lg" href="mailto:ciao@fooody.it">
-            <span className="btn-label">ciao@fooody.it</span>
+            <span className="btn-label">Scrivici</span>
           </a>
         }
       />

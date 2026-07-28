@@ -8,15 +8,15 @@ export default function ContattiHero() {
       <div className="wrap">
         <div className="lav-hero">
           <div>
-            <div className="eyebrow no-slash" style={{ color: 'var(--tomato)' }}>— prima call gratuita</div>
+            <div className="eyebrow no-slash" style={{ color: 'var(--tomato)' }}>— incontriamoci gratuitamente</div>
             <h1 className="mega" data-kinetic="lines" style={{ marginTop: 18 }}>
-              Parliamo<br /><span style={{ color: 'var(--tomato)' }}>di cibo.</span>
+              Posso offrirti<br /><span style={{ color: 'var(--tomato)' }}>un caffè?</span>
             </h1>
           </div>
           <div className="lav-hero-desc" data-reveal="" data-reveal-d="1">
             <p className="lead text-pretty" style={{ color: 'rgba(247,244,238,.78)', maxWidth: '44ch' }}>
-              Raccontaci il brand, il progetto, l&apos;obiettivo. Il primo confronto è offerto dalla casa —
-              nessun impegno, solo una conversazione onesta su dove sei e dove puoi arrivare.
+              Raccontaci il tuo progetto. Il primo confronto lo offriamo noi: guardiamo dove sei,
+              dove vuoi arrivare e capiamo se possiamo aiutarti davvero.
             </p>
             <div className="lav-hero-pills" data-reveal="" data-reveal-d="2">
               <span className="lav-pill">↓ 30 minuti</span>

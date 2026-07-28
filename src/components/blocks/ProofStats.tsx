@@ -12,6 +12,7 @@ interface ProofStatsProps {
   eyebrow: ReactNode
   eyebrowClass?: string
   heading: ReactNode
+  lead?: ReactNode
   items: StatEntry[]
   gridClass: string
   itemClass: string
@@ -23,6 +24,7 @@ export default function ProofStats({
   eyebrow,
   eyebrowClass,
   heading,
+  lead,
   items,
   gridClass,
   itemClass,
@@ -42,6 +44,11 @@ export default function ProofStats({
         >
           {heading}
         </h2>
+        {lead && (
+          <p className="lead text-pretty" data-reveal="" style={{ marginTop: 18, maxWidth: '46ch', color: 'rgba(247,244,238,.7)' }}>
+            {lead}
+          </p>
+        )}
         <StatsGrid
           gridClass={gridClass}
           itemClass={itemClass}

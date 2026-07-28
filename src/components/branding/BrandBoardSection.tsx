@@ -13,10 +13,10 @@ export default function BrandBoardSection() {
       />
       <div className="wrap">
         <SectionHeader
-          eyebrow="il sistema, assemblato"
+          eyebrow="il sistema assemblato"
           eyebrowClass="brand-eyebrow"
-          heading={<>Un&apos;identità non è<br />un logo. È un sistema.</>}
-          lead={<>Nome, colori, tipografia, packaging: tutto parla la stessa lingua. Premi{' '}<em className="italic-serif">rigenera</em> per vederlo cambiare.</>}
+          heading={<>Il design è l&apos;ambasciatore<br />silenzioso del tuo marchio.</>}
+          lead={<>Una gelateria, un bistrot, un e-commerce o un prodotto da scaffale non possono parlare allo stesso modo. Nome, colori, tipografia e packaging devono adattarsi al contesto, ma restare sempre riconoscibili. Premi{' '}<em className="italic-serif">rigenera</em> per vederlo cambiare.</>}
         />
         <BrandBoard />
       </div>

@@ -30,15 +30,15 @@ export default function BrandingPage() {
             — branding · identità &amp; packaging
           </div>
         }
-        heading={<>Riconoscibili<br />a prima <span className="brand-spectrum-text">vista.</span></>}
+        heading={<>Vuoi essere<br />ricordato <span className="brand-spectrum-text">davvero?</span></>}
         headingStyle={{ marginTop: 20, maxWidth: '15ch' }}
         extra={<div className="brand-spectrum-bar" data-reveal="" aria-hidden="true" />}
-        lead="Strategia, naming, identità visiva e packaging. Diamo al tuo brand una faccia, una voce e un carattere — di quelli che non si scordano facilmente."
+        lead="Costruiamo identità che non si fermano al logo. Strategia, naming, identità visiva e packaging lavorano insieme per dare al tuo brand una faccia, una voce e un motivo per essere ricordato."
         leadStyle={{ maxWidth: '48ch' }}
         footerClass="brand-hero-foot"
         ctaClass="brand-hero-cta"
         ctaPrimary={{
-          label: <>Prenota una call <span className="arrow">↗</span></>,
+          label: <>Incontriamoci <span className="arrow">↗</span></>,
           href: '/contatti',
           className: 'btn brand-btn lg',
           dataTransitionWord: 'Contatti',
@@ -60,8 +60,8 @@ export default function BrandingPage() {
         eyebrowClass="brand-eyebrow"
         coverLabel="case · identità + packaging"
         coverPlaceholder="case · identità + packaging · 4:5"
-        heading={<>Dal brief al lancio in otto settimane.</>}
-        lead="Rebranding completo: nuovo nome, identità da zero, sistema di packaging per tutta la linea. Otto settimane dal primo schizzo al prodotto sullo scaffale."
+        heading={<>Dal brief al lancio.</>}
+        lead="Rebranding completo: abbiamo dato ordine all'identità, forza al packaging e coerenza a tutta la linea. In otto settimane il brand è passato dal concept al prodotto pronto per lo scaffale."
         kpis={[
           { value: '8', label: 'settimane', color: 'var(--tomato-deep)' },
           { value: '12', label: 'referenze', color: 'var(--gold-deep)' },
@@ -72,7 +72,7 @@ export default function BrandingPage() {
       />
 
       <CtaSection
-        eyebrow="— pronti a farvi riconoscere?"
+        eyebrow="— sei pronto a restare impresso nella mente?"
         eyebrowStyle={{ color: 'rgba(247,244,238,.6)' }}
         heading={<>Diamo una faccia<br />al tuo <span className="brand-spectrum-text">brand.</span></>}
         lead="Raccontaci chi sei. Prima call gratuita: capiamo cosa rende il tuo marchio diverso dagli altri."
@@ -85,7 +85,7 @@ export default function BrandingPage() {
         }}
         ctaSecondary={
           <a className="btn on-ink ghost lg" href="mailto:ciao@fooody.it">
-            <span className="btn-label">ciao@fooody.it</span>
+            <span className="btn-label">Scrivici</span>
           </a>
         }
       />

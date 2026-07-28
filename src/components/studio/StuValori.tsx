@@ -7,30 +7,29 @@ export default function StuValori() {
         <SectionHeader
           eyebrow="come lavoriamo"
           eyebrowClass="stu-eyebrow"
-          heading={<>Tre principi.<br />Nessuna scusa.</>}
-          lead="Non sono valori appesi al muro. Sono il modo in cui prendiamo le decisioni ogni giorno."
+          heading={<>Tre principi<br />su cui ci basiamo.</>}
+          lead="Sono il modo in cui scegliamo cosa fare, cosa evitare e cosa migliorare ogni giorno."
         />
 
         <div className="stu-vals-grid">
           <div className="stu-val" data-reveal="">
             <div className="stu-val-n">01</div>
             <div className="stu-val-main">
-              <h3 className="h3">Gusto prima di tutto</h3>
+              <h3 className="h3">Buon gusto prima di tutto</h3>
               <p className="body text-pretty" style={{ marginTop: 14, maxWidth: '44ch', color: 'var(--ink-2)' }}>
-                Ogni scelta estetica è una scelta strategica. Un&apos;immagine brutta vende meno, un copy
-                piatto non convince, un sito lento perde clienti. La qualità non è un lusso — è la
-                baseline da cui partiamo.
+                Ogni scelta estetica è una scelta strategica. Una foto brutta vende meno. Un copy
+                debole non convince. Un sito lento fa scappare clienti. La qualità non è un lusso,
+                è la base da cui partiamo.
               </p>
             </div>
           </div>
           <div className="stu-val" data-reveal="" data-reveal-d="1">
             <div className="stu-val-n" style={{ color: 'var(--gold-deep)' }}>02</div>
             <div className="stu-val-main">
-              <h3 className="h3">Dati senza fuffa</h3>
+              <h3 className="h3">Numeri veri</h3>
               <p className="body text-pretty" style={{ marginTop: 14, maxWidth: '44ch', color: 'var(--ink-2)' }}>
-                Crediamo nei numeri e nel buon senso. Misuriamo tutto quello che conta, ignoriamo
-                le metriche di vanità e riportiamo solo quello che serve per decidere bene. Report
-                onesti, anche quando fanno un po&apos; male.
+                Misuriamo quello che conta davvero, leggiamo i dati con buon senso. I report devono
+                essere chiari, utili e onesti, anche quando raccontano qualcosa che non funziona.
               </p>
             </div>
           </div>
@@ -39,9 +38,8 @@ export default function StuValori() {
             <div className="stu-val-main">
               <h3 className="h3">Mani in pasta</h3>
               <p className="body text-pretty" style={{ marginTop: 14, maxWidth: '44ch', color: 'var(--ink-2)' }}>
-                Siamo un team operativo, non consulenti. Scriviamo i copy, giriamo i video,
-                costruiamo i siti. Chi presenta il lavoro è chi lo fa. Zero passaggi di consegne
-                telefono, massimo controllo su quello che esce.
+                Giriamo video, montiamo, progettiamo e sviluppiamo. Chi presenta il lavoro sa cosa
+                c&apos;è dentro, perché lo ha seguito davvero.
               </p>
             </div>
           </div>

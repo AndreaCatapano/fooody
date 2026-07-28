@@ -7,7 +7,7 @@ export default function ContattiComeFunziona() {
         <div className="eyebrow no-slash" style={{ color: 'var(--tomato)' }} data-reveal="">— come funziona</div>
         <h2 className="h1 text-balance" data-kinetic="words"
           style={{ marginTop: 16, maxWidth: '16ch', color: 'var(--paper)' }}>
-          Tre passi. Nessun impegno.
+          Tre step. Nessun impegno.
         </h2>
         <StepsTimeline
           wrapperClass="lav-steps"
@@ -16,9 +16,9 @@ export default function ContattiComeFunziona() {
           bodyClass="lav-step-body"
           bodyMaxWidth="36ch"
           items={[
-            { title: 'Ci scrivi', body: 'Due righe sul tuo brand e su cosa vorresti migliorare. Puoi usare il form qui sotto o scrivere direttamente a ciao@fooody.it — come preferisci.' },
-            { title: 'Prima call · gratuita', body: 'Fissiamo 30 minuti per sentirci. Guardiamo i numeri di oggi, capiamo dove sei e dove vuoi arrivare. Nessun obbligo, nessun preventivo automatico.', numberColor: 'var(--gold)' },
-            { title: 'Ti facciamo una proposta', body: "Se c'è la sintonia giusta, prepariamo una proposta su misura: obiettivi, servizi, tempistiche e budget. Chiara, non quella standard.", numberColor: 'var(--violet)' },
+            { title: 'Ci scrivi', body: 'Due righe sulla tua attività e cosa vorresti migliorare. Puoi usare il form qui sotto o scrivere direttamente a ciao@fooody.it — come preferisci.' },
+            { title: 'Ci incontriamo', body: 'Ci prendiamo questo famoso caffè: 30 minuti, senza impegno, per capire dove sei e dove vuoi arrivare.', numberColor: 'var(--gold)' },
+            { title: 'Ti facciamo una proposta', body: 'Prepariamo un piano strategico su misura: obiettivi, servizi, tempistiche e budget. Chiaro, non standard.', numberColor: 'var(--violet)' },
           ]}
         />
       </div>

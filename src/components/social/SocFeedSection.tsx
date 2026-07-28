@@ -8,14 +8,15 @@ export default function SocFeedSection() {
           <div className="soc-feed-lede">
             <div className="eyebrow no-slash">
               <span className="soc-live-dot" aria-hidden="true" />
-              <span className="soc-accent-fg">il feed, vivo</span>
+              <span className="soc-accent-fg">il feed che fa scegliere</span>
             </div>
             <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16, color: 'var(--paper)' }}>
-              Non un portfolio.<br />Un feed che<br />respira.
+              Non semplici video<br />da mostrare.<br />Risultati da guardare.
             </h2>
             <p className="small" data-reveal="" style={{ color: 'rgba(247,244,238,.6)', maxWidth: '40ch', marginTop: 20 }}>
-              Passa sopra per fermarlo. Ogni tessera è un format che produciamo davvero —
-              reel, caroselli, UGC, copertine. Due righe, due ritmi.
+              Passa sopra per fermare il video. Questi non sono mockup: sono format reali
+              prodotti per clienti reali — reel, caroselli, UGC, copertine — pensati per farsi
+              notare, ricordare e convertire.
             </p>
           </div>
           <div className="soc-live soc-live-feed" data-reveal="" data-reveal-d="2">

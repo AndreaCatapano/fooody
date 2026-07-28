@@ -9,13 +9,13 @@ export default function StuManifesto() {
         </h2>
         <div className="stu-manifesto-body" data-reveal="" data-reveal-d="2">
           <p className="lead text-pretty" style={{ maxWidth: '54ch', color: 'rgba(247,244,238,.82)' }}>
-            Crediamo che dietro ogni piatto, ogni brand e ogni scroll ci sia una persona affamata di
-            qualcosa di buono. Il nostro lavoro è apparecchiare la tavola giusta — con metodo, gusto
-            e un pizzico di sfacciatosta.
+            Un piatto buono non basta, se nessuno lo desidera prima. Un brand forte non nasce
+            perché pubblica tanto, ma perché riesce a entrare nella testa delle persone.
           </p>
           <p className="lead text-pretty" style={{ maxWidth: '54ch', color: 'rgba(247,244,238,.82)', marginTop: 22 }}>
-            Non facciamo contenuti per riempire un calendario. Facciamo contenuti per riempire una
-            sala. C&apos;è differenza — e si vede nei numeri.
+            Noi lavoriamo lì: tra attenzione e desiderio, tra contenuto e risultato, tra quello che
+            sei e quello che il cliente percepisce. Non riempiamo calendari. Costruiamo motivi per
+            prenotare, ordinare, tornare e parlare di te.
           </p>
         </div>
       </div>

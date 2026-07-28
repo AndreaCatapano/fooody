@@ -76,7 +76,7 @@ export const PAGES = {
   chiSiamo: {
     title: "Chi siamo — Il team dell'agenzia food marketing | Fooody",
     description:
-      'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Milano, Fooody affianca ristoranti e brand food con metodo e creatività.',
+      'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Portici (Napoli), Fooody affianca ristoranti e brand food con metodo e creatività.',
     canonical: '/chi-siamo',
   },
   privacy: {

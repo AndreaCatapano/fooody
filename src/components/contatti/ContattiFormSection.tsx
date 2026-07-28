@@ -31,7 +31,7 @@ export default function ContattiFormSection() {
             <div className="lav-info-block">
               <span className="mono-xs lav-info-label">// dove siamo</span>
               <p className="body" style={{ color: 'var(--ink-2)', marginTop: 6 }}>
-                Milano<br />
+                Corso Garibaldi, 149, 80055 Portici (NA)<br />
                 <span style={{ color: 'var(--ink-3)' }}>Lavoriamo su tutto il territorio italiano.</span>
               </p>
             </div>

@@ -5,14 +5,15 @@ export default function StuTestimonianza() {
         <blockquote className="stu-quote" data-reveal="">
           <span className="stu-quote-mark" aria-hidden="true">&ldquo;</span>
           <p className="stu-quote-text">
-            Avevamo un buon prodotto, ma sui social eravamo invisibili. In quattro mesi siamo
-            diventati il brand di riferimento nella nostra categoria.
+            I ragazzi mi hanno fatto letteralmente volare sui social! Inizialmente ero scettico,
+            poi con loro ho capito la vera opportunità di guadagno che ti danno i social se
+            gestiti bene come fanno loro.
           </p>
           <footer className="stu-quote-foot">
             <div className="stu-quote-meta">
-              <span className="h3 stu-quote-name">Nome Cliente</span>
+              <span className="h3 stu-quote-name">Alessio Ippolis</span>
               <span className="mono-xs" style={{ color: 'var(--ink-3)', marginTop: 4 }}>
-                Marketing Director · Brand · Milano
+                Paninoteca Il Mastone
               </span>
             </div>
             <div className="stu-quote-kpis">

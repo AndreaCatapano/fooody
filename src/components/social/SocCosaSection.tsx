@@ -2,11 +2,11 @@
 import { useEffect, useRef, useState } from 'react'
 
 const PUNTI = [
-  { n: 1, pa: 'var(--tomato)',      title: 'Strategia & posizionamento', sub: 'prima il perché, poi il post', desc: 'Tono di voce, pilastri di contenuto, calendario. Decidiamo cosa dire e a chi, prima di accendere la fotocamera.', chips: ['Audit', 'Tone of voice', 'Piano editoriale'], like: '12.4k' },
-  { n: 2, pa: 'var(--tomato-deep)', title: 'Content & format', sub: 'il contenuto che ferma il pollice', desc: 'Food photography, grafiche, copertine, copy. Format riconoscibili che diventano la firma del brand sul feed.', chips: ['Foto', 'Grafica', 'Copywriting'], like: '8.9k' },
-  { n: 3, pa: 'var(--tomato)',      title: 'Reels & UGC', sub: 'il motore della crescita organica', desc: 'Riprese, montaggio, trend. Più creator e clienti che parlano di te: il contenuto che gira senza spingere a pagamento.', chips: ['Video', 'Montaggio', 'Creator'], like: '1.3M' },
-  { n: 4, pa: 'var(--tomato-deep)', title: 'ADV & performance', sub: 'quando serve spingere, spingiamo bene', desc: 'Campagne Meta e TikTok con budget che rende. Targeting e creatività testate, ottimizzazione settimanale sul costo per risultato.', chips: ['Meta ADV', 'TikTok ADS', 'A/B test'], like: '880k' },
-  { n: 5, pa: 'var(--tomato)',      title: 'Community & report', sub: 'le persone, non i follower', desc: 'Gestione DM e commenti, moderazione, report mensile con i numeri che contano davvero.', chips: ['Community', 'Moderazione', 'Report'], like: '4.1k' },
+  { n: 1, pa: 'var(--tomato)',      title: 'Strategia & posizionamento', sub: 'prima il perché, poi il post', desc: 'Prima capiamo cosa devi dire. Poi decidiamo come farlo vedere. Tono di voce, pilastri e piano editoriale costruiti sulla tua identità.', chips: ['Audit', 'Tone of voice', 'Piano editoriale'], like: '12.4k' },
+  { n: 2, pa: 'var(--tomato-deep)', title: 'Content & format', sub: 'il contenuto che ferma il pollice', desc: 'Non basta essere belli nel feed. Copertine, grafiche, shooting e copy devono dare al brand una forma riconoscibile e farlo notare prima ancora che venga capito.', chips: ['Foto', 'Grafica', 'Copywriting'], like: '8.9k' },
+  { n: 3, pa: 'var(--tomato)',      title: 'Reels & UGC', sub: 'il motore della crescita organica', desc: 'Le persone non vogliono guardare pubblicità. Vogliono riconoscersi in qualcosa. Riprese, montaggi, trend e format pensati per far girare il contenuto.', chips: ['Video', 'Montaggio', 'Creator'], like: '1.3M' },
+  { n: 4, pa: 'var(--tomato-deep)', title: 'ADV & performance', sub: 'quando serve spingere, spingiamo bene', desc: 'Quando serve spingere, non basta mettere budget. Campagne Meta e TikTok per portare il contenuto davanti alle persone giuste.', chips: ['Meta ADV', 'TikTok ADS', 'A/B test'], like: '880k' },
+  { n: 5, pa: 'var(--tomato)',      title: 'Community & report', sub: 'le persone, non i follower', desc: 'Non follower da contare, ma persone. DM, commenti, moderazione e report per capire cosa funziona davvero.', chips: ['Community', 'Moderazione', 'Report'], like: '4.1k' },
 ]
 
 export default function SocCosaSection() {

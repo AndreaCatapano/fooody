@@ -18,7 +18,7 @@ const aboutPageSchema = {
   '@type': 'AboutPage',
   name: 'Chi siamo — Fooody',
   description:
-    'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Milano.',
+    'Strategist, designer, video-maker e copy specializzati nel settore food & beverage. Fondato nel 2020 a Portici (Napoli).',
   url: 'https://fooody.it/chi-siamo',
 }
 
@@ -33,12 +33,12 @@ export default function ChiSiamoPage() {
         innerClass="stu-hero"
         textClass="stu-hero-text"
         eyebrow={<div className="eyebrow no-slash stu-accent-fg">— chi siamo</div>}
-        heading={<>Testa,<br />cuore<br />e <span className="stu-accent-fg">metodo.</span></>}
+        heading={<>Le teste dietro<br />i tuoi <span className="stu-accent-fg">contenuti.</span></>}
         headingStyle={{ marginTop: 20 }}
-        lead="Strategist, designer, video-maker e copy che si prendono sul serio solo quando serve. Siamo nel food perché ci piace — e lavoriamo con qualsiasi brand abbia qualcosa di vero da dire."
+        lead="Fooody è un insieme di teste diverse che lavorano nella stessa direzione. Ognuno con la sua skill, ognuno fondamentale nel far girare la macchina. Ci piace costruire progetti veri, con identità, contenuti e numeri che abbiano senso."
         leadStyle={{ marginTop: 26, maxWidth: '46ch' }}
         ctaPrimary={{
-          label: <>Lavoriamo insieme <span className="arrow">↗</span></>,
+          label: <>Collabora con noi <span className="arrow">↗</span></>,
           href: '/contatti',
           className: 'btn stu-btn lg',
           dataTransitionWord: 'Parliamo.',
@@ -56,7 +56,7 @@ export default function ChiSiamoPage() {
         }
         belowWrap={
           <div className="stu-hero-foot" data-reveal="" data-reveal-d="2">
-            <span className="mono-xs">fondato nel 2020 · Milano</span>
+            <span className="mono-xs">fondato nel 2020 · Portici (NA)</span>
             <span className="mono-xs stu-accent-fg">↓ la nostra storia</span>
           </div>
         }
@@ -74,11 +74,11 @@ export default function ChiSiamoPage() {
       <CtaSection
         eyebrow="— prima call"
         eyebrowClass="stu-accent-fg"
-        heading={<>30 minuti.<br />Gratis.</>}
-        lead="Ti ascoltiamo, analizziamo la situazione attuale e ti diciamo se — e come — possiamo aiutarti. Nessun obbligo, nessuna vendita: solo una valutazione onesta."
+        heading={<>30 minuti per capire<br />se ha senso lavorare insieme.</>}
+        lead="Ti ascoltiamo, guardiamo dove sei oggi e capiamo se possiamo aiutarti realmente. Nessun obbligo, nessuna vendita forzata: solo una valutazione chiara su cosa funziona."
         leadStyle={{ maxWidth: '44ch' }}
         ctaPrimary={{
-          label: <>Prenota la call <span className="arrow">↗</span></>,
+          label: <>Incontriamoci <span className="arrow">↗</span></>,
           href: '/contatti',
           className: 'btn stu-btn lg',
           dataTransitionWord: 'Parliamo.',
@@ -91,9 +91,9 @@ export default function ChiSiamoPage() {
         }
         extra={
           <div className="stu-call-punti" data-reveal="" data-reveal-d="1">
-            <span>✓ Audit gratuito del tuo canale</span>
-            <span>✓ Stima budget e tempi</span>
-            <span>✓ Piano d&apos;azione su misura</span>
+            <span>✓ Audit del tuo canale</span>
+            <span>✓ Preventivo</span>
+            <span>✓ Strategia su misura</span>
           </div>
         }
       />

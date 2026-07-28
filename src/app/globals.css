@@ -1891,10 +1891,16 @@ body.sig-off #board .board { display: none; }
 .stu-val-n { font-family: var(--sans); font-weight: 700; font-size: clamp(2.8rem,5.5vw,4.2rem);
   color: var(--tomato); line-height: 1; margin-bottom: 16px; }
 
-.stu-team { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(16px,2.5vw,32px);
+.stu-team { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(16px,2.5vw,32px);
   margin-top: clamp(28px,4vw,48px); }
 .stu-member-ph { aspect-ratio: 3/4; margin-bottom: 20px; }
 .stu-member-info h3 { margin-bottom: 6px; }
+
+.stu-team-more { display: grid; grid-template-columns: repeat(2,1fr); gap: clamp(16px,2.5vw,32px);
+  margin-top: clamp(20px,3vw,32px); padding-top: clamp(20px,3vw,32px); border-top: 1px solid var(--line); }
+.stu-team-mini { display: flex; align-items: center; gap: 16px; }
+.stu-team-mini-ph { aspect-ratio: 1/1; width: clamp(64px,8vw,88px); flex-shrink: 0; margin-bottom: 0; }
+.stu-team-mini .stu-member-info h3 { font-size: 1rem; margin-bottom: 2px; }
 
 .stu-processo { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(16px,3vw,40px);
   margin-top: clamp(32px,5vw,56px); border-top: 1px solid var(--line-ink);
@@ -1937,6 +1943,7 @@ body.sig-off #board .board { display: none; }
 }
 @media (max-width: 640px) {
   .stu-team { grid-template-columns: 1fr; }
+  .stu-team-more { grid-template-columns: 1fr; }
   .stu-processo { grid-template-columns: 1fr; }
   .stu-clients { grid-template-columns: repeat(2,1fr); }
   .stu-nums { grid-template-columns: 1fr 1fr; }
