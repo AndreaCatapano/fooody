@@ -1045,9 +1045,9 @@ body.sig-off #panoramica .pillars-map { display: none; }
 .btn.soc-btn::after { background: var(--ink); }
 .btn.soc-btn:hover { border-color: var(--ink); color: #fff; }
 
-/* hero */
-.soc-hero { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: clamp(28px,5vw,72px); align-items: end; }
-.soc-hero-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+/* hero — testo a piena larghezza, strip reel sotto (non più a fianco: colonna testo troppo stretta per il titolo mega) */
+.soc-hero { display: grid; grid-template-columns: 1fr; gap: clamp(28px,4vw,44px); }
+.soc-hero-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; max-width: 480px; }
 .reel-mini { aspect-ratio: 9/16; border-radius: 12px; position: relative; display: flex; align-items: flex-end; padding: 12px; }
 .reel-mini-tag {
   font-family: var(--mono); font-size: .56rem; text-transform: uppercase; letter-spacing: .08em;
@@ -1325,7 +1325,6 @@ body.cosa-righe .cap-idx { font-size: clamp(2.6rem,6vw,5rem); opacity: .9; }
 body.cosa-righe .cap-go { display: none; }
 
 @media (max-width: 980px) {
-  .soc-hero { grid-template-columns: 1fr; }
   .soc-hero-strip { max-width: 420px; }
   .soc-live, .soc-proof { grid-template-columns: 1fr 1fr; }
   body.cosa-griglia .caps { grid-template-columns: 1fr 1fr; }
@@ -1864,8 +1863,9 @@ body.sig-off #board .board { display: none; }
 .btn.stu-btn::after { background: var(--ink); }
 .btn.stu-btn:hover { border-color: var(--ink); color: #fff; }
 
-.stu-hero { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: clamp(32px,5vw,80px); align-items: end; }
-.stu-hero-photo { aspect-ratio: 3/4; }
+/* testo a piena larghezza, foto sotto come banner largo (non più a fianco: colonna testo troppo stretta per il titolo mega) */
+.stu-hero { display: grid; grid-template-columns: 1fr; gap: clamp(28px,4vw,44px); }
+.stu-hero-photo { aspect-ratio: 21/9; max-width: 900px; }
 .stu-hero-foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   margin-top: clamp(36px,5vw,64px); padding-top: 18px; border-top: 1px solid var(--line-ink); }
 
@@ -1932,8 +1932,6 @@ body.sig-off #board .board { display: none; }
 .stu-call-punti span { font-family: var(--mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: rgba(247,244,238,.55); }
 
 @media (max-width: 980px) {
-  .stu-hero { grid-template-columns: 1fr; }
-  .stu-hero-photo { max-width: 480px; }
   .stu-nums { grid-template-columns: 1fr 1fr; }
   .stu-manifesto-body { grid-template-columns: 1fr; }
   .stu-vals-grid { grid-template-columns: 1fr; gap: clamp(28px,4vw,40px); }

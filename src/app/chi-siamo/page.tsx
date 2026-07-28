@@ -34,7 +34,7 @@ export default function ChiSiamoPage() {
         textClass="stu-hero-text"
         eyebrow={<div className="eyebrow no-slash stu-accent-fg">— chi siamo</div>}
         heading={<>Le teste dietro<br />i tuoi <span className="stu-accent-fg">contenuti.</span></>}
-        headingStyle={{ marginTop: 20, fontSize: 'clamp(1rem, 1rem + 2.72vw, 3.4rem)' }}
+        headingStyle={{ marginTop: 20 }}
         lead="Fooody è un insieme di teste diverse che lavorano nella stessa direzione. Ognuno con la sua skill, ognuno fondamentale nel far girare la macchina. Ci piace costruire progetti veri, con identità, contenuti e numeri che abbiano senso."
         leadStyle={{ marginTop: 26, maxWidth: '46ch' }}
         ctaPrimary={{
@@ -50,7 +50,7 @@ export default function ChiSiamoPage() {
           </a>
         }
         strip={
-          <figure className="ph tall stu-hero-photo on-ink" data-reveal="" data-tilt="3">
+          <figure className="ph stu-hero-photo on-ink" data-reveal="" data-tilt="3">
             <span className="ph-label">foto · studio / team</span>
           </figure>
         }
