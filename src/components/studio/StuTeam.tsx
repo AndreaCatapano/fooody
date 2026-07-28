@@ -55,24 +55,41 @@ export default function StuTeam() {
           </div>
         </div>
 
+        <div className="stu-team-collab-label mono-xs" data-reveal="" data-reveal-d="3">i collaboratori</div>
         <div className="stu-team-more">
           <div className="stu-team-mini" data-reveal="" data-reveal-d="3">
             <figure className="ph stu-team-mini-ph on-ink"><span className="ph-label">ritratto</span></figure>
             <div className="stu-member-info">
               <h3 className="h3">Giulia Scognamiglio</h3>
-              <span className="mono-xs stu-accent-fg">Social Media Manager</span>
-              <p className="small" style={{ marginTop: 6, color: 'var(--ink-2)' }}>
-                Laureata in Culture Digitali della Comunicazione, dalla passione per il graphic
-                design al mondo dei social media: creatività, ricerca e attenzione ai dettagli
-                nella cura della comunicazione digitale dei brand.
-              </p>
+              <span className="mono-xs stu-accent-fg">Art Director</span>
+            </div>
+          </div>
+          <div className="stu-team-mini" data-reveal="" data-reveal-d="3">
+            <figure className="ph stu-team-mini-ph on-ink"><span className="ph-label">ritratto</span></figure>
+            <div className="stu-member-info">
+              <h3 className="h3">Guia Di Carluccio</h3>
+              <span className="mono-xs" style={{ color: 'var(--gold-deep)' }}>Social Media Manager</span>
             </div>
           </div>
           <div className="stu-team-mini" data-reveal="" data-reveal-d="4">
             <figure className="ph stu-team-mini-ph on-ink"><span className="ph-label">ritratto</span></figure>
             <div className="stu-member-info">
-              <h3 className="h3">Guia Di Carluccio</h3>
-              <span className="mono-xs" style={{ color: 'var(--gold-deep)' }}>Art Director</span>
+              <h3 className="h3">Nome Cognome</h3>
+              <span className="mono-xs" style={{ color: 'var(--violet-deep)' }}>Collaboratore</span>
+            </div>
+          </div>
+          <div className="stu-team-mini" data-reveal="" data-reveal-d="4">
+            <figure className="ph stu-team-mini-ph on-ink"><span className="ph-label">ritratto</span></figure>
+            <div className="stu-member-info">
+              <h3 className="h3">Nome Cognome</h3>
+              <span className="mono-xs stu-accent-fg">Collaboratore</span>
+            </div>
+          </div>
+          <div className="stu-team-mini" data-reveal="" data-reveal-d="4">
+            <figure className="ph stu-team-mini-ph on-ink"><span className="ph-label">ritratto</span></figure>
+            <div className="stu-member-info">
+              <h3 className="h3">Nome Cognome</h3>
+              <span className="mono-xs" style={{ color: 'var(--gold-deep)' }}>Collaboratore</span>
             </div>
           </div>
         </div>
