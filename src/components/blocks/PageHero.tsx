@@ -75,16 +75,8 @@ export default function PageHero({
       </div>
     )
 
-    const text = (
+    const textBody = (
       <>
-        {eyebrow}
-        <h1
-          className="mega"
-          style={headingStyle}
-          {...(headingKinetic ? { 'data-kinetic': 'lines' } : { 'data-reveal': '' })}
-        >
-          {heading}
-        </h1>
         <p className="lead text-pretty" data-reveal="" data-reveal-d="2" style={leadStyle}>{lead}</p>
         {ctaWrap}
       </>
@@ -97,8 +89,16 @@ export default function PageHero({
         style={{ paddingTop: 'clamp(130px,18vh,220px)', paddingBottom }}
       >
         <div className="wrap">
+          {eyebrow}
+          <h1
+            className="mega"
+            style={headingStyle}
+            {...(headingKinetic ? { 'data-kinetic': 'lines' } : { 'data-reveal': '' })}
+          >
+            {heading}
+          </h1>
           <div className={innerClass}>
-            {textClass ? <div className={textClass}>{text}</div> : text}
+            {textClass ? <div className={textClass}>{textBody}</div> : textBody}
             {strip}
           </div>
           {belowWrap}
