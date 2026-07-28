@@ -28,8 +28,8 @@ export default function SocialPage() {
         innerClass="soc-hero"
         textClass="soc-hero-text"
         eyebrow={<div className="eyebrow no-slash soc-accent-fg">— social media · food &amp; oltre</div>}
-        heading={<>Prima ti vedono.<br />Poi decidono<br /><span className="soc-accent-fg">se sceglierti.</span></>}
-        headingStyle={{ marginTop: 20 }}
+        heading={<>Prima ti vedono. Poi<br />decidono se <span className="soc-accent-fg">sceglierti.</span></>}
+        headingStyle={{ marginTop: 20, fontSize: 'clamp(1rem, 1rem + 2.72vw, 3.4rem)' }}
         lead="I social non servono solo a pubblicare. Servono a farti riconoscere, ricordare e scegliere. Costruiamo contenuti con una direzione precisa: trasformare l'attenzione in risultati misurabili."
         leadStyle={{ marginTop: 26, maxWidth: '46ch' }}
         ctaPrimary={{
