@@ -142,6 +142,8 @@ body.has-cursor select { cursor: none; }
 .wrap-wide  { max-width: 1560px; }
 .section    { padding-block: clamp(64px, 9vw, 150px); position: relative; }
 .section-tight { padding-block: clamp(40px, 5vw, 80px); }
+/* Opts a section out of the scroll-reactive body --bg/--fg: always paper, no matter what's above/below. */
+.section-paper-fixed { background: var(--paper); color: var(--ink); }
 .divider    { height: 1px; background: var(--line); border: 0; margin: 0; }
 
 /* ============ type utilities ============ */

@@ -1,6 +1,6 @@
 export default function StuTestimonianza() {
   return (
-    <section className="section" data-bg="paper" id="quote">
+    <section className="section section-paper-fixed" data-bg="paper" id="quote">
       <div className="wrap">
         <blockquote className="stu-quote">
           <span className="stu-quote-mark" aria-hidden="true">&ldquo;</span>

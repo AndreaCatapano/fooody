@@ -2,7 +2,7 @@ import StatsGrid from '@/components/blocks/StatsGrid'
 
 export default function StuNumeri() {
   return (
-    <section className="section" data-bg="paper" id="numeri">
+    <section className="section section-paper-fixed" data-bg="paper" id="numeri">
       <div className="wrap">
         <StatsGrid
           gridClass="stu-nums"
