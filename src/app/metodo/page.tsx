@@ -99,12 +99,29 @@ export default function MetodoPage() {
       <CtaSection
         eyebrow="— E TU COSA ASPETTI?"
         eyebrowClass="met-accent-fg"
-        heading={<>È il momento di applicare<br />il Metodo Fooody al tuo locale.</>}
+        heading={
+          <>
+            È il momento di applicare<br />il Metodo Fooody al tuo{' '}
+            <WordScramble
+              className="met-accent-fg"
+              words={[
+                'locale',
+                'ristorante',
+                'pizzeria',
+                'bar',
+                'pasticceria',
+                'bistrot',
+                'bakery',
+                'pub',
+              ]}
+            />.
+          </>
+        }
         lead="Raccontaci il tuo progetto. Con una prima call capiamo dove sei oggi, cosa ti sta frenando e da dove possiamo iniziare."
         ctaPrimary={{
           label: <>Inizia da qui <span className="arrow">↗</span></>,
           href: '/contatti',
-          className: 'btn accent lg',
+          className: 'btn met-btn lg',
           dataTransitionWord: 'Contatti',
           dataMagnetic: '0.3',
         }}

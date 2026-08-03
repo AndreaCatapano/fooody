@@ -1,6 +1,10 @@
 'use client'
 import { useState } from 'react'
 
+// Distanza verticale (px) tra il centro di due pallini consecutivi nello stepper mobile.
+// Deve restare in sync con .web-tl-step-head in globals.css (dot 44px + margin-bottom 20px).
+const STEP_ROW_HEIGHT = 64
+
 const STEPS = [
   {
     idx: '01',
@@ -53,21 +57,23 @@ export default function WebMetodoSection() {
   return (
     <section className="section" data-bg="paper-2" style={{ background: 'var(--paper-2)' }} id="metodo">
       <div className="wrap">
-        <div className="sec-head">
+        <div className="sec-head sec-head--solo">
           <div>
             <div className="eyebrow web-eyebrow">il metodo</div>
             <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
               Come lavoriamo
             </h2>
           </div>
-          <p className="small" style={{ maxWidth: '42ch' }}>
-            Cinque passaggi, sempre gli stessi. Ogni fase produce le risposte che servono alla
-            successiva — per questo il risultato è su misura, non perché lo scriviamo qui.
-          </p>
         </div>
 
         <div className="web-tl" data-reveal="">
+          {/* Desktop: rail orizzontale con linea di progresso + pannello separato sotto */}
           <div className="web-tl-rail" role="tablist" aria-label="Fasi del metodo">
+            <span
+              className="web-tl-rail-fill"
+              style={{ transform: `scaleX(${active / (STEPS.length - 1)})` }}
+              aria-hidden="true"
+            />
             {STEPS.map((s, i) => (
               <button
                 key={s.idx}
@@ -90,6 +96,36 @@ export default function WebMetodoSection() {
                 <p className="body text-pretty" key={i}>{p}</p>
               ))}
             </div>
+          </div>
+
+          {/* Mobile: stepper verticale ad accordion, un pannello aperto alla volta */}
+          <div className="web-tl-stepper">
+            <span
+              className="web-tl-stepper-fill"
+              style={{ height: `${active * STEP_ROW_HEIGHT}px` }}
+              aria-hidden="true"
+            />
+            {STEPS.map((s, i) => (
+              <details
+                key={s.idx}
+                className="web-tl-step"
+                open={i === active}
+                onToggle={(e) => {
+                  if (e.currentTarget.open) setActive(i)
+                }}
+              >
+                <summary className="web-tl-step-head">
+                  <span className="web-tl-dot">{s.idx}</span>
+                  <span className="web-tl-lbl">{s.title}</span>
+                </summary>
+                <div className="web-tl-step-body">
+                  <h3 className="h3 web-tl-panel-title">{s.label ?? s.title}</h3>
+                  {s.body.map((p, pi) => (
+                    <p className="body text-pretty" key={pi}>{p}</p>
+                  ))}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </div>

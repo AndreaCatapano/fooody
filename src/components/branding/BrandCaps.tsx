@@ -8,8 +8,6 @@ export default function BrandCaps() {
           eyebrow="cosa creiamo"
           eyebrowClass="brand-eyebrow"
           heading={<>Dalla strategia<br />al lancio.</>}
-          lead="Quattro tappe per costruire un brand riconoscibile e pronto a vivere ovunque: online, offline ma soprattutto nella testa delle persone."
-          leadMaxWidth="34ch"
         />
 
         <div className="brd-caps">

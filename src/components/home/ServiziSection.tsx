@@ -2,17 +2,13 @@ export default function ServiziSection() {
   return (
     <section className="section" data-bg="paper" id="servizi">
       <div className="wrap">
-        <div className="sec-head">
+        <div className="sec-head sec-head--solo">
           <div>
             <div className="eyebrow">I QUATTRO PILASTRI DI FOOODY</div>
             <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
               Scegli cosa vuoi ottenere.<br />Al come ci pensiamo noi.
             </h2>
           </div>
-          <p className="small" style={{ maxWidth: '34ch' }}>
-            Abbiamo scelto quattro aree di specializzazione, perché preferiamo fare poche cose, ma
-            farle davvero bene.
-          </p>
         </div>
 
         <div className="services">

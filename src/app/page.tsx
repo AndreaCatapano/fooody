@@ -28,7 +28,7 @@ export default function Home() {
         ctaPrimary={{
           label: <>Inizia da qui <span className="arrow">↗</span></>,
           href: '/contatti',
-          className: 'btn accent lg',
+          className: 'btn lg',
           dataTransitionWord: 'Contatti',
           dataMagnetic: '0.3',
         }}

@@ -16,7 +16,6 @@ export default function BrandBoardSection() {
           eyebrow="il sistema assemblato"
           eyebrowClass="brand-eyebrow"
           heading={<>Il design è l&apos;ambasciatore<br />silenzioso del tuo marchio.</>}
-          lead={<>Una gelateria, un bistrot, un e-commerce o un prodotto da scaffale non possono parlare allo stesso modo. Nome, colori, tipografia e packaging devono adattarsi al contesto, ma restare sempre riconoscibili. Premi{' '}<em className="italic-serif">rigenera</em> per vederlo cambiare.</>}
         />
         <BrandBoard />
       </div>

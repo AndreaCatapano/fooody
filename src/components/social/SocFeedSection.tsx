@@ -13,11 +13,6 @@ export default function SocFeedSection() {
             <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16, color: 'var(--paper)' }}>
               Non semplici video<br />da mostrare.<br />Risultati da guardare.
             </h2>
-            <p className="small" data-reveal="" style={{ color: 'rgba(247,244,238,.6)', maxWidth: '40ch', marginTop: 20 }}>
-              Passa sopra per fermare il video. Questi non sono mockup: sono format reali
-              prodotti per clienti reali — reel, caroselli, UGC, copertine — pensati per farsi
-              notare, ricordare e convertire.
-            </p>
           </div>
           <div className="soc-live soc-live-feed" data-reveal="" data-reveal-d="2">
             <div className="soc-live-item">

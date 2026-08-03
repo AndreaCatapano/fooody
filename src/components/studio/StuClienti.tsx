@@ -8,7 +8,6 @@ export default function StuClienti() {
           eyebrow="con chi lavoriamo"
           eyebrowClass="stu-eyebrow"
           heading={<>Hanno mangiato<br />con noi.</>}
-          lead="Ristoranti, brand food e aziende che hanno qualcosa di buono da raccontare."
         />
         <div className="stu-clients">
           {[...Array(6)].map((_, i) => (

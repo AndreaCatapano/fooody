@@ -8,7 +8,6 @@ export default function StuTeam() {
           eyebrow="il team"
           eyebrowClass="stu-eyebrow"
           heading={<>Le persone<br />dietro i progetti.</>}
-          lead="Otto persone, un obiettivo. Ognuno con le sue skills — tutti con lo stesso obiettivo."
         />
 
         <div className="stu-team">

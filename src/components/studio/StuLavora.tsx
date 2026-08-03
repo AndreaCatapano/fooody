@@ -19,7 +19,7 @@ export default function StuLavora() {
             </ul>
           </div>
           <div data-reveal="" data-reveal-d="2" style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
-            <a className="btn stu-btn lg" href="mailto:lavora@fooody.it" data-magnetic="0.3">
+            <a className="btn lg" href="mailto:lavora@fooody.it" data-magnetic="0.3">
               <span className="btn-label">Inviaci la tua candidatura <span className="arrow">↗</span></span>
             </a>
             <a className="btn ghost lg" href="mailto:ciao@fooody.it">

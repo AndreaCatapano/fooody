@@ -8,7 +8,6 @@ export default function StuValori() {
           eyebrow="come lavoriamo"
           eyebrowClass="stu-eyebrow"
           heading={<>Tre principi<br />su cui ci basiamo.</>}
-          lead="Sono il modo in cui scegliamo cosa fare, cosa evitare e cosa migliorare ogni giorno."
         />
 
         <div className="stu-vals-grid">

@@ -8,7 +8,6 @@ export default function MetodoPanoramica() {
           eyebrow="DENTRO IL METODO"
           eyebrowClass="met-eyebrow"
           heading={<>Cinque pilastri.<br />Un unico percorso.</>}
-          lead="Ogni pilastro lavora anche da solo, ma è insieme che il sistema diventa davvero potente."
         />
 
         <div className="pillars-map">

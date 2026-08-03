@@ -9,8 +9,11 @@ export default function MetodoRisultati() {
           eyebrow="E I RISULTATI?"
           eyebrowClass="met-eyebrow"
           heading={<>Non basta dire “sta andando bene”.<br />Bisogna capire quanto, dove e perché.</>}
-          lead="Medie rilevate sui progetti seguiti con il Metodo Fooody completo nei primi 6 mesi. Niente magie, fatti misurati e dati alla mano."
         />
+        <p className="small" style={{ marginTop: 12, maxWidth: '62ch' }}>
+          Medie rilevate sui progetti seguiti con il Metodo Fooody completo nei primi 6 mesi.
+          Niente magie, fatti misurati e dati alla mano.
+        </p>
 
         <StatsGrid
           gridClass="results-grid"

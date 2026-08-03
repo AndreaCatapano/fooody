@@ -40,7 +40,7 @@ export default function ChiSiamoPage() {
         ctaPrimary={{
           label: <>Collabora con noi <span className="arrow">↗</span></>,
           href: '/contatti',
-          className: 'btn stu-btn lg',
+          className: 'btn lg',
           dataTransitionWord: 'Parliamo.',
           dataMagnetic: '0.3',
         }}
@@ -80,7 +80,7 @@ export default function ChiSiamoPage() {
         ctaPrimary={{
           label: <>Incontriamoci <span className="arrow">↗</span></>,
           href: '/contatti',
-          className: 'btn stu-btn lg',
+          className: 'btn lg',
           dataTransitionWord: 'Parliamo.',
           dataMagnetic: '0.3',
         }}

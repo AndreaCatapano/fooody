@@ -9,7 +9,7 @@ export default function MetodoScrollTelling() {
         className="wrap"
         style={{ paddingTop: 'clamp(40px,6vw,90px)', paddingBottom: 18 }}
       >
-        <div className="sec-head" style={{ marginBottom: 0 }}>
+        <div className="sec-head sec-head--solo" style={{ marginBottom: 0 }}>
           <div>
             <div className="eyebrow no-slash met-accent-fg">
               — il sistema
@@ -18,9 +18,6 @@ export default function MetodoScrollTelling() {
               I cinque pilastri.
             </h2>
           </div>
-          <p className="small" style={{ maxWidth: '30ch', color: 'rgba(247,244,238,.6)' }}>
-            Scorri: ogni pilastro si compone mentre leggi. Insieme fanno il Metodo.
-          </p>
         </div>
       </div>
 
@@ -77,10 +74,10 @@ export default function MetodoScrollTelling() {
               del tuo locale, far crescere la community e trasformare l’attenzione in vendite.
             </p>
             <div className="step-list">
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Content plan</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Reel &amp; UGC</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Food photo</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Community</span>
+              <span className="chip">Content plan</span>
+              <span className="chip">Reel &amp; UGC</span>
+              <span className="chip">Food photo</span>
+              <span className="chip">Community</span>
             </div>
             <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(23,19,15,.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '5px 10px' }}>
               <span className="mono-xs" style={{ color: 'rgba(23,19,15,.45)' }}>Vuoi solo il social?</span>
@@ -103,10 +100,10 @@ export default function MetodoScrollTelling() {
               margini e aumenta il valore percepito.
             </p>
             <div className="step-list">
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Pricing</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Layout</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Piatti civetta</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Food cost</span>
+              <span className="chip">Pricing</span>
+              <span className="chip">Layout</span>
+              <span className="chip">Piatti civetta</span>
+              <span className="chip">Food cost</span>
             </div>
           </div>
 
@@ -119,10 +116,10 @@ export default function MetodoScrollTelling() {
               alla prenotazione.
             </p>
             <div className="step-list">
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Sito &amp; prenotazioni</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Menu digitale</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>Recensioni</span>
-              <span className="chip" style={{ borderColor: 'rgba(23,19,15,.25)', color: 'var(--ink)' }}>CRM</span>
+              <span className="chip">Sito &amp; prenotazioni</span>
+              <span className="chip">Menu digitale</span>
+              <span className="chip">Recensioni</span>
+              <span className="chip">CRM</span>
             </div>
             <div style={{ marginTop: 18, paddingTop: 16, borderTop: '1px solid rgba(23,19,15,.15)', display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '5px 10px' }}>
               <span className="mono-xs" style={{ color: 'rgba(23,19,15,.45)' }}>Vuoi solo il sito?</span>

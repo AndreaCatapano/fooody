@@ -4,7 +4,7 @@ interface SectionHeaderProps {
   eyebrow: ReactNode
   eyebrowClass?: string
   heading: ReactNode
-  lead: ReactNode
+  lead?: ReactNode
   leadMaxWidth?: string
 }
 
@@ -16,16 +16,18 @@ export default function SectionHeader({
   leadMaxWidth = '32ch',
 }: SectionHeaderProps) {
   return (
-    <div className="sec-head">
+    <div className={`sec-head${lead ? '' : ' sec-head--solo'}`}>
       <div>
         <div className={['eyebrow', eyebrowClass].filter(Boolean).join(' ')}>{eyebrow}</div>
         <h2 className="hero-type" data-kinetic="lines" style={{ marginTop: 16 }}>
           {heading}
         </h2>
       </div>
-      <p className="small" style={{ maxWidth: leadMaxWidth }}>
-        {lead}
-      </p>
+      {lead && (
+        <p className="small" style={{ maxWidth: leadMaxWidth }}>
+          {lead}
+        </p>
+      )}
     </div>
   )
 }

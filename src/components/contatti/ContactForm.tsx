@@ -189,7 +189,7 @@ export default function ContactForm() {
         </div>
 
         <div className="lav-row lav-row-submit">
-          <button className="btn accent lg lav-submit" type="submit" data-magnetic="0.3" disabled={submitting}>
+          <button className="btn lg lav-submit" type="submit" data-magnetic="0.3" disabled={submitting}>
             <span className="btn-label">{submitting ? 'Invio in corso…' : 'Invia il messaggio'} {!submitting && <span className="arrow">↗</span>}</span>
           </button>
           <p className="mono-xs lav-note">Nessuna newsletter, nessun dato ceduto a terzi.
@@ -207,7 +207,7 @@ export default function ContactForm() {
           <p className="lead text-pretty" style={{ marginTop: 12, color: 'var(--ink-2)', maxWidth: '38ch' }}>
             Ti rispondo entro 24 ore. Nel frattempo puoi dare un&apos;occhiata al nostro metodo.
           </p>
-          <a className="btn accent" href="/metodo" data-transition="" data-transition-word="Metodo"
+          <a className="btn" href="/metodo" data-transition="" data-transition-word="Metodo"
             style={{ marginTop: 28, display: 'inline-flex' }}>
             <span className="btn-label">Scopri il Metodo <span className="arrow">↗</span></span>
           </a>
