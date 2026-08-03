@@ -14,6 +14,8 @@ interface StatsGridProps {
   itemClass: string
   defaultNumeralClass?: string
   staggerItems?: boolean
+  /** Render statically: no reveal-on-scroll, no count-up animation. */
+  noMotion?: boolean
 }
 
 export default function StatsGrid({
@@ -22,27 +24,32 @@ export default function StatsGrid({
   itemClass,
   defaultNumeralClass,
   staggerItems = false,
+  noMotion = false,
 }: StatsGridProps) {
   return (
     <div
       className={gridClass}
-      {...(!staggerItems ? { 'data-reveal': '', 'data-reveal-d': '2' } : {})}
+      {...(!noMotion && !staggerItems ? { 'data-reveal': '', 'data-reveal-d': '2' } : {})}
     >
       {items.map((item, i) => (
         <div
           key={i}
           className={itemClass}
-          {...(staggerItems ? { 'data-reveal': '', ...(i > 0 ? { 'data-reveal-d': String(i) } : {}) } : {})}
+          {...(!noMotion && staggerItems ? { 'data-reveal': '', ...(i > 0 ? { 'data-reveal-d': String(i) } : {}) } : {})}
         >
           <span
             className={['numeral', item.numeralClass ?? defaultNumeralClass].filter(Boolean).join(' ')}
-            data-count={String(item.count)}
-            {...(item.from !== undefined ? { 'data-from': String(item.from) } : {})}
-            {...(item.prefix ? { 'data-pre': item.prefix } : {})}
-            {...(item.suffix ? { 'data-suf': item.suffix } : {})}
-            {...(item.placeholder ? { 'data-placeholder': item.placeholder } : {})}
+            {...(noMotion
+              ? {}
+              : {
+                  'data-count': String(item.count),
+                  ...(item.from !== undefined ? { 'data-from': String(item.from) } : {}),
+                  ...(item.prefix ? { 'data-pre': item.prefix } : {}),
+                  ...(item.suffix ? { 'data-suf': item.suffix } : {}),
+                  ...(item.placeholder ? { 'data-placeholder': item.placeholder } : {}),
+                })}
           >
-            0
+            {noMotion ? `${item.prefix ?? ''}${item.count}${item.suffix ?? ''}` : 0}
           </span>
           <span className="mono-xs">{item.label}</span>
         </div>

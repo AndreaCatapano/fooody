@@ -2,7 +2,7 @@ export default function StuTestimonianza() {
   return (
     <section className="section" data-bg="paper" id="quote">
       <div className="wrap">
-        <blockquote className="stu-quote" data-reveal="">
+        <blockquote className="stu-quote">
           <span className="stu-quote-mark" aria-hidden="true">&ldquo;</span>
           <p className="stu-quote-text">
             I ragazzi mi hanno fatto letteralmente volare sui social! Inizialmente ero scettico,

@@ -8,7 +8,7 @@ export default function StuNumeri() {
           gridClass="stu-nums"
           itemClass="stu-num-item"
           defaultNumeralClass="stu-n"
-          staggerItems
+          noMotion
           items={[
             { count: 5, suffix: ' anni', label: 'nel settore food' },
             { count: 40, prefix: '+', label: 'clienti serviti' },

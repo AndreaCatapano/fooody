@@ -61,13 +61,21 @@ export function PageTransition() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  /* Navigation complete → fade out + reinit motion.js for new page */
+  /* Route changed → reinit motion.js for the new page's DOM.
+     Runs on every pathname change, including browser back/forward (popstate),
+     which never goes through the data-transition click interceptor below. */
+  const isFirstRender = useRef(true)
   useEffect(() => {
-    if (!navigating.current) return
-    navigating.current = false
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ;(window as any).motionReinit?.()
-    hide(80)
+    if (navigating.current) {
+      navigating.current = false
+      hide(80)
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
 
