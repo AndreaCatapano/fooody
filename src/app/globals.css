@@ -386,30 +386,37 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
   align-items: center;
   justify-content: space-between;
   padding: 18px var(--gutter);
-  /* glass always on — avoids optical glitches when sections scroll under */
-  background: color-mix(in srgb, var(--paper) 48%, transparent);
-  backdrop-filter: blur(28px) saturate(1.5) brightness(1.03);
-  -webkit-backdrop-filter: blur(28px) saturate(1.5) brightness(1.03);
-  border-bottom: 1px solid rgba(255,255,255,0.22);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 1px 0 rgba(0,0,0,0.05);
-  transition: background 0.45s var(--ease), padding 0.45s var(--ease),
+  /* liquid glass: a soft top-down light sheen (background-image) layered over
+     the tinted blur (background-color) — the sheen is what reads as "glass"
+     rather than "tinted film" at a glance, the raised opacity below is what
+     stops saturated section colors from bleeding through underneath it. */
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 60%);
+  background-color: color-mix(in srgb, var(--paper) 66%, transparent);
+  backdrop-filter: blur(38px) saturate(1.25) brightness(1.05);
+  -webkit-backdrop-filter: blur(38px) saturate(1.25) brightness(1.05);
+  border-bottom: 1px solid rgba(255,255,255,0.28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 1px 0 rgba(0,0,0,0.05);
+  transition: background-color 0.45s var(--ease), padding 0.45s var(--ease),
               border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
 }
 .nav.scrolled {
-  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  background-color: color-mix(in srgb, var(--paper) 85%, transparent);
   padding-block: 12px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.32), 0 2px 12px rgba(0,0,0,0.07);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 2px 16px rgba(0,0,0,0.08);
 }
 .nav.on-ink {
   color: var(--paper);
-  background: color-mix(in srgb, var(--ink) 48%, transparent);
-  border-bottom-color: rgba(255,255,255,0.07);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 1px 0 rgba(0,0,0,0.25);
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 60%);
+  background-color: color-mix(in srgb, var(--ink) 66%, transparent);
+  backdrop-filter: blur(38px) saturate(1.3) brightness(0.92);
+  -webkit-backdrop-filter: blur(38px) saturate(1.3) brightness(0.92);
+  border-bottom-color: rgba(255,255,255,0.09);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 1px 0 rgba(0,0,0,0.25);
 }
 .nav.on-ink.scrolled {
-  background: color-mix(in srgb, var(--ink) 68%, transparent);
-  border-bottom-color: rgba(255,255,255,0.10);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 2px 12px rgba(0,0,0,0.22);
+  background-color: color-mix(in srgb, var(--ink) 85%, transparent);
+  border-bottom-color: rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.11), 0 2px 16px rgba(0,0,0,0.28);
 }
 
 .brand {
@@ -473,15 +480,19 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
     position: absolute;
     top: 100%; left: 0; right: 0;
     transform: none;
-    background: color-mix(in srgb, var(--paper) 82%, transparent);
-    backdrop-filter: blur(28px) saturate(1.4);
-    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 50%);
+    background-color: color-mix(in srgb, var(--paper) 90%, transparent);
+    backdrop-filter: blur(38px) saturate(1.25) brightness(1.05);
+    -webkit-backdrop-filter: blur(38px) saturate(1.25) brightness(1.05);
     padding: 8px var(--gutter) 22px;
     border-bottom: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.1);
   }
   .nav.on-ink.menu-open .nav-links {
-    background: color-mix(in srgb, var(--ink) 80%, transparent);
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 50%);
+    background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+    backdrop-filter: blur(38px) saturate(1.3) brightness(0.92);
+    -webkit-backdrop-filter: blur(38px) saturate(1.3) brightness(0.92);
     border-bottom-color: rgba(255,255,255,0.10);
   }
   .nav.menu-open .nav-link {
