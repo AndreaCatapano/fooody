@@ -392,40 +392,55 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
   align-items: center;
   justify-content: space-between;
   padding: 18px var(--gutter);
-  /* liquid glass: grain (texture) + a soft top-down light sheen, both layered
-     over the tinted blur — grain is what reads as "granulated glass" rather
-     than a smooth gradient, the sheen is what reads as "glass" rather than
-     "tinted film", and the higher opacity is what gives it real separation
-     from whatever's scrolling underneath instead of just tinting it. */
-  background-image: var(--glass-grain), linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0) 60%);
+  /* liquid glass: grain (texture) + a radial light sheen (brighter near the
+     top-left, like a light source catching curved glass, closer to Apple's
+     material than a flat top-down fade) + an inset highlight on top AND a
+     faint inset shadow on the bottom edge for a sense of thickness — both
+     layered over the tinted blur. Grain reads as "granulated glass" rather
+     than a smooth gradient; the higher opacity is what gives it real
+     separation from whatever's scrolling underneath instead of just tinting it. */
+  background-image: var(--glass-grain), radial-gradient(120% 180% at 18% -20%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.1) 35%, rgba(255,255,255,0) 65%);
   background-blend-mode: overlay, normal;
   background-color: color-mix(in srgb, var(--paper) 78%, transparent);
-  backdrop-filter: blur(40px) saturate(1.2) brightness(1.05);
-  -webkit-backdrop-filter: blur(40px) saturate(1.2) brightness(1.05);
+  backdrop-filter: blur(46px) saturate(1.2) brightness(1.05);
+  -webkit-backdrop-filter: blur(46px) saturate(1.2) brightness(1.05);
   border-bottom: 1px solid rgba(255,255,255,0.3);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 10px 30px -8px rgba(23,19,15,0.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(23,19,15,0.05),
+              0 10px 30px -8px rgba(23,19,15,0.16);
   transition: background-color 0.45s var(--ease), padding 0.45s var(--ease),
               border-color 0.45s var(--ease), box-shadow 0.45s var(--ease);
 }
 .nav.scrolled {
   background-color: color-mix(in srgb, var(--paper) 92%, transparent);
   padding-block: 12px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 12px 32px -6px rgba(23,19,15,0.20);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(23,19,15,0.06),
+              0 12px 32px -6px rgba(23,19,15,0.20);
 }
 .nav.on-ink {
   color: var(--paper);
-  background-image: var(--glass-grain), linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0) 60%);
+  background-image: var(--glass-grain), radial-gradient(120% 180% at 18% -20%, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.05) 35%, rgba(255,255,255,0) 65%);
   background-blend-mode: overlay, normal;
   background-color: color-mix(in srgb, var(--ink) 78%, transparent);
-  backdrop-filter: blur(40px) saturate(1.25) brightness(0.9);
-  -webkit-backdrop-filter: blur(40px) saturate(1.25) brightness(0.9);
+  backdrop-filter: blur(46px) saturate(1.25) brightness(0.9);
+  -webkit-backdrop-filter: blur(46px) saturate(1.25) brightness(0.9);
   border-bottom-color: rgba(255,255,255,0.1);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px -8px rgba(0,0,0,0.4);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.3),
+              0 10px 30px -8px rgba(0,0,0,0.4);
 }
 .nav.on-ink.scrolled {
   background-color: color-mix(in srgb, var(--ink) 92%, transparent);
   border-bottom-color: rgba(255,255,255,0.13);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 12px 32px -6px rgba(0,0,0,0.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(0,0,0,0.35),
+              0 12px 32px -6px rgba(0,0,0,0.5);
+}
+/* Menu open: the header bar and the dropdown panel below it must read as one
+   continuous slab of glass, not two materials — match the panel's opacity
+   here regardless of scroll state (see .menu-open .nav-links further down). */
+.nav.menu-open {
+  background-color: color-mix(in srgb, var(--paper) 94%, transparent);
+}
+.nav.on-ink.menu-open {
+  background-color: color-mix(in srgb, var(--ink) 94%, transparent);
 }
 
 .brand {
@@ -490,24 +505,24 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
     top: 100%; left: 0; right: 0;
     transform: none;
     /* same grain + sheen + high-opacity recipe as the desktop bar, so the
-       modal reads as the same material, not a separate lighter panel */
-    background-image: var(--glass-grain), linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 50%);
+       modal reads as the same continuous material, not a separate panel */
+    background-image: var(--glass-grain), radial-gradient(140% 60% at 22% 0%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 35%, rgba(255,255,255,0) 65%);
     background-blend-mode: overlay, normal;
     background-color: color-mix(in srgb, var(--paper) 94%, transparent);
-    backdrop-filter: blur(40px) saturate(1.2) brightness(1.05);
-    -webkit-backdrop-filter: blur(40px) saturate(1.2) brightness(1.05);
+    backdrop-filter: blur(46px) saturate(1.2) brightness(1.05);
+    -webkit-backdrop-filter: blur(46px) saturate(1.2) brightness(1.05);
     padding: 8px var(--gutter) 22px;
     border-bottom: 1px solid rgba(255,255,255,0.22);
-    box-shadow: 0 16px 40px -10px rgba(23,19,15,0.28);
+    box-shadow: inset 0 -1px 0 rgba(23,19,15,0.05), 0 16px 40px -10px rgba(23,19,15,0.28);
   }
   .nav.on-ink.menu-open .nav-links {
-    background-image: var(--glass-grain), linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 50%);
+    background-image: var(--glass-grain), radial-gradient(140% 60% at 22% 0%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 35%, rgba(255,255,255,0) 65%);
     background-blend-mode: overlay, normal;
     background-color: color-mix(in srgb, var(--ink) 94%, transparent);
-    backdrop-filter: blur(40px) saturate(1.25) brightness(0.9);
-    -webkit-backdrop-filter: blur(40px) saturate(1.25) brightness(0.9);
+    backdrop-filter: blur(46px) saturate(1.25) brightness(0.9);
+    -webkit-backdrop-filter: blur(46px) saturate(1.25) brightness(0.9);
     border-bottom-color: rgba(255,255,255,0.12);
-    box-shadow: 0 16px 40px -10px rgba(0,0,0,0.55);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.3), 0 16px 40px -10px rgba(0,0,0,0.55);
   }
   .nav.menu-open .nav-link {
     padding: 16px 2px;
