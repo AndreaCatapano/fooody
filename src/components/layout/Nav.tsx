@@ -1,4 +1,5 @@
 import { NavLinks } from './NavLinks'
+import { NavCta } from './NavCta'
 
 export default function Nav() {
   return (
@@ -11,18 +12,8 @@ export default function Nav() {
       {/* NavLinks is 'use client' for usePathname() active state */}
       <NavLinks />
 
-      {/* data-transition triggers PageTransition overlay */}
-      <a
-        className="btn nav-cta"
-        href="/contatti"
-        data-magnetic="0.35"
-        data-transition=""
-        data-transition-word="Contatti"
-      >
-        <span className="btn-label">
-          Lavoriamo insieme <span className="arrow">↗</span>
-        </span>
-      </a>
+      {/* NavCta is 'use client' too — picks the page's identity color via usePathname() */}
+      <NavCta />
 
       {/* Toggle label managed by motion.js initNav() */}
       <button className="nav-toggle" aria-label="Apri menu">

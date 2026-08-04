@@ -239,7 +239,8 @@ body.has-cursor select { cursor: none; }
 
 .btn.ghost   { --bbg: transparent; --bfg: var(--ink); --bbd: var(--line); }
 .btn.ghost:hover { color: #fff; }
-.btn.accent  { --bbg: var(--tomato); --bfg: #fff; --bbd: var(--tomato); }
+/* tomato-deep, not tomato: white text on plain --tomato is 3.95:1, fails AA 4.5:1 */
+.btn.accent  { --bbg: var(--tomato-deep); --bfg: #fff; --bbd: var(--tomato-deep); }
 .btn.accent::after { background: var(--ink); }
 .btn.accent:hover  { border-color: var(--ink); }
 .btn.on-ink  { --bbg: var(--paper); --bfg: var(--ink); --bbd: var(--paper); }
@@ -1737,6 +1738,18 @@ body.sig-off #anteprima .preview-wrap { display: none; }
 .btn.brand-btn { --bbg: var(--violet); --bfg: #fff; --bbd: var(--violet); font-weight: 600; }
 .btn.brand-btn::after { background: var(--ink); }
 .btn.brand-btn:hover { border-color: var(--ink); color: #fff; }
+/* Nav CTA on /branding: the brand spectrum as a fill, not just clipped text.
+   Known gap: no single text color clears AA across the whole gradient — white
+   passes on the tomato/violet ends (6.3:1 / 7.6:1) but fails on the gold
+   middle (3.0:1 even with gold-deep); ink passes on gold (10:1) but fails on
+   tomato/violet. Kept white + bold + a shadow for real-world legibility since
+   the gold zone is a thin slice of a nav-level CTA, not body copy — narrow
+   the gradient to skip gold if full AA here becomes a hard requirement. */
+.btn.brand-gradient { --bbg: var(--spectrum); --bfg: #fff; --bbd: transparent; font-weight: 700; }
+.btn.brand-gradient .btn-label { text-shadow: 0 1px 3px rgba(23,19,15,0.35); }
+.btn.brand-gradient::after { background: var(--ink); }
+.btn.brand-gradient:hover { border-color: var(--ink); color: #fff; }
+.btn.brand-gradient:hover .btn-label { text-shadow: none; }
 .brand-spectrum-text {
   background: var(--spectrum); -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;
