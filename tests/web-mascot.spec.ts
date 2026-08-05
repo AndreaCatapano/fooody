@@ -20,10 +20,20 @@ const POSE_MARKERS = {
   typing: (html: string) => html.includes('rotate(14 60 90)'),
   think: (html: string) => html.includes('rotate(-6 60 82)'),
   point: (html: string) => html.includes('rotate(6 60 82)') && !html.includes('rotate(-6 60 82)'),
+  excited: (html: string) => html.includes('x1="46" y1="38"'),
 } as const
 
 async function waitForNib(page: Page) {
   await page.waitForSelector('svg[viewBox="0 0 120 160"]')
+}
+
+// .figure carries the click/hover handlers and stays geometrically stable
+// (idleSway lives on the inner poseBox — see webMascot.module.css); the svg
+// itself wobbles while idle, which fails Playwright's own "element is
+// stable" actionability check. aria-hidden="true" sits directly on .figure,
+// so it's a selector that survives CSS Modules hashing the class name.
+function figureLocator(page: Page) {
+  return page.locator('div[aria-hidden="true"]:has(svg[viewBox="0 0 120 160"])')
 }
 
 async function figureBox(page: Page) {
@@ -41,6 +51,25 @@ async function figureBox(page: Page) {
 
 async function poseHtml(page: Page) {
   return page.locator('svg[viewBox="0 0 120 160"]').evaluate((el) => el.outerHTML)
+}
+
+/** Text of the quip/label span next to Nib (whichever is currently showing), or null if neither is. */
+async function quipOrLabelText(page: Page) {
+  return page.evaluate(() => {
+    const svg = document.querySelector('svg[viewBox="0 0 120 160"]')
+    const figure = svg?.closest('div[aria-hidden="true"]')
+    const span = figure?.querySelector(':scope > span')
+    return span?.textContent ?? null
+  })
+}
+
+/** Whether the poseBox currently has a running CSS animation (the idle sway). */
+async function isSwaying(page: Page) {
+  return page.evaluate(() => {
+    const svg = document.querySelector('svg[viewBox="0 0 120 160"]')
+    const poseBox = svg?.parentElement as HTMLElement | null
+    return !!poseBox && getComputedStyle(poseBox).animationName !== 'none'
+  })
 }
 
 // The site scrolls via Lenis (src/components/SmoothScroll.tsx), which
@@ -89,22 +118,38 @@ function angleDiff(a: number, b: number) {
   return Math.abs(norm(a - b))
 }
 
-/** Polls until Nib's position matches a spot next to `target` (both sides re-read each try). */
-async function pollNearTarget(page: Page, target: Locator) {
+// Everything (pose + position, both sides of the position check) is read
+// together in one poll iteration and required to hold simultaneously, rather
+// than as separate sequential expect.poll calls: a reaction with a bounded
+// on-screen window (e.g. FAQ's single-beat 1400ms) can close between two
+// separate polls' round trips even though the mechanism itself is correct —
+// checking it all atomically each try removes that gap entirely.
+//
+// The expected position mirrors positionNear()'s own clamp (never above the
+// nav, never off either horizontal edge) — a naive unclamped formula looks
+// right for costruiamo/metodo (their targets sit well clear of the nav) but
+// is simply wrong for a FAQ question that scrollIntoViewIfNeeded() happens
+// to land close to the top: production correctly clamps there, so the test's
+// expectation has to, or it's asserting a formula the app never promised.
+async function pollNearTarget(page: Page, target: Locator, posePredicate?: (html: string) => boolean) {
   await expect
     .poll(async () => {
-      const [near, box] = await Promise.all([figureBox(page), target.boundingBox()])
+      const [near, box, html, env] = await Promise.all([
+        figureBox(page),
+        target.boundingBox(),
+        poseHtml(page),
+        page.evaluate(() => ({
+          navHeight: document.querySelector('.nav')?.getBoundingClientRect().height ?? 0,
+          innerWidth: window.innerWidth,
+        })),
+      ])
       if (!box) return null
-      return near.top - (box.y - 96 - 16)
+      if (posePredicate && !posePredicate(html)) return null
+      const expectedTop = Math.max(env.navHeight + 12, box.y - 96 - 16)
+      const expectedLeft = Math.max(12, Math.min(env.innerWidth - 84 - 12, box.x + box.width / 2 - 42))
+      return Math.max(Math.abs(near.top - expectedTop), Math.abs(near.left - expectedLeft))
     })
-    .toBeCloseTo(0, 0)
-  await expect
-    .poll(async () => {
-      const [near, box] = await Promise.all([figureBox(page), target.boundingBox()])
-      if (!box) return null
-      return near.left - (box.x + box.width / 2 - 42)
-    })
-    .toBeCloseTo(0, 0)
+    .toBeLessThan(0.6)
 }
 
 // .nav's own padding transitions over 0.45s (globals.css) between its normal
@@ -151,8 +196,7 @@ test('walks over to a costruiamo tab on click, then returns home', async ({ page
   await settleScroll(page) // so click()'s own actionability scroll is a no-op
   await tab.click()
 
-  await expect.poll(async () => poseHtml(page).then(POSE_MARKERS.build)).toBe(true)
-  await pollNearTarget(page, tab)
+  await pollNearTarget(page, tab, POSE_MARKERS.build)
 
   // build -> typing -> idle, ~700ms per step; give it real margin.
   await expect.poll(async () => poseHtml(page).then(POSE_MARKERS.idle), { timeout: 3000 }).toBe(true)
@@ -165,7 +209,8 @@ test('points precisely at the metodo step it reacted to', async ({ page }) => {
   await settleScroll(page)
   await step.click()
 
-  await expect.poll(async () => poseHtml(page).then(POSE_MARKERS.point), { timeout: 2000 }).toBe(true)
+  // pollPointsAt already implies the `point` pose: armAngle() is null until
+  // then, so this alone atomically covers both pose and rotation.
   await pollPointsAt(page, step)
 })
 
@@ -175,11 +220,65 @@ test('points precisely at the contact CTA on hover', async ({ page }) => {
   await settleScroll(page)
   await cta.hover()
 
-  await expect.poll(async () => poseHtml(page).then(POSE_MARKERS.point)).toBe(true)
   await pollPointsAt(page, cta)
 
   await page.mouse.move(0, 0)
   await pollAtHome(page)
+})
+
+test('shows a one-time quip when Nib is born', async ({ page }) => {
+  // beforeEach's waitForNib already implies introStage is 'done' (the intro
+  // frame only renders once it settles), so the birth quip should be up.
+  await expect.poll(() => quipOrLabelText(page)).toBe('Sono Nib.')
+})
+
+test('shows a quip when clicked (excited)', async ({ page }) => {
+  await figureLocator(page).click()
+  await expect.poll(() => poseHtml(page).then(POSE_MARKERS.excited)).toBe(true)
+  expect(await quipOrLabelText(page)).toMatch(/^(Ehi!|Presente\.|Ci sono!)$/)
+})
+
+test('reacts to opening a FAQ question', async ({ page }) => {
+  const q = page.locator('.web-faq-q').first()
+  await q.scrollIntoViewIfNeeded()
+  await settleScroll(page)
+  // .web-faq-list has data-reveal (globals.css: translateY(26px) -> none,
+  // ~1.06s including its stagger delay) — clicking before it settles means
+  // the app measures the question's rect mid-transition while this test
+  // would measure it post-transition, a real (if identical-looking-once-
+  // stable) 26px mismatch that has nothing to do with position math being
+  // wrong. A real visitor only ever clicks it once it's actually visible.
+  await page.waitForFunction(() => {
+    const list = document.querySelector('.web-faq-list')
+    return !!list && getComputedStyle(list).opacity === '1'
+  })
+  await q.click()
+
+  await pollNearTarget(page, q, POSE_MARKERS.think)
+  expect(await quipOrLabelText(page)).toMatch(/^(Bella domanda\.|Fammi pensare\.|Giusto\.)$/)
+})
+
+test('acknowledges reaching the bottom of the page, once per session', async ({ page }) => {
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+  await settleScroll(page)
+
+  await expect.poll(async () => poseHtml(page).then(POSE_MARKERS.excited)).toBe(true)
+  expect(await quipOrLabelText(page)).toMatch(/^(Sei arrivato in fondo\.|Tutto letto\.)$/)
+
+  // Scroll away and back — shouldn't repeat within the same session.
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await settleScroll(page)
+  await expect.poll(async () => poseHtml(page).then(POSE_MARKERS.idle)).toBe(true)
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+  await settleScroll(page)
+  await page.waitForTimeout(300)
+  expect(await poseHtml(page).then(POSE_MARKERS.excited)).toBe(false)
+})
+
+test('idle sway runs at rest and pauses during a reaction', async ({ page }) => {
+  await expect.poll(() => isSwaying(page)).toBe(true)
+  await figureLocator(page).click()
+  await expect.poll(() => isSwaying(page)).toBe(false)
 })
 
 test('reduced motion: no intro compile frame, no hover reaction', async ({ page }) => {
@@ -188,8 +287,9 @@ test('reduced motion: no intro compile frame, no hover reaction', async ({ page 
   await waitForNib(page)
   expect(await poseHtml(page).then(POSE_MARKERS.idle)).toBe(true)
 
-  const figure = page.locator('svg[viewBox="0 0 120 160"]')
-  await figure.hover()
+  await figureLocator(page).hover()
   await page.waitForTimeout(200)
   expect(await poseHtml(page).then((h) => h.includes('rotate(4 60 82)'))).toBe(false) // no wink
+  expect(await isSwaying(page)).toBe(false)
+  expect(await quipOrLabelText(page)).toBeNull() // no birth quip either
 })

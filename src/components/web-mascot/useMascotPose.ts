@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { PoseName } from './frames'
+import { QUIP_END_OF_PAGE, QUIP_FAQ, QUIP_FALLEN, QUIP_GET_UP, QUIP_WAVE } from './quips'
 
 export type AnchorKey = 'hero' | 'anteprima' | 'costruiamo' | 'metodo' | 'faq' | 'end'
 
@@ -16,6 +17,10 @@ const GET_UP_MS = 300
 const REACTION_STEP_MS = 700 // each pose in a build->typing / think->point beat
 const WAVE_MS = 900
 const WAVE_SESSION_KEY = 'nib-waved'
+const END_OF_PAGE_SESSION_KEY = 'nib-end-of-page'
+const END_OF_PAGE_MARGIN = 40 // px from the true bottom that counts as "reached the end"
+const QUIP_MS = 1700
+const FAQ_REACTION_MS = 1400 // matches the effective on-screen time of the 2-step build/typing and think/point reactions
 const NIB_TOP_OFFSET = 24 // gap below the fixed nav
 const NIB_WIDTH = 84 // poseBox (72) plus the label's max-width headroom
 const NIB_HEIGHT = 96
@@ -37,9 +42,12 @@ interface Options {
  * well-defined value (home corner, or a spot next to the active element) so
  * moving between them is a CSS transition, not a teleport. The resting
  * *pose* still doesn't derive from which section is centered — it's always
- * `idle` unless a real interaction (tab click, step select, CTA hover,
- * hover/click on Nib, fast scroll, page exit) briefly overrides it. No
- * animation library — every transition is a plain setTimeout swap.
+ * `idle` unless a real interaction (tab click, step select, CTA hover, FAQ
+ * open, hover/click on Nib, fast scroll, page exit, reaching the bottom)
+ * briefly overrides it. `quip` (copy in quips.ts) rides alongside some of
+ * these — a short line of personality, not a status readout like the
+ * costruiamo/metodo label. No animation library — every transition is a
+ * plain setTimeout swap.
  *
  * `peek` (from the 13-pose handoff) has no trigger here: it was the old
  * scroll-arrival pose for `anteprima`, and that whole "re-anchor on scroll"
@@ -53,9 +61,24 @@ export function useMascotPose({ reducedMotion }: Options) {
   const [moveTarget, setMoveTarget] = useState<Position | null>(null)
   const [pointTarget, setPointTarget] = useState<Point | null>(null)
   const [override, setOverride] = useState<PoseName | null>(null)
+  const [quip, setQuip] = useState<string | null>(null)
 
   const overrideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const overrideChainRef = useRef<ReturnType<typeof setTimeout>[]>([])
+  const quipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lastQuipRef = useRef<string | null>(null)
+
+  /** Shows one line from `lines` (never repeating the last one shown), auto-clearing after QUIP_MS. */
+  function showQuip(lines: string | string[]) {
+    if (reducedMotion) return
+    const pool = Array.isArray(lines) ? lines : [lines]
+    const choices = pool.length > 1 ? pool.filter((l) => l !== lastQuipRef.current) : pool
+    const text = choices[Math.floor(Math.random() * choices.length)]
+    lastQuipRef.current = text
+    if (quipTimerRef.current) clearTimeout(quipTimerRef.current)
+    setQuip(text)
+    quipTimerRef.current = setTimeout(() => setQuip(null), QUIP_MS)
+  }
 
   // Home corner: just below the (fixed) nav, hugging the right edge — same
   // math as the CSS clamp() the old right-anchored layout used, so the
@@ -196,8 +219,10 @@ export function useMascotPose({ reducedMotion }: Options) {
     setOverride('wobble')
     const t1 = setTimeout(() => {
       setOverride('fallen')
+      showQuip(QUIP_FALLEN)
       const t2 = setTimeout(() => {
         setOverride('getUp')
+        showQuip(QUIP_GET_UP)
         const t3 = setTimeout(() => setOverride(null), GET_UP_MS)
         overrideChainRef.current.push(t3)
       }, FALLEN_MS)
@@ -250,6 +275,26 @@ export function useMascotPose({ reducedMotion }: Options) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reducedMotion])
 
+  // FAQ: opening a question (native <details>/<summary>, click covers both
+  // mouse and keyboard activation) walks Nib over for a brief think reaction
+  // — genuine curiosity about what's being read, not a scroll-arrival pose.
+  useEffect(() => {
+    const container = document.getElementById('faq')
+    if (!container) return
+    function onClick(e: MouseEvent) {
+      const q = (e.target as Element).closest?.('.web-faq-q') as HTMLElement | null
+      if (!q) return
+      triggerOverride('think', FAQ_REACTION_MS)
+      setMoveTarget(positionNear(q))
+      showQuip(QUIP_FAQ)
+      const t = setTimeout(() => setMoveTarget(null), FAQ_REACTION_MS)
+      overrideChainRef.current.push(t)
+    }
+    container.addEventListener('click', onClick)
+    return () => container.removeEventListener('click', onClick)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reducedMotion])
+
   // Footer contact CTA: the one explicit "invite" in the experience — Nib
   // walks over and points at the form for as long as the primary CTA is
   // hovered/focused (tap-and-hold on touch fires the same focus/enter pair).
@@ -285,10 +330,31 @@ export function useMascotPose({ reducedMotion }: Options) {
     function onExitIntent() {
       if (typeof sessionStorage !== 'undefined') sessionStorage.setItem(WAVE_SESSION_KEY, '1')
       triggerOverride('wave', WAVE_MS)
+      showQuip(QUIP_WAVE)
       document.removeEventListener('mouseleave', onExitIntent)
     }
     document.addEventListener('mouseleave', onExitIntent)
     return () => document.removeEventListener('mouseleave', onExitIntent)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reducedMotion])
+
+  // Reaching the true bottom of the page — a small acknowledgment for
+  // whoever actually reads to the end, once per tab session. Separate from
+  // the fast-scroll gag below: this fires on *position*, not *speed*.
+  useEffect(() => {
+    if (reducedMotion) return
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem(END_OF_PAGE_SESSION_KEY)) return
+    function onScroll() {
+      const reachedEnd =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - END_OF_PAGE_MARGIN
+      if (!reachedEnd) return
+      if (typeof sessionStorage !== 'undefined') sessionStorage.setItem(END_OF_PAGE_SESSION_KEY, '1')
+      triggerOverride('excited', REACTION_STEP_MS)
+      showQuip(QUIP_END_OF_PAGE)
+      window.removeEventListener('scroll', onScroll)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reducedMotion])
 
@@ -319,6 +385,7 @@ export function useMascotPose({ reducedMotion }: Options) {
     () => () => {
       if (overrideTimerRef.current) clearTimeout(overrideTimerRef.current)
       overrideChainRef.current.forEach(clearTimeout)
+      if (quipTimerRef.current) clearTimeout(quipTimerRef.current)
     },
     []
   )
@@ -333,6 +400,8 @@ export function useMascotPose({ reducedMotion }: Options) {
     top: position?.top ?? null,
     left: position?.left ?? null,
     pointTarget,
+    quip,
+    showQuip,
     triggerOverride,
   }
 }

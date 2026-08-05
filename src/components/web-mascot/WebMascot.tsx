@@ -6,10 +6,12 @@
  * ASCII glyphs, plus a narrower reappearance model — born once in the hero,
  * then only reacts to genuine interaction (see useMascotPose.ts) instead of
  * re-anchoring on every scroll position. This file wires the artwork, the
- * one-time hero transformation, and two "feels alive" touches on top of that
- * hook: cursor-aware pupils (this file) and walking over to whatever's being
- * interacted with (position math lives in the hook, since the interaction
- * listeners already do).
+ * one-time hero transformation, and the "feels alive" touches on top of that
+ * hook: cursor-aware pupils and the idle sway (both live here, cosmetic-only
+ * DOM/CSS work), walking over to whatever's being interacted with (position
+ * math lives in the hook, since the interaction listeners already do), and
+ * `quip` — a short line of copy (quips.ts) shown in the same slot as the
+ * costruiamo/metodo label, quip taking priority when both would apply.
  *
  * Isolation contract unchanged: this folder + one import/mount line in
  * app/web/page.tsx are the only files this experiment owns. It only *reads*
@@ -21,6 +23,7 @@ import { useEffect, useRef, useState } from 'react'
 import styles from './webMascot.module.css'
 import { frames, INTRO_TEXT, TRANSFORM_TICKS, type PoseName } from './frames'
 import { useMascotPose } from './useMascotPose'
+import { QUIP_EXCITED, QUIP_HERO, QUIP_WAVE } from './quips'
 
 type IntroStage = 'hold' | 'compile' | 'done'
 
@@ -44,7 +47,7 @@ export default function WebMascot() {
   const [blinkOn, setBlinkOn] = useState(false)
   const poseBoxRef = useRef<HTMLDivElement>(null)
 
-  const { anchor, pose: hookPose, onDark, top, left, pointTarget, triggerOverride } = useMascotPose({
+  const { anchor, pose: hookPose, onDark, top, left, pointTarget, quip, showQuip, triggerOverride } = useMascotPose({
     reducedMotion,
   })
 
@@ -61,6 +64,12 @@ export default function WebMascot() {
     if (introStage !== 'compile') return
     const t = setTimeout(() => setIntroStage('done'), TRANSFORM_MS)
     return () => clearTimeout(t)
+  }, [introStage])
+  // One-time "hi" the moment the transformation settles — the birth itself
+  // is the introduction, this is just Nib saying so.
+  useEffect(() => {
+    if (introStage === 'done') showQuip(QUIP_HERO)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [introStage])
 
   // idle <-> idleBlink breath: applies wherever Nib is genuinely at rest
@@ -121,6 +130,7 @@ export default function WebMascot() {
       const href = a.getAttribute('href') || ''
       if (!href || href.startsWith('#') || href.startsWith('/web')) return
       triggerOverride('wave', WAVE_MS)
+      showQuip(QUIP_WAVE)
     }
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)
@@ -204,15 +214,26 @@ export default function WebMascot() {
   if (top === null || left === null) return null
 
   const poseKey: PoseName = idleNow && blinkOn ? 'idleBlink' : hookPose
-  const showLabel = (anchor === 'costruiamo' || anchor === 'metodo') && contextLabel
+  const infoLabel = anchor === 'costruiamo' || anchor === 'metodo' ? contextLabel : null
 
   return (
     <div
       className={`${styles.figure} ${styles.visible} ${onDark ? styles.onDark : styles.onLight}`}
       style={{ top, left }}
       aria-hidden="true"
-      onMouseEnter={() => triggerOverride('wink', WINK_MS)}
-      onClick={() => triggerOverride('excited', EXCITED_MS)}
+      onMouseEnter={() => {
+        // Swapping poseBox's innerHTML (any pose change) or Nib's own
+        // top/left transition sweeping past a stationary cursor can both
+        // fire a genuine-looking mouseenter with no real hover intent behind
+        // it — gating on "currently idle" means it only ever reacts to an
+        // actual hover of an at-rest Nib, not a side effect of it reacting
+        // to something else.
+        if (hookPose === 'idle') triggerOverride('wink', WINK_MS)
+      }}
+      onClick={() => {
+        triggerOverride('excited', EXCITED_MS)
+        showQuip(QUIP_EXCITED)
+      }}
     >
       {introStage === 'hold' ? (
         <span className={styles.introText}>
@@ -222,9 +243,17 @@ export default function WebMascot() {
       ) : introStage === 'compile' ? (
         <div className={styles.poseBox} dangerouslySetInnerHTML={{ __html: TRANSFORM_TICKS }} />
       ) : (
-        <div ref={poseBoxRef} className={styles.poseBox} dangerouslySetInnerHTML={{ __html: frames[poseKey] }} />
+        <div
+          ref={poseBoxRef}
+          className={`${styles.poseBox} ${idleNow ? styles.idleSway : ''}`}
+          dangerouslySetInnerHTML={{ __html: frames[poseKey] }}
+        />
       )}
-      {showLabel && <span className={styles.label}>{contextLabel}</span>}
+      {quip ? (
+        <span className={styles.quip}>{quip}</span>
+      ) : infoLabel ? (
+        <span className={styles.label}>{infoLabel}</span>
+      ) : null}
     </div>
   )
 }
