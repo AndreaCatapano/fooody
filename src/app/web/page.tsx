@@ -6,6 +6,7 @@ import WebAnteprimaSection from '@/components/web/WebAnteprimaSection'
 import WebCapabilitiesSection from '@/components/web/WebCapabilitiesSection'
 import WebMetodoSection from '@/components/web/WebMetodoSection'
 import WebFaq, { WEB_FAQS } from '@/components/web/WebFaq'
+import WebMascot from '@/components/web-mascot/WebMascot'
 
 export const metadata: Metadata = buildMetadata('web')
 
@@ -30,6 +31,9 @@ export default function WebPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+
+      {/* experiment/web-mascot: self-contained, see src/components/web-mascot/ */}
+      <WebMascot />
 
       <PageHero
         eyebrow={<div className="eyebrow no-slash web-accent-fg">— web design · ux · sviluppo</div>}
