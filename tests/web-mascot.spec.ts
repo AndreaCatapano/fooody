@@ -293,3 +293,34 @@ test('reduced motion: no intro compile frame, no hover reaction', async ({ page 
   expect(await isSwaying(page)).toBe(false)
   expect(await quipOrLabelText(page)).toBeNull() // no birth quip either
 })
+
+test('label/quip has an opaque backing on a narrow (mobile) viewport', async ({ page }) => {
+  // Mobile columns are narrow enough that the costruiamo/metodo label almost
+  // always lands on top of real body copy — small mono text directly over a
+  // paragraph of similar size is unreadable without something behind it to
+  // separate the two (found by hand-testing at 375px: "LANDING PAGE" was
+  // interleaved with "...conosciamo a fondo" underneath it).
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/web')
+  await waitForNib(page)
+
+  // .web-cap-tabs (desktop pills) is display:none at this width; the visible
+  // control is .web-cap-dots — matching what a real visitor would tap here.
+  const tab = page.locator('.web-cap-dot').first()
+  await tab.scrollIntoViewIfNeeded()
+  await tab.click()
+
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const svg = document.querySelector('svg[viewBox="0 0 120 160"]')
+        const figure = svg?.closest('div[aria-hidden="true"]')
+        const span = figure?.querySelector(':scope > span')
+        if (!span) return null
+        const { backgroundColor } = getComputedStyle(span)
+        // "rgba(r, g, b, 0)" (fully transparent) is the no-backing case this guards against.
+        return backgroundColor
+      })
+    )
+    .not.toMatch(/rgba?\([^)]*,\s*0\)$/)
+})

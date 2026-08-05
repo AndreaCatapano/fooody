@@ -52,18 +52,43 @@
 
 /* Capped to the poseBox width (not left free to grow): keeps the figure's
    box a stable size so the JS-computed `left` (measured for that width)
-   never drifts when a long tab/step label is showing. */
-.label {
+   never drifts when a long tab/step label is showing. border-box (not the
+   default content-box) so the pill's own padding is *inside* that 84px cap,
+   not added on top of it — same reason NIB_WIDTH in useMascotPose.ts can
+   keep assuming 84px regardless.
+   The pill background exists because Nib rides on top of real body copy
+   (most visibly on mobile/tablet, where columns are narrow and there's
+   text almost everywhere) — small mono text directly on top of a paragraph
+   of similar size is unreadable without something to separate the two. It
+   deliberately doesn't extend to the character itself (frames.ts / the
+   handoff's "no card" note): the line art holds up fine against text on its
+   own; only text-on-text needed the fix. */
+.label,
+.quip {
   display: block;
+  box-sizing: border-box;
   max-width: 84px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   font-family: var(--mono, ui-monospace, monospace);
+  text-align: right;
+  text-wrap: balance;
+  transition: color 0.4s ease, background-color 0.4s ease;
+}
+
+.label {
   font-size: 10px;
   line-height: 1.3;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  text-align: right;
-  text-wrap: balance;
-  transition: color 0.4s ease;
+}
+
+.quip {
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
 }
 
 .onLight .label {
@@ -74,18 +99,16 @@
   color: rgba(247, 244, 238, 0.5);
 }
 
-/* Same width cap as .label and for the same reason (see above), but no
-   text-transform and no separate color rule — a quip inherits .figure's gold
-   directly, reading as Nib's own voice rather than a status readout. */
-.quip {
-  display: block;
-  max-width: 84px;
-  font-family: var(--mono, ui-monospace, monospace);
-  font-size: 11px;
-  line-height: 1.35;
-  letter-spacing: 0.01em;
-  text-align: right;
-  text-wrap: balance;
+.onLight .label,
+.onLight .quip {
+  background-color: color-mix(in srgb, var(--paper, #f7f4ee) 95%, transparent);
+  box-shadow: 0 1px 8px rgba(23, 19, 15, 0.08);
+}
+
+.onDark .label,
+.onDark .quip {
+  background-color: color-mix(in srgb, var(--ink, #17130f) 90%, transparent);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* Idle micro-fidget: only while genuinely at rest (idleNow gates the class
