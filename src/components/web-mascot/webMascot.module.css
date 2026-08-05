@@ -5,8 +5,12 @@
    than body copy — still adapts light/dark per section, same mechanism the
    rest of the site already uses for text-on-reactive-background contrast. */
 
+/* Fixed to the viewport, not the page: Nib rides along at a constant screen
+   position below the (also-fixed) nav instead of a page coordinate computed
+   once per section — the old page-coordinate approach only recomputed on a
+   section crossing, so it stayed put and scrolled off-screen mid-section. */
 .wrap {
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   display: flex;
@@ -15,7 +19,7 @@
   z-index: 5;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.4s ease, top 0.6s ease;
+  transition: opacity 0.4s ease, top 0.3s ease;
 }
 
 .visible {

@@ -13,6 +13,7 @@ const GET_UP_MS = 300
 const REACTION_STEP_MS = 700 // each pose in a build->typing / think->point beat
 const WAVE_MS = 900
 const WAVE_SESSION_KEY = 'nib-waved'
+const NIB_TOP_OFFSET = 24 // gap below the fixed nav
 
 interface Options {
   reducedMotion: boolean
@@ -21,13 +22,14 @@ interface Options {
 /**
  * Single hook owning Nib's state. Round 2 design pass narrows this from "6
  * scroll-anchored poses" to "born once in the hero, reacts only to genuine
- * interaction": position/background contrast still track scroll continuously
- * (so Nib stays sensibly placed near the reader and the fast-scroll/exit
- * gags have somewhere visible to play), but the resting *pose* no longer
- * derives from which section is centered — it's always `idle` unless a real
- * interaction (tab click, step select, CTA hover, hover/click on Nib, fast
- * scroll, page exit) briefly overrides it. No animation library — every
- * transition is a plain setTimeout swap.
+ * interaction": Nib sits at a fixed screen position (not a page coordinate)
+ * so it's always visible, while background contrast and the costruiamo/
+ * metodo label still track scroll (so they reflect whatever's currently
+ * behind it) — but the resting *pose* no longer derives from which section
+ * is centered, it's always `idle` unless a real interaction (tab click, step
+ * select, CTA hover, hover/click on Nib, fast scroll, page exit) briefly
+ * overrides it. No animation library — every transition is a plain
+ * setTimeout swap.
  *
  * `peek` (from the 13-pose handoff) has no trigger here: it was the old
  * scroll-arrival pose for `anteprima`, and that whole "re-anchor on scroll"
@@ -43,10 +45,24 @@ export function useMascotPose({ reducedMotion }: Options) {
   const overrideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const overrideChainRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
-  // Section detection: an IntersectionObserver with a thin band around the
-  // vertical center of the viewport — a section counts as "current" exactly
-  // when it crosses that line, so at most one is active at a time without
-  // hand-rolled scroll math.
+  // Nib rides at a constant screen position just below the (fixed) nav — not
+  // a page coordinate, so it never scrolls out of view mid-section. Only the
+  // nav's own height (desktop vs mobile) moves this, so it's a plain resize
+  // measurement, no scroll math.
+  useEffect(() => {
+    function measure() {
+      const navHeight = document.querySelector('.nav')?.getBoundingClientRect().height ?? 0
+      setTop(navHeight + NIB_TOP_OFFSET)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [])
+
+  // Section detection for background contrast + context label only (no
+  // longer for position): an IntersectionObserver with a thin band near the
+  // top of the viewport, roughly where Nib actually sits, so onDark and the
+  // costruiamo/metodo label reflect whatever's currently behind it.
   useEffect(() => {
     const all: { key: AnchorKey; el: HTMLElement | null }[] = [
       { key: 'hero', el: document.querySelector<HTMLElement>('#main-content > header') },
@@ -60,16 +76,9 @@ export function useMascotPose({ reducedMotion }: Options) {
 
     if (!known.length) return
 
-    const activeRef = { current: known[0] }
-
     function place(entry: { key: AnchorKey; el: HTMLElement }) {
-      activeRef.current = entry
-      const rect = entry.el.getBoundingClientRect()
-      const navHeight =
-        entry.key === 'hero' ? (document.querySelector('.nav')?.getBoundingClientRect().height ?? 0) : 0
       setAnchor((prev) => (prev === entry.key ? prev : entry.key))
       setOnDark(entry.el.getAttribute('data-bg') === 'ink')
-      setTop(rect.top + window.scrollY + navHeight + (entry.key === 'hero' ? 24 : 40))
     }
 
     const io = new IntersectionObserver(
@@ -80,24 +89,14 @@ export function useMascotPose({ reducedMotion }: Options) {
           if (match) place(match)
         }
       },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+      { rootMargin: '0px 0px -80% 0px', threshold: 0 } // top 20% of the viewport
     )
     known.forEach((s) => io.observe(s.el))
 
     // Land on the right section immediately (IO's first callback is async).
     place(known[0])
 
-    // Sections don't resize height on window resize in a way that moves their
-    // top, but re-measure anyway (e.g. nav height changes at the mobile
-    // breakpoint) so the mascot doesn't drift out of place.
-    function onResize() {
-      place(activeRef.current)
-    }
-    window.addEventListener('resize', onResize)
-    return () => {
-      io.disconnect()
-      window.removeEventListener('resize', onResize)
-    }
+    return () => io.disconnect()
   }, [])
 
   function clearOverrideTimers() {
