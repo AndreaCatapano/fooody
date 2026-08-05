@@ -5,6 +5,8 @@ import type { PoseName } from './frames'
 
 export type AnchorKey = 'hero' | 'anteprima' | 'costruiamo' | 'metodo' | 'faq' | 'end'
 
+type Position = { top: number; left: number }
+
 const FAST_SCROLL_PX_PER_MS = 2.5 // 2500px/s per Nib's spec
 const SCROLL_THROTTLE_MS = 100
 const WOBBLE_MS = 180
@@ -14,6 +16,9 @@ const REACTION_STEP_MS = 700 // each pose in a build->typing / think->point beat
 const WAVE_MS = 900
 const WAVE_SESSION_KEY = 'nib-waved'
 const NIB_TOP_OFFSET = 24 // gap below the fixed nav
+const NIB_WIDTH = 84 // poseBox (72) plus the label's max-width headroom
+const NIB_HEIGHT = 96
+const VIEWPORT_MARGIN = 12
 
 interface Options {
   reducedMotion: boolean
@@ -22,14 +27,16 @@ interface Options {
 /**
  * Single hook owning Nib's state. Round 2 design pass narrows this from "6
  * scroll-anchored poses" to "born once in the hero, reacts only to genuine
- * interaction": Nib sits at a fixed screen position (not a page coordinate)
- * so it's always visible, while background contrast and the costruiamo/
- * metodo label still track scroll (so they reflect whatever's currently
- * behind it) — but the resting *pose* no longer derives from which section
- * is centered, it's always `idle` unless a real interaction (tab click, step
- * select, CTA hover, hover/click on Nib, fast scroll, page exit) briefly
- * overrides it. No animation library — every transition is a plain
- * setTimeout swap.
+ * interaction," and this pass adds two "feels alive" layers on top: Nib
+ * walks over to whatever's actually being interacted with (tab, step, CTA)
+ * instead of sitting fixed in one corner, and — in WebMascot.tsx, not here —
+ * its pupils track the cursor when it's nearby. Position always has a
+ * well-defined value (home corner, or a spot next to the active element) so
+ * moving between them is a CSS transition, not a teleport. The resting
+ * *pose* still doesn't derive from which section is centered — it's always
+ * `idle` unless a real interaction (tab click, step select, CTA hover,
+ * hover/click on Nib, fast scroll, page exit) briefly overrides it. No
+ * animation library — every transition is a plain setTimeout swap.
  *
  * `peek` (from the 13-pose handoff) has no trigger here: it was the old
  * scroll-arrival pose for `anteprima`, and that whole "re-anchor on scroll"
@@ -39,29 +46,32 @@ interface Options {
 export function useMascotPose({ reducedMotion }: Options) {
   const [anchor, setAnchor] = useState<AnchorKey>('hero')
   const [onDark, setOnDark] = useState(true)
-  const [top, setTop] = useState<number | null>(null)
+  const [home, setHome] = useState<Position | null>(null)
+  const [moveTarget, setMoveTarget] = useState<Position | null>(null)
   const [override, setOverride] = useState<PoseName | null>(null)
 
   const overrideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const overrideChainRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
-  // Nib rides at a constant screen position just below the (fixed) nav — not
-  // a page coordinate, so it never scrolls out of view mid-section. Only the
-  // nav's own height (desktop vs mobile) moves this, so it's a plain resize
-  // measurement, no scroll math.
+  // Home corner: just below the (fixed) nav, hugging the right edge — same
+  // math as the CSS clamp() the old right-anchored layout used, so the
+  // resting spot looks identical to before. Only nav height / viewport width
+  // move this, so it's a plain resize measurement, no scroll math.
   useEffect(() => {
     function measure() {
+      if (window.innerWidth <= 0) return // layout not settled yet, wait for the next resize
       const navHeight = document.querySelector('.nav')?.getBoundingClientRect().height ?? 0
-      setTop(navHeight + NIB_TOP_OFFSET)
+      const paddingRight = Math.min(48, Math.max(16, window.innerWidth * 0.04))
+      setHome({ top: navHeight + NIB_TOP_OFFSET, left: window.innerWidth - paddingRight - NIB_WIDTH })
     }
     measure()
     window.addEventListener('resize', measure)
     return () => window.removeEventListener('resize', measure)
   }, [])
 
-  // Section detection for background contrast + context label only (no
-  // longer for position): an IntersectionObserver with a thin band near the
-  // top of the viewport, roughly where Nib actually sits, so onDark and the
+  // Section detection for background contrast + context label only (not
+  // position): an IntersectionObserver with a thin band near the top of the
+  // viewport, roughly where Nib's home spot sits, so onDark and the
   // costruiamo/metodo label reflect whatever's currently behind it.
   useEffect(() => {
     const all: { key: AnchorKey; el: HTMLElement | null }[] = [
@@ -99,10 +109,23 @@ export function useMascotPose({ reducedMotion }: Options) {
     return () => io.disconnect()
   }, [])
 
+  /** A spot next to `el` (above it by default), clamped so Nib never lands under the nav or off-screen. */
+  function positionNear(el: HTMLElement): Position {
+    const rect = el.getBoundingClientRect()
+    const navHeight = document.querySelector('.nav')?.getBoundingClientRect().height ?? 0
+    const top = Math.max(navHeight + VIEWPORT_MARGIN, rect.top - NIB_HEIGHT - 16)
+    const left = Math.max(
+      VIEWPORT_MARGIN,
+      Math.min(window.innerWidth - NIB_WIDTH - VIEWPORT_MARGIN, rect.left + rect.width / 2 - NIB_WIDTH / 2)
+    )
+    return { top, left }
+  }
+
   function clearOverrideTimers() {
     if (overrideTimerRef.current) clearTimeout(overrideTimerRef.current)
     overrideChainRef.current.forEach(clearTimeout)
     overrideChainRef.current = []
+    setMoveTarget(null)
   }
 
   function triggerOverride(pose: PoseName, ms: number) {
@@ -139,6 +162,7 @@ export function useMascotPose({ reducedMotion }: Options) {
 
   /** wobble (anticipation) -> fallen (in place) -> getUp (recovery) -> base pose. */
   function triggerFall() {
+    clearOverrideTimers()
     if (reducedMotion) {
       // No comic timing when the user asked for less motion — just the plain
       // "fallen" state for the same total duration, no wobble/getUp beats.
@@ -147,7 +171,6 @@ export function useMascotPose({ reducedMotion }: Options) {
       overrideChainRef.current.push(t)
       return
     }
-    clearOverrideTimers()
     setOverride('wobble')
     const t1 = setTimeout(() => {
       setOverride('fallen')
@@ -161,15 +184,20 @@ export function useMascotPose({ reducedMotion }: Options) {
     overrideChainRef.current.push(t1)
   }
 
-  // "Cosa costruiamo": a tab (or its mobile dot equivalent) click gets a
-  // brief build -> typing reaction — fires on the click, not on merely
-  // scrolling the section into view.
+  // "Cosa costruiamo": a tab (or its mobile dot equivalent) click walks Nib
+  // over to it for a brief build -> typing reaction — fires on the click
+  // (mouse or tap, same event either way), not on scrolling the section into
+  // view.
   useEffect(() => {
     const container = document.getElementById('costruiamo')
     if (!container) return
     function onClick(e: MouseEvent) {
-      if (!(e.target as Element).closest?.('.web-cap-tab, .web-cap-dot')) return
+      const tab = (e.target as Element).closest?.('.web-cap-tab, .web-cap-dot') as HTMLElement | null
+      if (!tab) return
       triggerSequence(['build', 'typing'], REACTION_STEP_MS)
+      setMoveTarget(positionNear(tab))
+      const t = setTimeout(() => setMoveTarget(null), REACTION_STEP_MS * 2)
+      overrideChainRef.current.push(t)
     }
     container.addEventListener('click', onClick)
     return () => container.removeEventListener('click', onClick)
@@ -177,14 +205,19 @@ export function useMascotPose({ reducedMotion }: Options) {
   }, [reducedMotion])
 
   // "Come lavoriamo": selecting a step (desktop rail node or mobile
-  // accordion summary — keyboard activation dispatches a click on both) gets
-  // a brief think -> point reaction, not a scroll-arrival pose.
+  // accordion summary — keyboard activation dispatches a click on both)
+  // walks Nib over to it for a brief think -> point reaction, not a
+  // scroll-arrival pose.
   useEffect(() => {
     const container = document.getElementById('metodo')
     if (!container) return
     function onClick(e: MouseEvent) {
-      if (!(e.target as Element).closest?.('.web-tl-node, .web-tl-step-head')) return
+      const step = (e.target as Element).closest?.('.web-tl-node, .web-tl-step-head') as HTMLElement | null
+      if (!step) return
       triggerSequence(['think', 'point'], REACTION_STEP_MS)
+      setMoveTarget(positionNear(step))
+      const t = setTimeout(() => setMoveTarget(null), REACTION_STEP_MS * 2)
+      overrideChainRef.current.push(t)
     }
     container.addEventListener('click', onClick)
     return () => container.removeEventListener('click', onClick)
@@ -192,12 +225,14 @@ export function useMascotPose({ reducedMotion }: Options) {
   }, [reducedMotion])
 
   // Footer contact CTA: the one explicit "invite" in the experience — Nib
-  // points at the form for as long as the primary CTA is hovered/focused.
+  // walks over and points at the form for as long as the primary CTA is
+  // hovered/focused (tap-and-hold on touch fires the same focus/enter pair).
   useEffect(() => {
     const cta = document.querySelector<HTMLElement>('#contatti .web-btn')
     if (!cta) return
     function onEnter() {
       setHoverOverride('point')
+      setMoveTarget(positionNear(cta!))
     }
     function onLeave() {
       setHoverOverride(null)
@@ -253,9 +288,16 @@ export function useMascotPose({ reducedMotion }: Options) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reducedMotion])
 
-  useEffect(() => () => clearOverrideTimers(), [])
+  useEffect(
+    () => () => {
+      if (overrideTimerRef.current) clearTimeout(overrideTimerRef.current)
+      overrideChainRef.current.forEach(clearTimeout)
+    },
+    []
+  )
 
   const pose = override ?? 'idle'
+  const position = moveTarget ?? home
 
-  return { anchor, pose, onDark, top, triggerOverride }
+  return { anchor, pose, onDark, top: position?.top ?? null, left: position?.left ?? null, triggerOverride }
 }

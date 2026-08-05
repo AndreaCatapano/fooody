@@ -5,8 +5,11 @@
  * (design_handoff_nib_mascot/): 13 SVG line-art poses replacing the original
  * ASCII glyphs, plus a narrower reappearance model — born once in the hero,
  * then only reacts to genuine interaction (see useMascotPose.ts) instead of
- * re-anchoring on every scroll position. This file wires the artwork and the
- * one-time hero transformation on top of that hook.
+ * re-anchoring on every scroll position. This file wires the artwork, the
+ * one-time hero transformation, and two "feels alive" touches on top of that
+ * hook: cursor-aware pupils (this file) and walking over to whatever's being
+ * interacted with (position math lives in the hook, since the interaction
+ * listeners already do).
  *
  * Isolation contract unchanged: this folder + one import/mount line in
  * app/web/page.tsx are the only files this experiment owns. It only *reads*
@@ -14,7 +17,7 @@
  * classes, open <details>) — never edits another component's source.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './webMascot.module.css'
 import { frames, INTRO_TEXT, TRANSFORM_TICKS, type PoseName } from './frames'
 import { useMascotPose } from './useMascotPose'
@@ -27,6 +30,8 @@ const IDLE_BLINK_EVERY_MS = 3400
 const WINK_MS = 500
 const EXCITED_MS = 600
 const WAVE_MS = 900
+const GAZE_MAX = 1.6 // pupil offset cap, in the pose's own 120x160 viewBox units
+const GAZE_RADIUS = 260 // px — cursor distance at which gaze intensity reaches 0
 
 export default function WebMascot() {
   // Read once on first client render (this component always renders null
@@ -37,8 +42,9 @@ export default function WebMascot() {
   )
   const [introStage, setIntroStage] = useState<IntroStage>(() => (reducedMotion ? 'done' : 'hold'))
   const [blinkOn, setBlinkOn] = useState(false)
+  const poseBoxRef = useRef<HTMLDivElement>(null)
 
-  const { anchor, pose: hookPose, onDark, top, triggerOverride } = useMascotPose({ reducedMotion })
+  const { anchor, pose: hookPose, onDark, top, left, triggerOverride } = useMascotPose({ reducedMotion })
 
   // Symbolic transformation: "fooody." holds, then the tick-mark frame
   // (letters dissolving into the same primitive as Nib's nibble ticks)
@@ -119,34 +125,66 @@ export default function WebMascot() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (top === null) return null
+  // Cursor-aware gaze: the pupils (every pose's currentColor-filled circles)
+  // nudge toward the cursor when it's nearby, easing back to centered as it
+  // moves away — reads as "notices you" without redrawing any of the 13
+  // poses, since it just transforms whatever circles the current pose has.
+  // Touch devices never fire mousemove, so pupils simply stay centered there
+  // — the honest default, not a gap to fill.
+  useEffect(() => {
+    if (reducedMotion) return
+    let raf = 0
+    let pending: { x: number; y: number } | null = null
+    function apply() {
+      raf = 0
+      const svg = poseBoxRef.current?.querySelector('svg')
+      if (!svg || !pending) return
+      const rect = svg.getBoundingClientRect()
+      const dx = pending.x - (rect.left + rect.width / 2)
+      const dy = pending.y - (rect.top + rect.height / 2)
+      const dist = Math.hypot(dx, dy)
+      const intensity = Math.max(0, 1 - dist / GAZE_RADIUS)
+      const nx = dist > 0 ? (dx / dist) * GAZE_MAX * intensity : 0
+      const ny = dist > 0 ? (dy / dist) * GAZE_MAX * intensity : 0
+      svg.querySelectorAll('circle[fill="currentColor"]').forEach((c) => {
+        ;(c as SVGCircleElement).style.transform = intensity > 0 ? `translate(${nx}px, ${ny}px)` : ''
+      })
+    }
+    function onMove(e: MouseEvent) {
+      pending = { x: e.clientX, y: e.clientY }
+      if (!raf) raf = requestAnimationFrame(apply)
+    }
+    window.addEventListener('mousemove', onMove)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [reducedMotion])
+
+  if (top === null || left === null) return null
 
   const poseKey: PoseName = idleNow && blinkOn ? 'idleBlink' : hookPose
   const showLabel = (anchor === 'costruiamo' || anchor === 'metodo') && contextLabel
 
   return (
     <div
-      className={`${styles.wrap} ${styles.visible} ${onDark ? styles.onDark : styles.onLight}`}
-      style={{ top }}
+      className={`${styles.figure} ${styles.visible} ${onDark ? styles.onDark : styles.onLight}`}
+      style={{ top, left }}
       aria-hidden="true"
+      onMouseEnter={() => triggerOverride('wink', WINK_MS)}
+      onClick={() => triggerOverride('excited', EXCITED_MS)}
     >
-      <div
-        className={styles.figure}
-        onMouseEnter={() => triggerOverride('wink', WINK_MS)}
-        onClick={() => triggerOverride('excited', EXCITED_MS)}
-      >
-        {introStage === 'hold' ? (
-          <span className={styles.introText}>
-            {INTRO_TEXT}
-            <span className={styles.cursor} />
-          </span>
-        ) : introStage === 'compile' ? (
-          <div className={styles.poseBox} dangerouslySetInnerHTML={{ __html: TRANSFORM_TICKS }} />
-        ) : (
-          <div className={styles.poseBox} dangerouslySetInnerHTML={{ __html: frames[poseKey] }} />
-        )}
-        {showLabel && <span className={styles.label}>{contextLabel}</span>}
-      </div>
+      {introStage === 'hold' ? (
+        <span className={styles.introText}>
+          {INTRO_TEXT}
+          <span className={styles.cursor} />
+        </span>
+      ) : introStage === 'compile' ? (
+        <div className={styles.poseBox} dangerouslySetInnerHTML={{ __html: TRANSFORM_TICKS }} />
+      ) : (
+        <div ref={poseBoxRef} className={styles.poseBox} dangerouslySetInnerHTML={{ __html: frames[poseKey] }} />
+      )}
+      {showLabel && <span className={styles.label}>{contextLabel}</span>}
     </div>
   )
 }
