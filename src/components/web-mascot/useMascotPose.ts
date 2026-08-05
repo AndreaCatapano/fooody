@@ -6,6 +6,7 @@ import type { PoseName } from './frames'
 export type AnchorKey = 'hero' | 'anteprima' | 'costruiamo' | 'metodo' | 'faq' | 'end'
 
 type Position = { top: number; left: number }
+type Point = { x: number; y: number }
 
 const FAST_SCROLL_PX_PER_MS = 2.5 // 2500px/s per Nib's spec
 const SCROLL_THROTTLE_MS = 100
@@ -27,9 +28,11 @@ interface Options {
 /**
  * Single hook owning Nib's state. Round 2 design pass narrows this from "6
  * scroll-anchored poses" to "born once in the hero, reacts only to genuine
- * interaction," and this pass adds two "feels alive" layers on top: Nib
- * walks over to whatever's actually being interacted with (tab, step, CTA)
- * instead of sitting fixed in one corner, and — in WebMascot.tsx, not here —
+ * interaction," and this pass adds "feels alive" layers on top: Nib walks
+ * over to whatever's actually being interacted with (tab, step, CTA) instead
+ * of sitting fixed in one corner; `pointTarget` is the screen-space point the
+ * `point` pose's arm should actually aim at (WebMascot.tsx does the rotation
+ * — this hook only tracks where "at" is); and — in WebMascot.tsx, not here —
  * its pupils track the cursor when it's nearby. Position always has a
  * well-defined value (home corner, or a spot next to the active element) so
  * moving between them is a CSS transition, not a teleport. The resting
@@ -48,6 +51,7 @@ export function useMascotPose({ reducedMotion }: Options) {
   const [onDark, setOnDark] = useState(true)
   const [home, setHome] = useState<Position | null>(null)
   const [moveTarget, setMoveTarget] = useState<Position | null>(null)
+  const [pointTarget, setPointTarget] = useState<Point | null>(null)
   const [override, setOverride] = useState<PoseName | null>(null)
 
   const overrideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -55,18 +59,29 @@ export function useMascotPose({ reducedMotion }: Options) {
 
   // Home corner: just below the (fixed) nav, hugging the right edge — same
   // math as the CSS clamp() the old right-anchored layout used, so the
-  // resting spot looks identical to before. Only nav height / viewport width
-  // move this, so it's a plain resize measurement, no scroll math.
+  // resting spot looks identical to before. The nav isn't just resize-
+  // sensitive: it also shrinks its own padding on scroll (.nav.scrolled in
+  // globals.css), so a plain resize listener leaves `home` stale — a
+  // ResizeObserver on the nav itself catches both.
   useEffect(() => {
+    const nav = document.querySelector<HTMLElement>('.nav')
     function measure() {
       if (window.innerWidth <= 0) return // layout not settled yet, wait for the next resize
-      const navHeight = document.querySelector('.nav')?.getBoundingClientRect().height ?? 0
+      const navHeight = nav?.getBoundingClientRect().height ?? 0
       const paddingRight = Math.min(48, Math.max(16, window.innerWidth * 0.04))
       setHome({ top: navHeight + NIB_TOP_OFFSET, left: window.innerWidth - paddingRight - NIB_WIDTH })
     }
     measure()
     window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+    // border-box, not the (default) content-box: .nav.scrolled only changes
+    // padding, and padding isn't part of the content box, so the default
+    // observation mode would never fire for it.
+    const ro = nav ? new ResizeObserver(measure) : null
+    if (nav && ro) ro.observe(nav, { box: 'border-box' })
+    return () => {
+      window.removeEventListener('resize', measure)
+      ro?.disconnect()
+    }
   }, [])
 
   // Section detection for background contrast + context label only (not
@@ -121,11 +136,18 @@ export function useMascotPose({ reducedMotion }: Options) {
     return { top, left }
   }
 
+  /** Screen-space center of `el` — what the `point` pose's arm actually aims at. */
+  function centerOf(el: HTMLElement): Point {
+    const rect = el.getBoundingClientRect()
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+  }
+
   function clearOverrideTimers() {
     if (overrideTimerRef.current) clearTimeout(overrideTimerRef.current)
     overrideChainRef.current.forEach(clearTimeout)
     overrideChainRef.current = []
     setMoveTarget(null)
+    setPointTarget(null)
   }
 
   function triggerOverride(pose: PoseName, ms: number) {
@@ -216,7 +238,11 @@ export function useMascotPose({ reducedMotion }: Options) {
       if (!step) return
       triggerSequence(['think', 'point'], REACTION_STEP_MS)
       setMoveTarget(positionNear(step))
-      const t = setTimeout(() => setMoveTarget(null), REACTION_STEP_MS * 2)
+      setPointTarget(centerOf(step))
+      const t = setTimeout(() => {
+        setMoveTarget(null)
+        setPointTarget(null)
+      }, REACTION_STEP_MS * 2)
       overrideChainRef.current.push(t)
     }
     container.addEventListener('click', onClick)
@@ -233,6 +259,7 @@ export function useMascotPose({ reducedMotion }: Options) {
     function onEnter() {
       setHoverOverride('point')
       setMoveTarget(positionNear(cta!))
+      setPointTarget(centerOf(cta!))
     }
     function onLeave() {
       setHoverOverride(null)
@@ -299,5 +326,13 @@ export function useMascotPose({ reducedMotion }: Options) {
   const pose = override ?? 'idle'
   const position = moveTarget ?? home
 
-  return { anchor, pose, onDark, top: position?.top ?? null, left: position?.left ?? null, triggerOverride }
+  return {
+    anchor,
+    pose,
+    onDark,
+    top: position?.top ?? null,
+    left: position?.left ?? null,
+    pointTarget,
+    triggerOverride,
+  }
 }

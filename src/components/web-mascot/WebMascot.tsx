@@ -44,7 +44,9 @@ export default function WebMascot() {
   const [blinkOn, setBlinkOn] = useState(false)
   const poseBoxRef = useRef<HTMLDivElement>(null)
 
-  const { anchor, pose: hookPose, onDark, top, left, triggerOverride } = useMascotPose({ reducedMotion })
+  const { anchor, pose: hookPose, onDark, top, left, pointTarget, triggerOverride } = useMascotPose({
+    reducedMotion,
+  })
 
   // Symbolic transformation: "fooody." holds, then the tick-mark frame
   // (letters dissolving into the same primitive as Nib's nibble ticks)
@@ -160,6 +162,44 @@ export default function WebMascot() {
       if (raf) cancelAnimationFrame(raf)
     }
   }, [reducedMotion])
+
+  // Precise pointing: the `point` pose ships one fixed arm angle, which only
+  // ever looks right by coincidence. Rotate the arm+chevron (tagged
+  // `[data-nib-arm]` in frames.ts) around its shoulder pivot to actually aim
+  // at pointTarget — the pivot's SVG-space coordinates are converted to
+  // screen space via the SVG's own CTM, so this stays correct regardless of
+  // the poseBox's on-screen size.
+  //
+  // React rewrites poseBox's innerHTML on every re-render of this component
+  // (dangerouslySetInnerHTML isn't skipped just because the string is
+  // unchanged), and something else here re-renders while `point` is still
+  // showing — e.g. the section-tracking IntersectionObserver settling a beat
+  // after Lenis's own scroll animation. Each rewrite wipes the imperative
+  // rotation. A MutationObserver on the poseBox re-applies it right after
+  // every such rewrite instead of trusting a single one-shot effect run.
+  useEffect(() => {
+    if (hookPose !== 'point' || !pointTarget) return
+    function applyRotation() {
+      const svg = poseBoxRef.current?.querySelector('svg')
+      const arm = svg?.querySelector<SVGGElement>('[data-nib-arm]')
+      if (!svg || !arm) return
+      const [pivotX, pivotY] = (arm.getAttribute('data-nib-arm') || '0,0').split(',').map(Number)
+      const ctm = svg.getScreenCTM()
+      if (!ctm) return
+      const pt = svg.createSVGPoint()
+      pt.x = pivotX
+      pt.y = pivotY
+      const pivot = pt.matrixTransform(ctm)
+      const targetAngle = Math.atan2(pointTarget!.y - pivot.y, pointTarget!.x - pivot.x) * (180 / Math.PI)
+      const drawnAngle = Math.atan2(-16, 28) * (180 / Math.PI) // the arm's drawn direction: (80,76) -> (108,60)
+      arm.style.transform = `rotate(${targetAngle - drawnAngle}deg)`
+    }
+    applyRotation()
+    const box = poseBoxRef.current
+    const mo = box ? new MutationObserver(applyRotation) : null
+    if (box && mo) mo.observe(box, { childList: true, subtree: true })
+    return () => mo?.disconnect()
+  }, [hookPose, pointTarget])
 
   if (top === null || left === null) return null
 
