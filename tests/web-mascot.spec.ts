@@ -16,6 +16,7 @@ import { test, expect, type Page, type Locator } from '@playwright/test'
 
 const POSE_MARKERS = {
   idle: (html: string) => !html.includes('<g transform') && html.includes('cx="54" cy="75"'),
+  peek: (html: string) => html.includes('M40,95 L40,70'),
   build: (html: string) => html.includes('rect x="50" y="20"'),
   typing: (html: string) => html.includes('rotate(14 60 90)'),
   think: (html: string) => html.includes('rotate(-6 60 82)'),
@@ -292,6 +293,36 @@ test('reduced motion: no intro compile frame, no hover reaction', async ({ page 
   expect(await poseHtml(page).then((h) => h.includes('rotate(4 60 82)'))).toBe(false) // no wink
   expect(await isSwaying(page)).toBe(false)
   expect(await quipOrLabelText(page)).toBeNull() // no birth quip either
+})
+
+test('compact viewport: hides while idle mid-section, stays visible in the hero', async ({ page }) => {
+  // Nib sitting fixed in the corner used to drift over real body copy as the
+  // page scrolled on narrow viewports (found by hand-testing at 375px). Now
+  // it should only ever be visible in the hero or mid-reaction there.
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/web')
+  await waitForNib(page)
+
+  await expect(figureLocator(page)).toHaveClass(/visible/)
+
+  await page.locator('.web-faq-q').first().scrollIntoViewIfNeeded()
+  await settleScroll(page)
+  // Let any boundary peek from crossing into #faq finish and settle to idle.
+  await expect.poll(() => poseHtml(page).then(POSE_MARKERS.idle), { timeout: 3000 }).toBe(true)
+  await expect(figureLocator(page)).not.toHaveClass(/visible/)
+})
+
+test('compact viewport: peeks at a section boundary while crossing it, then hides again', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/web')
+  await waitForNib(page)
+
+  await page.locator('#metodo').scrollIntoViewIfNeeded()
+  await expect.poll(() => poseHtml(page).then(POSE_MARKERS.peek), { timeout: 1500 }).toBe(true)
+  await expect(figureLocator(page)).toHaveClass(/visible/)
+
+  await expect.poll(() => poseHtml(page).then(POSE_MARKERS.idle), { timeout: 3000 }).toBe(true)
+  await expect(figureLocator(page)).not.toHaveClass(/visible/)
 })
 
 test('label/quip has an opaque backing on a narrow (mobile) viewport', async ({ page }) => {

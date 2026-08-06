@@ -28,6 +28,13 @@
   opacity: 1;
 }
 
+/* Compact mode fades Nib out entirely between its safe spots (hero, section
+   boundaries, active reactions) rather than leaving it floating over body
+   copy — while hidden it must not intercept taps meant for the page under it. */
+.figure:not(.visible) {
+  pointer-events: none;
+}
+
 .figure.onLight {
   color: var(--nib-gold-on-light, oklch(55% 0.15 80));
 }

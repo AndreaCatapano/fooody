@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { PoseName } from './frames'
-import { QUIP_END_OF_PAGE, QUIP_FAQ, QUIP_FALLEN, QUIP_GET_UP, QUIP_WAVE } from './quips'
+import { QUIP_END_OF_PAGE, QUIP_FAQ, QUIP_FALLEN, QUIP_GET_UP, QUIP_PEEK, QUIP_WAVE } from './quips'
 
 export type AnchorKey = 'hero' | 'anteprima' | 'costruiamo' | 'metodo' | 'faq' | 'end'
 
@@ -25,6 +25,8 @@ const NIB_TOP_OFFSET = 24 // gap below the fixed nav
 const NIB_WIDTH = 84 // poseBox (72) plus the label's max-width headroom
 const NIB_HEIGHT = 96
 const VIEWPORT_MARGIN = 12
+const COMPACT_BREAKPOINT = 860 // matches globals.css's own mobile/tablet breakpoint
+const PEEK_MS = 1900 // compact-only "peek over the section boundary" beat
 
 interface Options {
   reducedMotion: boolean
@@ -49,14 +51,23 @@ interface Options {
  * costruiamo/metodo label. No animation library — every transition is a
  * plain setTimeout swap.
  *
- * `peek` (from the 13-pose handoff) has no trigger here: it was the old
- * scroll-arrival pose for `anteprima`, and that whole "re-anchor on scroll"
- * behavior is exactly what this pass removes. Kept in frames.ts as an
- * available pose in case a future genuine-interaction moment wants it.
+ * Compact viewports (`isCompact`, <= COMPACT_BREAKPOINT) get one more layer:
+ * on mobile/tablet Nib can't just sit fixed in the corner the way it does on
+ * desktop — that corner drifts over real body copy as the page scrolls, and
+ * a mono-font label on top of a paragraph is unreadable. So in compact mode
+ * Nib is only visible in the hero (genuinely empty) and for a brief `peek`
+ * beat right as the user crosses from one section into the next (the same
+ * `anchor` change already tracked below) — `peek` is the pose the original
+ * handoff drew for exactly this ("only the upper body visible, one hand
+ * gripping a horizontal edge"), unused until now. Outside those moments —
+ * i.e. idle and scrolled into the middle of a section — visible resolves to
+ * false and WebMascot.tsx fades Nib out entirely rather than leaving it
+ * floating over text. Desktop's `isCompact === false` path is untouched.
  */
 export function useMascotPose({ reducedMotion }: Options) {
   const [anchor, setAnchor] = useState<AnchorKey>('hero')
   const [onDark, setOnDark] = useState(true)
+  const [isCompact, setIsCompact] = useState(false)
   const [home, setHome] = useState<Position | null>(null)
   const [moveTarget, setMoveTarget] = useState<Position | null>(null)
   const [pointTarget, setPointTarget] = useState<Point | null>(null)
@@ -67,6 +78,10 @@ export function useMascotPose({ reducedMotion }: Options) {
   const overrideChainRef = useRef<ReturnType<typeof setTimeout>[]>([])
   const quipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastQuipRef = useRef<string | null>(null)
+  // Mirrors isCompact/anchor for the section-IO callback below, which is set
+  // up once (mount-only deps) and would otherwise close over stale values.
+  const isCompactRef = useRef(false)
+  const prevAnchorRef = useRef<AnchorKey | null>(null)
 
   /** Shows one line from `lines` (never repeating the last one shown), auto-clearing after QUIP_MS. */
   function showQuip(lines: string | string[]) {
@@ -93,6 +108,8 @@ export function useMascotPose({ reducedMotion }: Options) {
       const navHeight = nav?.getBoundingClientRect().height ?? 0
       const paddingRight = Math.min(48, Math.max(16, window.innerWidth * 0.04))
       setHome({ top: navHeight + NIB_TOP_OFFSET, left: window.innerWidth - paddingRight - NIB_WIDTH })
+      isCompactRef.current = window.innerWidth <= COMPACT_BREAKPOINT
+      setIsCompact(isCompactRef.current)
     }
     measure()
     window.addEventListener('resize', measure)
@@ -127,6 +144,13 @@ export function useMascotPose({ reducedMotion }: Options) {
     function place(entry: { key: AnchorKey; el: HTMLElement }) {
       setAnchor((prev) => (prev === entry.key ? prev : entry.key))
       setOnDark(entry.el.getAttribute('data-bg') === 'ink')
+      // Compact-mode "peek": once a real boundary crossing happens (not the
+      // initial landing below), briefly surface Nib at the seam. Desktop
+      // (isCompactRef false) is untouched.
+      if (prevAnchorRef.current !== null && prevAnchorRef.current !== entry.key && isCompactRef.current && !reducedMotion) {
+        peekAtBoundary(entry.el)
+      }
+      prevAnchorRef.current = entry.key
     }
 
     const io = new IntersectionObserver(
@@ -145,7 +169,26 @@ export function useMascotPose({ reducedMotion }: Options) {
     place(known[0])
 
     return () => io.disconnect()
+    // Mount-only: reducedMotion is read once by design (see Options), and
+    // peekAtBoundary reads fresh state via setters/refs on every call, so
+    // neither needs to re-run this observer setup.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  /** Compact-mode only: triggers the `peek` beat right at a section's top boundary — closer to the seam than positionNear's default hover-above offset, and clamped to the same safe viewport bounds. Called from the IO callback in the effect above, once per genuine boundary crossing. */
+  function peekAtBoundary(el: HTMLElement) {
+    const rect = el.getBoundingClientRect()
+    const navHeight = document.querySelector('.nav')?.getBoundingClientRect().height ?? 0
+    const top = Math.max(
+      navHeight + VIEWPORT_MARGIN,
+      Math.min(window.innerHeight - NIB_HEIGHT - VIEWPORT_MARGIN, rect.top - NIB_HEIGHT * 0.35)
+    )
+    triggerOverride('peek', PEEK_MS)
+    setMoveTarget({ top, left: window.innerWidth - VIEWPORT_MARGIN - NIB_WIDTH })
+    showQuip(QUIP_PEEK)
+    const t = setTimeout(() => setMoveTarget(null), PEEK_MS)
+    overrideChainRef.current.push(t)
+  }
 
   /** A spot next to `el` (above it by default), clamped so Nib never lands under the nav or off-screen. */
   function positionNear(el: HTMLElement): Position {
@@ -397,6 +440,7 @@ export function useMascotPose({ reducedMotion }: Options) {
     anchor,
     pose,
     onDark,
+    isCompact,
     top: position?.top ?? null,
     left: position?.left ?? null,
     pointTarget,

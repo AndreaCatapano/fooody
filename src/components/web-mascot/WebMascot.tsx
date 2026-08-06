@@ -47,7 +47,18 @@ export default function WebMascot() {
   const [blinkOn, setBlinkOn] = useState(false)
   const poseBoxRef = useRef<HTMLDivElement>(null)
 
-  const { anchor, pose: hookPose, onDark, top, left, pointTarget, quip, showQuip, triggerOverride } = useMascotPose({
+  const {
+    anchor,
+    pose: hookPose,
+    onDark,
+    isCompact,
+    top,
+    left,
+    pointTarget,
+    quip,
+    showQuip,
+    triggerOverride,
+  } = useMascotPose({
     reducedMotion,
   })
 
@@ -215,10 +226,15 @@ export default function WebMascot() {
 
   const poseKey: PoseName = idleNow && blinkOn ? 'idleBlink' : hookPose
   const infoLabel = anchor === 'costruiamo' || anchor === 'metodo' ? contextLabel : null
+  // Compact viewports (mobile/tablet): Nib only shows in the hero (genuinely
+  // empty) or mid-reaction (hookPose !== 'idle' covers every trigger in
+  // useMascotPose.ts, including the boundary `peek`) — never idle over a
+  // section's own body copy. Desktop keeps the always-on corner presence.
+  const visible = !isCompact || anchor === 'hero' || hookPose !== 'idle'
 
   return (
     <div
-      className={`${styles.figure} ${styles.visible} ${onDark ? styles.onDark : styles.onLight}`}
+      className={`${styles.figure} ${visible ? styles.visible : ''} ${onDark ? styles.onDark : styles.onLight}`}
       style={{ top, left }}
       aria-hidden="true"
       onMouseEnter={() => {
