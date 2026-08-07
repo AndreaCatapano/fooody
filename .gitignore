@@ -44,6 +44,10 @@ next-env.d.ts
 *.png
 *.jpg
 *.jpeg
+# ...but public/ served assets (logo, og-image, favicons) MUST be tracked
+!public/*.png
+!public/*.jpg
+!public/*.jpeg
 prompt/
 
 # Claude Code local-only settings (machine-specific permissions)

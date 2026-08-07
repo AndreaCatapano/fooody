@@ -74,7 +74,7 @@ export default function ChiSiamoPage() {
       <CtaSection
         eyebrow="— prima call"
         eyebrowClass="stu-accent-fg"
-        heading={<>30 minuti per capire<br />se ha senso lavorare insieme.</>}
+        heading={<>30 minuti<br />per capire<br />se ha senso<br />lavorare insieme.</>}
         lead="Ti ascoltiamo, guardiamo dove sei oggi e capiamo se possiamo aiutarti realmente. Nessun obbligo, nessuna vendita forzata: solo una valutazione chiara su cosa funziona."
         leadStyle={{ maxWidth: '44ch' }}
         ctaPrimary={{

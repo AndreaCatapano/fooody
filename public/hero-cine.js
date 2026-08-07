@@ -21,6 +21,19 @@
   const PCOLOR  = '#17130f';  /* ink */
   const SENS    = 1.55;       /* forte */
 
+  /* ---- logo silhouette: le particelle tracciano il LOGO reale
+     (public/logo.png, wordmark su fondo trasparente) invece del wordmark in
+     font — coerenza di brand. Si campiona il canale alpha, quindi il PNG
+     trasparente dà esattamente la forma del logo. Finché il PNG non è
+     caricato si usa il fallback in font; all'arrivo, onload ricostruisce. ---- */
+  let logoImg = null, logoReady = false;
+  (function preloadLogo() {
+    const im = new Image();
+    im.onload  = () => { logoImg = im; logoReady = true; if (built) buildParticles(); };
+    im.onerror = () => { logoReady = false; };
+    im.src = '/logo.png';
+  })();
+
   /* ---- element refs (re-bind on SPA nav via heroReinit) ---- */
   let hero, stage, canvas, paper, vid, vidEl, scrollCue, eyebrow, cap;
 
@@ -90,16 +103,22 @@
     off.width = SW; off.height = SH;
     const o = off.getContext('2d');
 
-    const bodyFont = getComputedStyle(document.body).fontFamily
-      || '"Helvetica Neue", Helvetica, Arial, sans-serif';
-    o.fillStyle    = '#000';
-    o.textAlign    = 'center';
-    o.textBaseline = 'middle';
-    o.font = `700 100px ${bodyFont}`;
-    const measured = o.measureText('fooody').width || 100;
-    const fs = Math.min(100 * (SW * 0.88) / measured, SH * 0.46);
-    o.font = `700 ${fs}px ${bodyFont}`;
-    o.fillText('fooody', SW / 2, SH * 0.46);
+    if (logoReady && logoImg) {
+      const drawW = SW * 0.88;
+      const drawH = drawW * (logoImg.height / logoImg.width);
+      o.drawImage(logoImg, (SW - drawW) / 2, SH * 0.46 - drawH / 2, drawW, drawH);
+    } else {
+      const bodyFont = getComputedStyle(document.body).fontFamily
+        || '"Helvetica Neue", Helvetica, Arial, sans-serif';
+      o.fillStyle    = '#000';
+      o.textAlign    = 'center';
+      o.textBaseline = 'middle';
+      o.font = `700 100px ${bodyFont}`;
+      const measured = o.measureText('fooody').width || 100;
+      const fs = Math.min(100 * (SW * 0.88) / measured, SH * 0.46);
+      o.font = `700 ${fs}px ${bodyFont}`;
+      o.fillText('fooody', SW / 2, SH * 0.46);
+    }
 
     const px   = o.getImageData(0, 0, SW, SH).data;
     const step = clamp(Math.round(14 - (DENSITY / 120) * 10), 3, 14);

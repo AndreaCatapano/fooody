@@ -53,7 +53,8 @@ export default function MetodoPage() {
             />
             <br />
             format diversi,<br />
-            stessa sfida farsi scegliere.
+            stessa sfida<br />
+            farsi scegliere.
           </>
         }
         headingKinetic={false}
@@ -101,7 +102,7 @@ export default function MetodoPage() {
         eyebrowClass="met-accent-fg"
         heading={
           <>
-            È il momento di applicare<br />il Metodo Fooody al tuo{' '}
+            È il momento<br />di applicare<br />il Metodo Fooody<br />al tuo{' '}
             <WordScramble
               className="met-accent-fg"
               words={[

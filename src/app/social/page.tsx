@@ -28,7 +28,7 @@ export default function SocialPage() {
         innerClass="soc-hero"
         textClass="soc-hero-text"
         eyebrow={<div className="eyebrow no-slash soc-accent-fg">— social media · food &amp; oltre</div>}
-        heading={<>Prima ti vedono. Poi<br />decidono se <span className="soc-accent-fg">sceglierti.</span></>}
+        heading={<>Prima ti vedono.<br />Poi decidono<br />se <span className="soc-accent-fg">sceglierti.</span></>}
         headingStyle={{ marginTop: 20, fontSize: 'clamp(1.3rem, -0.22rem + 8.04vw, 6.4rem)' }}
         lead="I social non servono solo a pubblicare. Servono a farti riconoscere, ricordare e scegliere. Costruiamo contenuti con una direzione precisa: trasformare l'attenzione in risultati misurabili."
         leadStyle={{ marginTop: 26, maxWidth: '46ch' }}
@@ -99,7 +99,7 @@ export default function SocialPage() {
       <CtaSection
         eyebrow="— sei pronto a farti notare?"
         eyebrowClass="soc-accent-fg"
-        heading={<>Il tuo feed può<br />fare molto più rumore.</>}
+        heading={<>Il tuo feed può<br />fare molto<br />più rumore.</>}
         lead="Raccontaci il tuo brand. Nella prima call gratuita guardiamo da dove parti, cosa oggi non sta funzionando e quali contenuti possono iniziare a muovere la crescita."
         ctaPrimary={{
           label: <>Prenota una call <span className="arrow">↗</span></>,

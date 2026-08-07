@@ -6,6 +6,7 @@ import WebAnteprimaSection from '@/components/web/WebAnteprimaSection'
 import WebCapabilitiesSection from '@/components/web/WebCapabilitiesSection'
 import WebMetodoSection from '@/components/web/WebMetodoSection'
 import WebFaq, { WEB_FAQS } from '@/components/web/WebFaq'
+import ScrambleText from '@/components/web-motion/ScrambleText'
 
 export const metadata: Metadata = buildMetadata('web')
 
@@ -33,7 +34,14 @@ export default function WebPage() {
 
       <PageHero
         eyebrow={<div className="eyebrow no-slash web-accent-fg">— web design · ux · sviluppo</div>}
-        heading={<>Non un template.<br />Un sito su misura,<br />dall&apos;audit al lancio.</>}
+        heading={
+          <>
+            Non un template.<br />
+            Un <ScrambleText text="sito su misura" className="web-accent-fg" />,<br />
+            dall&apos;audit al lancio.
+          </>
+        }
+        headingKinetic={false}
         headingStyle={{ marginTop: 20, maxWidth: '16ch' }}
         lead="Landing, corporate, e-commerce o web app: prima l'audit, poi la tecnologia giusta. E dopo il lancio restiamo."
         leadStyle={{ maxWidth: '46ch' }}

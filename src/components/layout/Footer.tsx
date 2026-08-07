@@ -32,7 +32,7 @@ export default function Footer() {
         </div>
 
         <div className="foot-mega">
-          fooody<span className="dot">.</span>
+          <span className="foot-logo" role="img" aria-label="Fooody" />
         </div>
 
         <div className="foot-bottom">

@@ -157,7 +157,18 @@ body.has-cursor select { cursor: none; }
   font-family: var(--exp);
   font-weight: 600;
   font-size: var(--t-mega);
-  line-height: 0.88;
+  /* Was 0.88 — measured (Range.getBoundingClientRect on the actual glyphs,
+     not a generic metric) the real ink height of a descender-bearing line
+     at 120px: ~108px, already past a 105.6px line box. That's a literal
+     overflow:hidden clip on kinetic-split headings (.kline), and visible
+     inter-line crowding even without kinetic. 1.0 already clears it in this
+     engine's own metrics (108px ink vs 120px box) — bumped a bit further to
+     1.06 as cross-browser safety margin: font ascent/descent metrics for a
+     custom display face like this can differ slightly between rendering
+     engines, and the /web hero (headingKinetic=false, no .kline box to even
+     measure against) has no CSS clip this environment can detect, so this
+     is deliberate headroom rather than a value tied to one more measurement. */
+  line-height: 1.06;
   letter-spacing: -0.01em;
 }
 .hero-type { font-weight: 600; font-size: var(--t-hero); line-height: 0.95; letter-spacing: -0.035em; }
@@ -444,16 +455,18 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
   background-color: color-mix(in srgb, var(--ink) 94%, transparent);
 }
 
-.brand {
-  font-family: var(--exp);
-  font-weight: 400;
-  font-style: italic;
-  font-size: 1.55rem;
-  letter-spacing: 0.02em;
-  display: inline-flex;
-  align-items: baseline;
+.brand { display: inline-flex; align-items: center; color: inherit; }
+/* Logo come maschera riempita di currentColor: eredita il colore del nav
+   (ink di default, paper quando .nav.on-ink) — così si inverte da solo su
+   sfondo chiaro/scuro come faceva il testo, senza due file diversi. */
+.brand-logo {
+  display: block;
+  height: 1.5rem;
+  aspect-ratio: 1200 / 392;
+  background-color: currentColor;
+  -webkit-mask: url(/logo.png) center / contain no-repeat;
+          mask: url(/logo.png) center / contain no-repeat;
 }
-.brand .dot { color: var(--tomato); font-style: normal; }
 
 .nav-links { display: flex; align-items: center; gap: 4px; position: absolute; left: 50%; transform: translateX(-50%); }
 .nav-link {
@@ -549,17 +562,17 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
 .footer .foot-cols { display: flex; flex-direction: column; gap: 12px; }
 .footer .mono-xs,
 .footer .idx { color: rgba(247,244,238,0.55); }
-.footer .foot-mega {
-  font-family: var(--exp);
-  font-weight: 700;
-  font-size: clamp(3rem, 8vw, 6rem);
-  line-height: 0.85;
-  letter-spacing: -0.01em;
-  color: var(--paper);
-  margin-top: var(--s8);
-  overflow-wrap: break-word;
+.footer .foot-mega { margin-top: var(--s8); }
+/* Stesso principio del brand nel nav: logo come maschera riempita di
+   currentColor (qui paper, il footer è sempre scuro). */
+.footer .foot-logo {
+  display: block;
+  height: clamp(2.4rem, 7vw, 5rem);
+  aspect-ratio: 1200 / 392;
+  background-color: currentColor;
+  -webkit-mask: url(/logo.png) left center / contain no-repeat;
+          mask: url(/logo.png) left center / contain no-repeat;
 }
-.footer .foot-mega .dot { color: var(--tomato); }
 .footer .foot-bottom {
   display: flex;
   justify-content: space-between;
@@ -850,9 +863,14 @@ html .ink-region .chip   { background: rgba(247,244,238,0.08); border-color: tra
   left: 0; right: 0;
   text-align: center; z-index: 3; pointer-events: none;
 }
+/* Centrato via left/right:0 + margin-inline:auto, NON via translateX(-50%):
+   l'elemento ha anche data-reveal, e [data-reveal].is-in { transform: none }
+   (specificità 0,2,0) sovrascriveva il translateX di centratura (0,1,0) a
+   reveal completato, spostandolo di ~mezza larghezza a destra. Così il
+   transform resta libero per l'animazione di reveal e la centratura regge. */
 .hero-scroll {
-  position: absolute; left: 50%; bottom: 26px;
-  transform: translateX(-50%);
+  position: absolute; left: 0; right: 0; bottom: 26px;
+  width: fit-content; margin-inline: auto;
   z-index: 3; display: flex; flex-direction: column;
   align-items: center; gap: 6px; color: rgba(247,244,238,0.55);
 }
@@ -1561,133 +1579,182 @@ body.sig-off #feed .feed-marquee { display: none; }
 .a-stat:nth-child(even) .a-stat-num { color: var(--ink); }
 .a-stat-lbl { font-family: var(--mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
 
-/* cosa costruiamo (Web) — showcase interattivo a tab */
-@keyframes webPanelIn { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
-
-.web-cap-tabs {
-  display: flex; flex-wrap: wrap; gap: 8px; position: relative;
-  margin-top: clamp(28px,4vw,44px); padding-bottom: 14px;
-}
-.web-cap-tab {
-  font-family: var(--sans); font-weight: 600; font-size: .9rem; line-height: 1; letter-spacing: -.01em;
-  padding: 10px 20px; border-radius: 999px; cursor: pointer;
-  border: 1px solid var(--line); background: var(--paper); color: var(--ink-3);
-  transition: color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
-}
-.web-cap-tab:hover { color: var(--ink); background: var(--paper-2); border-color: var(--ink-3); }
-.web-cap-tab.active { background: var(--violet); border-color: var(--violet); color: #fff; }
-/* barra che scorre sotto la tab attiva (stile .nav-link), posizione calcolata via JS
-   perché le tab vanno a capo su più righe: un semplice pseudo-elemento non basterebbe. */
-.web-cap-tab-indicator {
-  position: absolute; height: 1.5px; background: var(--violet);
-  opacity: 0; pointer-events: none;
-  transition: left .35s var(--ease), width .35s var(--ease), top .35s var(--ease), opacity .25s var(--ease);
-}
-.web-cap-tab-indicator.is-visible { opacity: 1; }
-.web-cap-panel {
-  display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(20px,3vw,44px);
-  align-items: stretch; margin-top: clamp(18px,2.4vw,28px);
-  animation: webPanelIn .4s var(--ease);
-}
-.web-cap-visual { min-height: clamp(240px,32vw,340px); }
-.web-cap-info { display: flex; flex-direction: column; gap: 16px; padding: clamp(6px,1.2vw,16px) 0; }
-.web-cap-info-tag {
-  color: var(--violet-deep); border: 1px solid var(--violet); border-radius: 999px;
-  padding: 4px 12px; align-self: flex-start; line-height: 1;
-}
-.web-cap-info-desc { max-width: 44ch; }
+/* cosa costruiamo (Web) — pila di card sticky: ognuna si "posa" sulla
+   precedente mentre scrolli, leggermente sfalsata (--card-top, impostata
+   per-card inline), come un mazzo di schede — pattern osservato su
+   native.inc. Il wrapper sotto ogni card dev'essere SOLO leggermente più
+   alto della card stessa (non un blocco tipo 60vh): è la differenza
+   wrapper-altezza meno card-altezza a decidere quanto la card resta
+   "agganciata" da sola prima che la successiva la raggiunga e si
+   sovrappongano — un wrapper troppo alto (il primo tentativo, 62vh contro
+   una card di ~390px) elimina del tutto la sovrapposizione e le card si
+   limitano a susseguirsi senza mai impilarsi.
+   Sotto 861px l'intero meccanismo si disattiva (position:relative,
+   top:auto, wrapper alto quanto il contenuto) — non un fallback ridotto,
+   proprio nessun position:sticky: stessa scelta già fatta per "Come
+   lavoriamo", e native.inc stesso non prova a riprodurre l'effetto lì. */
 .web-cap-stack {
-  margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3);
+  margin-top: clamp(28px,4vw,44px);
+  /* Both tuned by sampling getBoundingClientRect() through a full scroll
+     pass, not guessed: once card i has left its own sticky phase and card
+     i+1 hasn't yet reached its own (most of the scroll dwell time — this is
+     what's on screen for the great majority of the section, not a fleeting
+     transition), both move together in normal flow and the visible "peek"
+     of the card behind settles at a constant amount = card height − |wrap
+     margin-top|. A plain fixed px margin measured against the ~386px card
+     at 1440px (–280px → 106px peek, just past the number) turned out too
+     aggressive at narrower desktop widths — at 900px the card itself
+     shrinks to ~316px (clamp()-driven: less padding, smaller number, tighter
+     row), so the same –280px ate into the title, not just the number.
+     --scard-wrap-h/--scard-pull scale with vw for the same reason the
+     card's own padding/number size already do (see .web-cap-scard,
+     .web-cap-scard-num below) — tracking that shrinkage keeps the peek
+     landing just past the number across the desktop range, not just at one
+     calibration width. Both clamp() ceilings match where the card's own
+     internal clamps saturate (~1440px) so nothing keeps growing past it. */
+  --scard-pull: clamp(200px, calc(160px + 8vw), 280px);
+  --scard-wrap-h: clamp(560px, calc(365px + 22vw), 680px);
 }
 
-/* dot indicator — mobile, stesso valore visivo di .stu-quote-dots ma namespace
-   separato per non accoppiare i due componenti a una classe condivisa. */
-.web-cap-dots { display: none; align-items: center; justify-content: center; gap: 8px; }
-.web-cap-dot { width: 8px; height: 8px; border-radius: 50%; padding: 0;
-  border: 1px solid var(--line); background: transparent;
-  transition: background 0.4s var(--ease), border-color 0.4s var(--ease); }
-.web-cap-dot.active { background: var(--ink); border-color: var(--ink); }
+.web-cap-scard-wrap { min-height: var(--scard-wrap-h); display: flex; align-items: flex-start; }
+.web-cap-scard-wrap:last-child { min-height: 0; }
+.web-cap-scard-wrap:not(:first-child) { margin-top: calc(-1 * var(--scard-pull)); }
 
-/* metodo (Web) — timeline interattiva, un nodo cliccabile alla volta */
-.web-tl { margin-top: clamp(28px,4vw,48px); }
-
-/* rail orizzontale — solo desktop (nascosta sotto 861px, vedi media query) */
-.web-tl-rail {
-  display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; position: relative;
-}
-.web-tl-rail::before {
-  content: ""; position: absolute; top: 22px; left: 22px; right: 22px; height: 1px;
-  background: var(--line);
-}
-/* linea di progresso: elemento separato sovrapposto a ::before, animato via scaleX
-   in base allo step attivo — tenuto distinto dalla linea di base per poter animare
-   solo il transform senza toccare il layout della linea grigia sottostante */
-.web-tl-rail-fill {
-  position: absolute; top: 22px; left: 22px; right: 22px; height: 1px;
-  background: var(--violet); transform-origin: left center; transform: scaleX(0);
-  transition: transform .5s var(--ease);
-}
-.web-tl-node {
-  position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
-  background: none; border: none; padding: 0; cursor: pointer; text-align: left;
-  transition: transform .3s var(--ease);
-}
-.web-tl-node:hover:not(.active) { transform: translateY(-3px); }
-.web-tl-dot {
-  width: 44px; height: 44px; border-radius: 50%; flex: none;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: .9rem; font-weight: 500; line-height: 1;
-  background: var(--paper); color: var(--ink-3); border: 1px solid var(--line);
-  transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
-}
-.web-tl-node:hover .web-tl-dot { border-color: var(--ink-3); }
-.web-tl-node.active .web-tl-dot { background: var(--violet); color: #fff; border-color: var(--violet); }
-.web-tl-lbl {
-  font-family: var(--sans); font-weight: 600; font-size: .92rem; color: var(--ink-3);
-  transition: color .3s var(--ease);
-}
-.web-tl-node:hover .web-tl-lbl,
-.web-tl-node.active .web-tl-lbl { color: var(--ink); }
-.web-tl-panel {
-  margin-top: clamp(24px,3vw,40px); padding: clamp(24px,3vw,40px);
+.web-cap-scard {
+  position: sticky; top: var(--card-top, 24px); width: 100%;
+  display: flex; gap: clamp(20px,3vw,40px); align-items: flex-start;
   border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper);
-  display: grid; grid-template-columns: auto 1fr; gap: clamp(18px,3vw,44px); align-items: start;
-  animation: webPanelIn .4s var(--ease);
+  box-shadow: var(--shadow-lift); padding: clamp(28px,4vw,48px);
 }
-.web-tl-panel-idx {
-  font-family: var(--exp); font-weight: 600; font-size: clamp(3rem,7vw,6rem); line-height: .8;
-  color: var(--violet-deep);
+.web-cap-scard-num {
+  flex: none; font-family: var(--exp); font-weight: 600; line-height: .8;
+  font-size: clamp(2.5rem,5vw,4rem); color: var(--violet-deep);
 }
-.web-tl-panel-body { display: flex; flex-direction: column; gap: 14px; max-width: 64ch; }
-.web-tl-panel-title { color: var(--ink); margin-bottom: 4px; }
+.web-cap-scard-main { flex: 1; min-width: 0; }
+.web-cap-scard-title { font-size: clamp(1.8rem,3.2vw,2.75rem); color: var(--ink); margin-bottom: clamp(14px,2vw,20px); }
+.web-cap-scard-row { display: flex; gap: clamp(20px,3vw,36px); align-items: flex-start; }
+.web-cap-scard-text { flex: 1.2; min-width: 0; }
+.web-cap-scard-desc { max-width: 56ch; color: var(--ink-2); }
+.web-cap-scard-stack { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--ink-3); }
+.web-cap-scard-visual { flex: 1; min-height: clamp(140px,16vw,200px); }
 
-/* stepper verticale ad accordion — solo mobile (mostrato sotto 861px, vedi media query).
-   Un solo <details> aperto alla volta, sincronizzato con lo stesso stato `active` del rail
-   desktop: la fase "attiva" ha lo stesso significato su entrambi i breakpoint. */
-.web-tl-stepper { display: none; position: relative; }
-.web-tl-stepper::before {
-  content: ""; position: absolute; top: 22px; bottom: 22px; left: 22px; width: 1px;
-  background: var(--line);
+@media (max-width: 860px) {
+  .web-cap-scard-wrap { min-height: 0; }
+  .web-cap-scard-wrap:not(:first-child) { margin-top: 0; }
+  .web-cap-scard { position: relative; top: auto; flex-direction: column; gap: 16px; }
+  .web-cap-scard-wrap:not(:last-child) { margin-bottom: 20px; }
+  .web-cap-scard-row { flex-direction: column; }
+  .web-cap-scard-num { font-size: 2.25rem; }
 }
-.web-tl-stepper-fill {
-  position: absolute; top: 22px; left: 22px; width: 1px; height: 0;
-  background: var(--violet); transition: height .5s var(--ease);
+
+/* Come lavoriamo (Web) — formato "story": scroll-snap orizzontale nativo,
+   niente position:sticky. La versione precedente (rail desktop + accordion
+   mobile, come /metodo) si appoggiava a scroll pinning che si rompe su
+   mobile quando la toolbar dinamica di Safari ridimensiona il viewport a
+   metà scroll — scroll-snap non ha questa dipendenza, quindi touch,
+   trackpad e i bottoni qui sotto guidano tutti lo stesso identico
+   meccanismo, senza un ramo mobile separato e più fragile. */
+.web-story { margin-top: clamp(28px,4vw,48px); }
+
+.web-story-rail { display: flex; gap: 6px; margin-bottom: clamp(20px,3vw,32px); align-items: center; }
+/* Ogni segmento porta il colore della sua fase (--seg, inline): le tappe
+   raggiunte sono piene del proprio colore, la corrente è più alta. */
+.web-story-seg {
+  flex: 1; height: 4px; padding: 0; border: 0; border-radius: 999px;
+  background: var(--line); cursor: pointer;
+  transition: background .35s var(--ease), height .25s var(--ease);
 }
-.web-tl-step-head {
-  position: relative; z-index: 1; width: 100%; list-style: none;
-  display: flex; align-items: center; gap: 14px;
-  background: none; border: none; padding: 0; margin: 0 0 20px; cursor: pointer; text-align: left;
+.web-story-seg:hover { background: var(--ink-3); }
+.web-story-seg.filled { background: var(--seg, var(--violet)); }
+.web-story-seg.current { height: 7px; }
+
+.web-story-track {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper);
+  scrollbar-width: none;
 }
-.web-tl-step-head::-webkit-details-marker { display: none; }
-.web-tl-step:last-child .web-tl-step-head { margin-bottom: 0; }
-.web-tl-step[open] .web-tl-step-head { margin-bottom: 4px; }
-.web-tl-step[open] .web-tl-dot { background: var(--violet); color: #fff; border-color: var(--violet); }
-.web-tl-step[open] .web-tl-lbl { color: var(--ink); }
-.web-tl-step-body {
-  position: relative; z-index: 1; padding: 0 0 24px 58px;
-  display: flex; flex-direction: column; gap: 12px; max-width: 62ch;
-  animation: webPanelIn .4s var(--ease);
+.web-story-track::-webkit-scrollbar { display: none; }
+
+.web-story-slide {
+  flex: 0 0 100%; scroll-snap-align: start;
+  padding: clamp(28px,4vw,48px) clamp(24px,3.5vw,44px);
+  display: flex; gap: clamp(24px,4vw,48px); align-items: center;
 }
+.web-story-text { flex: 1.3; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.web-story-idx {
+  display: block; font-family: var(--exp); font-weight: 600;
+  font-size: clamp(3rem,7vw,6rem); line-height: .8; color: var(--violet-deep);
+}
+.web-story-title { color: var(--ink); max-width: 64ch; }
+.web-story-slide p { max-width: 64ch; }
+/* Icona SVG generata via codice (non un asset/foto), una per fase del
+   metodo — stesso frame "pannello" dello slot immagine in Cosa costruiamo. */
+.web-story-visual {
+  flex: 1; min-height: clamp(160px,18vw,240px); align-self: stretch;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--paper-2); color: var(--violet-deep);
+}
+.web-story-visual svg { width: min(66%, 200px); height: auto; overflow: visible; }
+
+/* Icone VISIBILI di default: i pannelli non restano mai vuoti anche se il
+   trigger non parte. Il disegno del tratto + l'entrata in scala dei dettagli
+   pieni si rigioca come arricchimento quando la fase è attiva (.is-drawing,
+   da React) e la sezione è in vista. dashoffset 600 supera qualunque
+   tracciato dei viewBox 160; animation-fill:both tiene nascosto ogni tratto
+   finché non è il suo turno (stagger via animation-delay), poi lo lascia
+   disegnato. I tratti sono i figli senza fill; i pieni hanno fill="currentColor". */
+.web-story-visual svg > :not([fill="currentColor"]) { stroke-dasharray: 600; }
+
+/* Entrata "macro": tutta l'icona entra in scala con un piccolo sovra-scatto
+   (overshoot), mentre i tratti si disegnano e i dettagli pieni entrano. */
+@keyframes webIconEnter {
+  0%   { opacity: 0; transform: scale(.5); }
+  62%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes webIconDraw { from { stroke-dashoffset: 600; } to { stroke-dashoffset: 0; } }
+@keyframes webIconPop  { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
+
+.web-story-visual.is-drawing svg { animation: webIconEnter .8s var(--ease) both; transform-origin: center; }
+.web-story-visual.is-drawing svg > :not([fill="currentColor"]) { animation: webIconDraw 1s var(--ease) both; }
+.web-story-visual.is-drawing svg > [fill="currentColor"] {
+  animation: webIconPop .55s var(--ease) both;
+  transform-box: fill-box; transform-origin: center;
+}
+.web-story-visual.is-drawing svg > :nth-child(2) { animation-delay: .08s; }
+.web-story-visual.is-drawing svg > :nth-child(3) { animation-delay: .16s; }
+.web-story-visual.is-drawing svg > :nth-child(4) { animation-delay: .24s; }
+.web-story-visual.is-drawing svg > :nth-child(5) { animation-delay: .32s; }
+.web-story-visual.is-drawing svg > :nth-child(6) { animation-delay: .40s; }
+.web-story-visual.is-drawing svg > :nth-child(7) { animation-delay: .48s; }
+.web-story-visual.is-drawing svg > :nth-child(8) { animation-delay: .56s; }
+.web-story-visual.is-drawing svg > :nth-child(n+9) { animation-delay: .64s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .web-story-visual.is-drawing svg,
+  .web-story-visual.is-drawing svg > * { animation: none; }
+}
+
+@media (max-width: 760px) {
+  .web-story-slide { flex-direction: column; align-items: stretch; gap: 20px; }
+  .web-story-visual { min-height: 160px; }
+  .web-story-visual svg { width: min(40%, 120px); }
+}
+
+.web-story-nav {
+  display: flex; align-items: center; justify-content: center; gap: clamp(16px,2.4vw,28px);
+  margin-top: clamp(16px,2.4vw,24px);
+}
+.web-story-arrow {
+  width: 40px; height: 40px; border-radius: 50%; flex: none;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+  font-size: 1.1rem; line-height: 1; display: grid; place-items: center; cursor: pointer;
+  transition: border-color .25s var(--ease), background .25s var(--ease), opacity .25s var(--ease);
+}
+.web-story-arrow:hover:not(:disabled) { border-color: var(--ink-3); background: var(--paper-2); }
+.web-story-arrow:disabled { opacity: .3; cursor: default; }
+.web-story-count { color: var(--ink-3); min-width: 5ch; text-align: center; }
 
 /* FAQ (Web) — accordion nativo details/summary */
 .web-faq-list { display: flex; flex-direction: column; margin-top: clamp(28px,4vw,48px); }
@@ -1711,12 +1778,12 @@ body.sig-off #feed .feed-marquee { display: none; }
   .web-hero-foot { grid-template-columns: 1fr; }
 }
 @media (max-width: 860px) {
-  .web-cap-tabs { display: none; }
-  .web-cap-panel { grid-template-columns: 1fr; }
-  .web-cap-dots { display: flex; margin-top: clamp(18px,3vw,28px); }
-  .web-tl-rail { display: none; }
-  .web-tl-panel { display: none; }
-  .web-tl-stepper { display: flex; flex-direction: column; }
+  /* The desktop/tablet/mobile toggle can't demonstrate anything real here —
+     .browser is forced to max-width:100% below 640px regardless of which
+     button is selected (see the 640px block below), so the whole "watch it
+     resize" premise breaks on an actual phone. Desktop keeps the live demo
+     unchanged; mobile just doesn't get a broken version of it. */
+  #anteprima { display: none; }
 }
 @media (max-width: 640px) {
   .anteprima-stats .a-stat { width: calc(50% - clamp(4px,0.75vw,8px)); }
